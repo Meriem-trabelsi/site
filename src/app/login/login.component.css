@@ -1,28 +1,27 @@
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
 
 * {
 	box-sizing: border-box;
+	font-family: 'Poppins', sans-serif; /* Apply Poppins to everything */
 }
 
 body {
-	background: #f6f5f7;
+	background: lightgray; /* Set background to light gray */
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
-	font-family: 'Montserrat', sans-serif;
-	height: 100vh;
-	margin: -20px 0 50px;
-}
-
-h1 {
-	font-weight: bold;
+	height: 100vh; /* Full screen height */
 	margin: 0;
 }
 
-h2 {
-	text-align: center;
+h1, h2 {
+	font-weight: 700; /* Bold for headings */
+}
+
+p {
+	font-weight: 400; /* Regular for paragraphs */
 }
 
 p {
@@ -46,8 +45,8 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #FF4B2B;
-	background-color: #FF4B2B;
+	border: 1px solid #FF9D00;
+	background-color: #FF9D00;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -88,17 +87,20 @@ input {
 	margin: 8px 0;
 	width: 100%;
 }
-
 .container {
 	background-color: #fff;
 	border-radius: 10px;
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
+	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+				0 10px 10px rgba(0,0,0,0.22);
 	position: relative;
 	overflow: hidden;
-	width: 768px;
+	width: 900px; /* Made it bigger */
 	max-width: 100%;
-	min-height: 480px;
+	min-height: 600px; /* Bigger Height */
+	display: flex; /* Center Content */
+	justify-content: center;
+	align-items: center;
+	margin: auto; /* This centers the container horizontally */
 }
 
 .form-container {
@@ -160,9 +162,9 @@ input {
 }
 
 .overlay {
-	background: #FF416C;
-	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-	background: linear-gradient(to right, #FF4B2B, #FF416C);
+	background: #020052;
+	background: -webkit-linear-gradient(to right, #020052, #020052);
+	background: linear-gradient(to right, #020052, #020052);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -211,42 +213,72 @@ input {
 	transform: translateX(20%);
 }
 
-.social-container {
-	margin: 20px 0;
+.overlay-left .ghost {
+	background-color: #FF9D00; 
+	border: 1px solid #FF9D00;
+	
+  }
+  
+  .overlay-right .ghost {
+	background-color: #FF9D00; 
+	border: 1px solid #FF9D00;
+  }
+
+  .ch {
+	display: flex;              /* Aligns the checkbox and the text in a row */
+	align-items: center;        /* Vertically centers the checkbox with the text */
+	justify-content: flex-start; /* Keeps the content aligned to the left */
+  }
+  
+  input[type="checkbox"] {
+	margin-right: 8px;  /* Reduces the space between the checkbox and the text */
+  }
+  
+  
+  p {
+	margin: 0;                 
+	font-size: 14px;
+	font-family: 'poppins';           
+  }
+  form label {
+	display: block;         /* Keeps label above the input */
+	text-align: left;       /* Align text to the far left */
+	font-weight: normal;    /* Remove bold */
+	font-size: 12px;        /* Smaller text */
+	width: 100%;            /* Make the label stretch full width for proper alignment */
+	margin-bottom: 1px;     /* Small gap between label and input */
+	color: #333;            /* Optional: Darker color */
+	padding-left: 0;        /* Make sure there is no left padding */
+	}
+	
+	input {
+		width: 100%;
+		padding: 10px;
+		margin-bottom: 10px; /* Reduced margin-bottom to 10px */
+		box-sizing: border-box;
+	  }
+	
+  .overlay-right p {
+    margin-bottom: 20px; /* Adjust the value to your preference */
+}
+.overlay-right .ghost {
+    margin-top: 20px; /* Add space above the button */
 }
 
-.social-container a {
-	border: 1px solid #DDDDDD;
-	border-radius: 50%;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	margin: 0 5px;
-	height: 40px;
-	width: 40px;
+.overlay-left p {
+    margin-bottom: 20px; /* Adjust the value to your preference */
+}
+.overlay-left .ghost {
+    margin-top: 20px; /* Add space above the button */
 }
 
-footer {
-    background-color: #222;
-    color: #fff;
-    font-size: 14px;
-    bottom: 0;
-    position: fixed;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 999;
-}
+  
+  
+  
+  
 
-footer p {
-    margin: 10px 0;
-}
+  
+  
 
-footer i {
-    color: red;
-}
 
-footer a {
-    color: #3c97bf;
-    text-decoration: none;
-}
+
