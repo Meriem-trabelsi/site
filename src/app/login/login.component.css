@@ -1,6 +1,4 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
 
 * {
 	box-sizing: border-box;
@@ -12,12 +10,13 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100vh; /* Full screen height */
+    height: 100%; 
 	margin: 0;
 }
 
 h1, h2 {
 	font-weight: 700; /* Bold for headings */
+	margin: 0 0;
 }
 
 p {
@@ -91,16 +90,17 @@ input {
 	background-color: #fff;
 	border-radius: 10px;
 	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-				0 10px 10px rgba(0,0,0,0.22);
-	position: relative;
-	overflow: hidden;
-	width: 900px; /* Made it bigger */
+	0 10px 10px rgba(0,0,0,0.22);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);	overflow: hidden;
+	width: 1100px; /* Made it bigger */
 	max-width: 100%;
-	min-height: 600px; /* Bigger Height */
+	min-height: 750px; /* Bigger Height */
 	display: flex; /* Center Content */
 	justify-content: center;
 	align-items: center;
-	margin: auto; /* This centers the container horizontally */
 }
 
 .form-container {
@@ -272,13 +272,151 @@ input {
     margin-top: 20px; /* Add space above the button */
 }
 
-  
-  
-  
-  
+.checkbox-wrapper-4 * {
+box-sizing: border-box;
+}
+.checkbox-wrapper-4 .cbx {
+-webkit-user-select: none;
+user-select: none;
+cursor: pointer;
+padding: 6px 8px;
+border-radius: 6px;
+overflow: hidden;
+transition: all 0.2s ease;
+display: inline-block;
+}
+.checkbox-wrapper-4 .cbx:not(:last-child) {
+margin-right: 6px;
+}
 
+.checkbox-wrapper-4 .cbx span {
+float: left;
+vertical-align: middle;
+transform: translate3d(0, 0, 0);
+}
+.checkbox-wrapper-4 .cbx span:first-child {
+position: relative;
+width: 18px;
+height: 18px;
+border-radius: 4px;
+transform: scale(1);
+border: 1px solid #cccfdb;
+transition: all 0.2s ease;
+box-shadow: 0 1px 1px rgba(0,16,75,0.05);
+}
+.checkbox-wrapper-4 .cbx span:first-child svg {
+position: absolute;
+top: 3px;
+left: 2px;
+fill: none;
+stroke: #fff;
+stroke-width: 2;
+stroke-linecap: round;
+stroke-linejoin: round;
+stroke-dasharray: 16px;
+stroke-dashoffset: 16px;
+transition: all 0.3s ease;
+transition-delay: 0.1s;
+transform: translate3d(0, 0, 0);
+}
+.checkbox-wrapper-4 .cbx span:last-child {
+padding-left: 8px;
+line-height: 18px;
+}
+.checkbox-wrapper-4 .cbx:hover span:first-child {
+border-color: #e3b04b;
+}
+.checkbox-wrapper-4 .inp-cbx {
+position: absolute;
+visibility: hidden;
+}
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
+background: #e3b04b;
+border-color: #e3b04b;
+animation: wave-4 0.4s ease;
+}
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
+stroke-dashoffset: 0;
+}
+.checkbox-wrapper-4 .inline-svg {
+position: absolute;
+width: 0;
+height: 0;
+pointer-events: none;
+user-select: none;
+}
+@media screen and (max-width: 640px) {
+.checkbox-wrapper-4 .cbx {
+	width: 100%;
+	display: inline-block;
+}
+}
+@-moz-keyframes wave-4 {
+50% {
+	transform: scale(0.9);
+}
+}
+@-webkit-keyframes wave-4 {
+50% {
+	transform: scale(0.9);
+}
+}
+@-o-keyframes wave-4 {
+50% {
+	transform: scale(0.9);
+}
+}
+@keyframes wave-4 {
+50% {
+	transform: scale(0.9);
+}
+}
+
+input[type="tel"] {
+	width: 100%;
+	padding: 12px 15px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+}
+
+input[type="tel"]::before {
+	content: "+216 ";
+	color: #aaa;
+}
+
+input[type="tel"]:focus {
+	outline: none;
+	border: 1px solid #FF9D00;
+}
+.phone-number {
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+.country-code {
+	padding: 12px 10px;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin-right: 5px;
+}
+
+/* Style the select dropdown */
+select {
+	background-color: #eee;
+	border: 1px solid #ccc;
+	padding: 12px 15px;
+	width: 100%;
+	border-radius: 5px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	font-size: 14px;
+	color: #333;
+  }
   
-  
-
-
-
+  /* Style the select dropdown on focus */
+  select:focus {
+	outline: none;
+	border: 1px solid #FF9D00;
+  }
