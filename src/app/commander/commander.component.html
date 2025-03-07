@@ -1,0 +1,100 @@
+<div class="container">
+  <div class="title">
+    <h2>Formulaire de commande</h2>
+  </div>
+
+  <!-- Login/Sign-up Option under the title -->
+  <div class="auth-option">
+    <h3><a href="/login">Se connecter</a> | <a href="/login">S'inscrire</a></h3>
+  </div>
+
+  <div class="d-flex">
+    <form action="" method="">
+      <label>
+        <span>Prénom <span class="required">*</span></span>
+        <input type="text" name="fname" placeholder="Votre prénom" required>
+      </label>
+      <label>
+        <span>Nom <span class="required">*</span></span>
+        <input type="text" name="lname" placeholder="Votre nom" required>
+      </label>
+
+      <label>
+        <span>Région <span class="required">*</span></span>
+        <select name="selection" required>
+          <option value="Tunis">Tunis</option>
+          <option value="Sfax">Sfax</option>
+          <option value="Sousse">Sousse</option>
+          <option value="Ariana">Ariana</option>
+          <option value="Kairouan">Kairouan</option>
+          <option value="Bizerte">Bizerte</option>
+          <option value="Nabeul">Nabeul</option>
+          <option value="Gabès">Gabès</option>
+          <option value="Tozeur">Tozeur</option>
+          <option value="Monastir">Monastir</option>
+          <option value="Mahdia">Mahdia</option>
+          <option value="Jendouba">Jendouba</option>
+          <option value="Kasserine">Kasserine</option>
+          <option value="Kébili">Kébili</option>
+          <option value="Medenine">Medenine</option>
+          <option value="Ben Arous">Ben Arous</option>
+          <option value="Zaghouan">Zaghouan</option>
+          <option value="Siliana">Siliana</option>
+          <option value="Gafsa">Gafsa</option>
+          <option value="Tataouine">Tataouine</option>
+          <option value="Le Kef">Le Kef</option>
+          <option value="Manouba">Manouba</option>
+          <option value="Sidi Bouzid">Sidi Bouzid</option>
+          <option value="La Manouba">La Manouba</option>
+          <option value="Béja">Béja</option>
+        </select>
+      </label>
+      <label>
+        <span>Adresse <span class="required">*</span></span>
+        <input type="text" name="houseadd" placeholder="Numéro et nom de la rue" required>
+      </label>
+
+      <label>
+        <span>Téléphone <span class="required">*</span></span>
+        <input type="tel" name="phone" placeholder="Numéro de téléphone" required>
+      </label>
+
+      <label>
+        <span>Email <span class="required">*</span></span>
+        <input type="email" name="email" placeholder="Votre email" required>
+      </label>
+    </form>
+
+    <div class="Yorder">
+      <table>
+        <tr>
+          <th colspan="2">Votre commande</th>
+        </tr>
+        <tr>
+          <td>Produit</td>
+          <td>800</td>
+        </tr>
+        <tr>
+          <td>Sous-total</td>
+          <td>800</td>
+        </tr>
+        <tr>
+          <td>Livraison</td>
+          <td>Gratuite</td>
+        </tr>
+      </table>
+      <br>
+      <div>
+        <input type="radio" name="payment" value="virement" checked> Virement bancaire
+      </div>
+      <div>
+        <input type="radio" name="payment" value="livraison"> Paiement à la livraison
+      </div>
+      <div>
+        <input type="radio" name="payment" value="paypal"> Paypal
+        <img src="https://www.logolynx.com/images/logolynx/c3/c36093ca9fb6c250f74d319550acac4d.jpeg" alt="Paypal" width="50">
+      </div>
+      <button type="button">Commander</button>
+    </div>
+  </div>
+</div>

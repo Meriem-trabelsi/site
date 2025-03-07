@@ -2,53 +2,54 @@
 
 <div class="shopping-cart">
 
-  <div class="column-labels">
-    <label class="product-details">Produit</label>
-    <label class="product-price">Prix</label>
-    <label class="product-quantity">Quantité</label>
-    <label class="product-removal">Supprimer</label>
-    <label class="product-line-price">Total</label>
+  <div class="products-section">
+    <div class="column-labels">
+      <label class="product-details">Produit</label>
+      <label class="product-price">Prix</label>
+      <label class="product-quantity">Quantité</label>
+      <label class="product-removal">Supprimer</label>
+      <label class="product-line-price">Total</label>
+    </div>
+
+    <!-- Existing Product -->
+    <div class="product">
+      <div class="product-image">
+        <img src="" alt="im1">
+      </div>
+      <div class="product-details">
+        <div class="product-title">pc protable</div>
+      </div>
+      <div class="product-price">12.99</div>
+      <div class="product-quantity">
+        <input type="number" value="2" min="1">
+      </div>
+      <div class="product-removal">
+        <button class="remove-product">Supprimer</button>
+      </div>
+      <div class="product-line-price">25.98</div>
+    </div>
+
+    
+    <div class="product">
+      <div class="product-image">
+        <img src="" alt="im2">
+      </div>
+      <div class="product-details">
+        <div class="product-title">Pc gamer</div>
+      </div>
+      <div class="product-price">45.99</div>
+      <div class="product-quantity">
+        <input type="number" value="1" min="1">
+      </div>
+      <div class="product-removal">
+        <button class="remove-product">Supprimer</button>
+      </div>
+      <div class="product-line-price">45.99</div>
+    </div>
+
   </div>
 
-  <div class="product">
-    <div class="product-image">
-      <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-    </div>
-    <div class="product-details">
-      <div class="product-title">Os pour chiens Dingo</div>
-    </div>
-    <div class="product-price">12.99</div>
-    <div class="product-quantity">
-      <input type="number" value="2" min="1">
-    </div>
-    <div class="product-removal">
-      <button class="remove-product">
-        Supprimer
-      </button>
-    </div>
-    <div class="product-line-price">25.98</div>
-  </div>
-
-  <div class="product">
-    <div class="product-image">
-      <img src="https://s.cdpn.io/3/large-NutroNaturalChoiceAdultLambMealandRiceDryDogFood.png">
-    </div>
-    <div class="product-details">
-      <div class="product-title">Croquettes Nutro™ Agneau et Riz</div>
-    </div>
-    <div class="product-price">45.99</div>
-    <div class="product-quantity">
-      <input type="number" value="1" min="1">
-    </div>
-    <div class="product-removal">
-      <button class="remove-product">
-        Supprimer
-      </button>
-    </div>
-    <div class="product-line-price">45.99</div>
-  </div>
-
-  <div class="totals">
+  <div class="totals-section">
     <div class="totals-item">
       <label>Sous-total</label>
       <div class="totals-value" id="cart-subtotal">71.97</div>
@@ -65,8 +66,6 @@
       <label>Total Général</label>
       <div class="totals-value" id="cart-total">90.57</div>
     </div>
+    <button class="checkout">Commander</button>
   </div>
-
-  <button class="checkout">Commander</button>
-
 </div>

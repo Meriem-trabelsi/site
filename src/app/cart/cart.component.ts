@@ -1,18 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
 })
-export class CartComponent {
+export class CartComponent implements AfterViewInit {
   taxRate: number = 0.05; // 5%
   shippingRate: number = 15.0; // $15
   fadeTime: number = 300; // 300ms
 
   ngOnInit() {
-    this.assignActions();
+    // Recalculate cart on page load
     this.recalculateCart();
+  }
+
+  ngAfterViewInit() {
+    // Now that the view has initialized, assign actions
+    this.assignActions();
   }
 
   // Assign Actions
@@ -31,7 +36,7 @@ export class CartComponent {
 
     removeButtons.forEach((btn) => {
       btn.addEventListener('click', (event) => {
-        this.removeItem(event.target);
+        this.removeItem(event.target as HTMLElement);
       });
     });
   }
@@ -40,15 +45,22 @@ export class CartComponent {
   recalculateCart() {
     let subtotal = 0;
 
+    // Loop through each product to calculate subtotal
     document.querySelectorAll('.product').forEach((product: Element) => {
       const linePrice = parseFloat(
-        (product.querySelector('.product-line-price') as HTMLElement).innerText
+        (product.querySelector('.product-line-price') as HTMLElement)
+          .innerText
       );
       subtotal += linePrice;
     });
 
+    // Tax calculation
     let tax = subtotal * this.taxRate;
+
+    // Shipping fee is applied only if subtotal is greater than 0
     let shipping = subtotal > 0 ? this.shippingRate : 0;
+
+    // Total price
     let total = subtotal + tax + shipping;
 
     const cartSubtotal = document.getElementById('cart-subtotal');
@@ -57,6 +69,7 @@ export class CartComponent {
     const cartTotal = document.getElementById('cart-total');
     const checkoutBtn = document.querySelector('.checkout');
 
+    // Update the UI with the new calculated values
     if (cartSubtotal && cartTax && cartShipping && cartTotal) {
       setTimeout(() => {
         cartSubtotal.innerHTML = subtotal.toFixed(2);
@@ -66,7 +79,8 @@ export class CartComponent {
       }, this.fadeTime);
     }
 
-    if (total == 0 && checkoutBtn) {
+    // Hide checkout button if total is 0
+    if (total === 0 && checkoutBtn) {
       checkoutBtn.classList.add('hide');
     } else if (checkoutBtn) {
       checkoutBtn.classList.remove('hide');
@@ -76,16 +90,18 @@ export class CartComponent {
   // Update Quantity
   updateQuantity(input: HTMLInputElement) {
     const productRow = input.closest('.product');
+    if (!productRow) return;
+
     const price = parseFloat(
-      (productRow?.querySelector('.product-price') as HTMLElement).innerText
+      (productRow.querySelector('.product-price') as HTMLElement).innerText
     );
     const quantity = parseInt(input.value);
     const linePrice = price * quantity;
 
-    if (productRow) {
-      const linePriceElement = productRow.querySelector(
-        '.product-line-price'
-      ) as HTMLElement;
+    const linePriceElement = productRow.querySelector(
+      '.product-line-price'
+    ) as HTMLElement;
+    if (linePriceElement) {
       setTimeout(() => {
         linePriceElement.innerText = linePrice.toFixed(2);
         this.recalculateCart();
@@ -94,10 +110,11 @@ export class CartComponent {
   }
 
   // Remove Item
-  removeItem(btn: any) {
+  removeItem(btn: HTMLElement) {
     const productRow = btn.closest('.product') as HTMLElement;
 
-    productRow.classList.add('removed'); // For Animation
+    // Add a class for animation effect
+    productRow.classList.add('removed');
 
     setTimeout(() => {
       productRow.remove();
