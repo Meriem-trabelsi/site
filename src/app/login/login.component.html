@@ -7,74 +7,75 @@
   <div class="container" id="container">
 	<!-- Sign Up Form -->
 	<div class="form-container sign-up-container">
-	  <form action="#">
-		<h1>Créer un compte</h1>
-		
-		<label for="name">Nom</label>
-		<input type="text" id="name" placeholder="Nom" required />
-		
-		<label for="email">Email</label>
-		<input type="email" id="email" placeholder="Email" required />
-		
-		<label for="password">Mot de passe</label>
-		<input type="password" id="password" placeholder="Mot de passe" required />
-		
-		<label for="confirm-password">Confirmer votre mot de passe</label>
-		<input type="password" id="confirm-password" placeholder="Confirmer votre mot de passe" required />
-
-		<label for="tel">Saisir votre téléphone</label>
+		<form action="#" onsubmit="return false;">
+			<h1>Créer un compte</h1>
+			
+			<label for="name">Nom</label>
+			<input type="text" id="name" placeholder="Nom" required />
+			
+			<label for="email">Email</label>
+			<input type="email" id="email" placeholder="Email" required />
+			
+			<label for="password">Mot de passe</label>
+			<input type="password" id="password" placeholder="Mot de passe" required />
+			
+			<label for="confirm-password">Confirmer votre mot de passe</label>
+			<input type="password" id="confirm-password" placeholder="Confirmer votre mot de passe" required />
+			
+			<label for="tel">Saisir votre téléphone</label>
 			<div class="phone-number">
-				<span class="country-code">+216</span>
-				<input type="tel" id="tel" placeholder="Numéro de téléphone" required pattern="^[0-9]{8}$" />
+			  <span class="country-code">+216</span>
+			  <input type="tel" id="tel" placeholder="Numéro de téléphone" required pattern="^[0-9]{8}$" />
 			</div>
-
+			
 			<label for="adresse">Saisir votre adresse</label>
 			<input type="address" id="adresse" placeholder="Adresse" required />
-
+			
 			<label for="region">Région</label>
 			<select id="region" required>
-				<option value="">Sélectionnez votre région</option>
-				<option value="Tunis">Tunis</option>
-				<option value="Sfax">Sfax</option>
-				<option value="Sousse">Sousse</option>
-				<option value="Ariana">Ariana</option>
-				<option value="Kairouan">Kairouan</option>
-				<option value="Bizerte">Bizerte</option>
-				<option value="Nabeul">Nabeul</option>
-				<option value="Gabès">Gabès</option>
-				<option value="Tozeur">Tozeur</option>
-				<option value="Monastir">Monastir</option>
-				<option value="Mahdia">Mahdia</option>
-				<option value="Jendouba">Jendouba</option>
-				<option value="Kasserine">Kasserine</option>
-				<option value="Kébili">Kébili</option>
-				<option value="Medenine">Medenine</option>
-				<option value="Ben Arous">Ben Arous</option>
-				<option value="Zaghouan">Zaghouan</option>
-				<option value="Siliana">Siliana</option>
-				<option value="Gafsa">Gafsa</option>
-				<option value="Tataouine">Tataouine</option>
-				<option value="Le Kef">Le Kef</option>
-				<option value="Manouba">Manouba</option>
-				<option value="Sidi Bouzid">Sidi Bouzid</option>
-				<option value="La Manouba">La Manouba</option>
-				<option value="Béja">Béja</option>
+			  <option value="">Sélectionnez votre région</option>
+			  <option value="Tunis">Tunis</option>
+			  <option value="Sfax">Sfax</option>
+			  <option value="Sousse">Sousse</option>
+			  <option value="Ariana">Ariana</option>
+			  <option value="Kairouan">Kairouan</option>
+			  <option value="Bizerte">Bizerte</option>
+			  <option value="Nabeul">Nabeul</option>
+			  <option value="Gabès">Gabès</option>
+			  <option value="Tozeur">Tozeur</option>
+			  <option value="Monastir">Monastir</option>
+			  <option value="Mahdia">Mahdia</option>
+			  <option value="Jendouba">Jendouba</option>
+			  <option value="Kasserine">Kasserine</option>
+			  <option value="Kébili">Kébili</option>
+			  <option value="Medenine">Medenine</option>
+			  <option value="Ben Arous">Ben Arous</option>
+			  <option value="Zaghouan">Zaghouan</option>
+			  <option value="Siliana">Siliana</option>
+			  <option value="Gafsa">Gafsa</option>
+			  <option value="Tataouine">Tataouine</option>
+			  <option value="Le Kef">Le Kef</option>
+			  <option value="Manouba">Manouba</option>
+			  <option value="Sidi Bouzid">Sidi Bouzid</option>
+			  <option value="La Manouba">La Manouba</option>
+			  <option value="Béja">Béja</option>
 			</select>				
-		
-		<div class="checkbox-wrapper-4">
-			<input class="inp-cbx" id="termes" type="checkbox"/>
-			<label class="cbx" for="termes"><span>
-			<svg width="12px" height="10px">
-			  <use xlink:href="#check-4"></use>
-			</svg></span><span>J'accepte les termes et conditions générales</span></label>
-			<svg class="inline-svg">
-			  <symbol id="check-4" viewbox="0 0 12 10">
+			
+			<div class="checkbox-wrapper-4">
+			  <input class="inp-cbx" id="termes" type="checkbox"/>
+			  <label class="cbx" for="termes"><span>
+			  <svg width="12px" height="10px">
+				<use xlink:href="#check-4"></use>
+			  </svg></span><span>J'accepte les termes et conditions générales</span></label>
+			  <svg class="inline-svg">
+				<symbol id="check-4" viewbox="0 0 12 10">
 				<polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-			  </symbol>
-			</svg>
-		  </div>
-		<button type="submit">S'inscrire</button>
-	  </form>
+				</symbol>
+			  </svg>
+			</div>
+			
+			<button type="submit">S'inscrire</button>
+		  </form>
 	</div>
   
 	<!-- Sign In Form -->
