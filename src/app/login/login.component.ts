@@ -14,8 +14,11 @@ export class LoginComponent {
     const signUpButton = document.getElementById('signUp') as HTMLButtonElement;
     const signInButton = document.getElementById('signIn') as HTMLButtonElement;
     const container = document.getElementById('container') as HTMLElement;
-    const form = document.querySelector('form') as HTMLFormElement;
+    const registerForm = document.querySelector('.sign-up-container form') as HTMLFormElement;
+    const loginForm = document.querySelector('.sign-in-container form') as HTMLFormElement;
+    const loginButton = document.getElementById('loginBtn') as HTMLButtonElement; // ✅ Target login button directly
 
+    
     if (signUpButton && signInButton && container) {
       signUpButton.addEventListener('click', () => {
         container.classList.add("right-panel-active");
@@ -26,27 +29,31 @@ export class LoginComponent {
       });
     }
 
-    // Add form submission handler
-    if (form) {
-      form.addEventListener('submit', (event) => {
+    if (registerForm) {
+      registerForm.addEventListener('submit', (event) => {
         event.preventDefault();
         this.handleRegistration();
       });
     }
+
+    if (loginButton) {
+      loginButton.addEventListener('click', (event) => {
+          event.preventDefault(); // Prevents form from submitting normally
+          this.handleLogin();
+      });
+  }
   }
 
   handleRegistration(): void {
-    // Get all form elements by their IDs
     const nameInput = document.getElementById('name') as HTMLInputElement;
-    const emailInput = document.getElementById('email') as HTMLInputElement;
-    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    const emailInput = document.getElementById('r-email') as HTMLInputElement;
+    const passwordInput = document.getElementById('r-password') as HTMLInputElement;
     const confirmPasswordInput = document.getElementById('confirm-password') as HTMLInputElement;
     const telInput = document.getElementById('tel') as HTMLInputElement;
     const addressInput = document.getElementById('adresse') as HTMLInputElement;
     const regionSelect = document.getElementById('region') as HTMLSelectElement;
     const termsCheckbox = document.getElementById('termes') as HTMLInputElement;
 
-    // Perform basic validation
     if (!nameInput.value || !emailInput.value || !passwordInput.value || 
         !confirmPasswordInput.value || !telInput.value || !addressInput.value || 
         !regionSelect.value || !termsCheckbox.checked) {
@@ -54,13 +61,11 @@ export class LoginComponent {
       return;
     }
 
-    // Check if passwords match
     if (passwordInput.value !== confirmPasswordInput.value) {
       alert('Les mots de passe ne correspondent pas.');
       return;
     }
 
-    // Create data object to match your backend route's expected format
     const formData = {
       name: nameInput.value,
       email: emailInput.value,
@@ -70,11 +75,18 @@ export class LoginComponent {
       region: regionSelect.value
     };
 
-    // Send the data to your backend route
     this.http.post('http://localhost:5000/Client/registerClient', formData).subscribe({
       next: (response: any) => {
         alert('Inscription réussie! Votre compte a été créé.');
-        // Reset the form
+        this.http.post('http://localhost:5000/Client/loginClient', formData).subscribe({
+          next: (response: any) => {
+            alert('Connexion réussie!');
+            localStorage.setItem('token', response.token);
+          },
+          error: (error) => {
+            alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
+          }
+        });
         (document.querySelector('form') as HTMLFormElement).reset();
       },
       error: (error) => {
@@ -82,4 +94,31 @@ export class LoginComponent {
       }
     });
   }
+
+  handleLogin(): void {
+    const emailInput = document.getElementById('l-email') as HTMLInputElement;
+    const passwordInput = document.getElementById('l-password') as HTMLInputElement;
+    const rememberMeCheckbox = document.getElementById('remember') as HTMLInputElement;
+
+    if (!emailInput.value || !passwordInput.value) {
+      alert('Veuillez saisir votre email et votre mot de passe.');
+      return;
+    }
+
+    const loginData = {
+      email: emailInput.value,
+      password: passwordInput.value,
+      rememberme: rememberMeCheckbox.checked
+    };
+
+    this.http.post('http://localhost:5000/Client/loginClient', loginData).subscribe({
+      next: (response: any) => {
+        alert('Connexion réussie!');
+        localStorage.setItem('token', response.token);
+      },
+      error: (error) => {
+        alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
+      }
+    });
+}
 }
