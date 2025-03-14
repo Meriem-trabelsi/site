@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { MdpComponent } from './mdp/mdp.component';
-import { RecupererPWComponent } from './recuperer-pw/recuperer-pw.component';
 import { CartComponent } from './cart/cart.component';
 import { CommanderComponent } from './commander/commander.component';
+import { RecupererMdpComponent } from './recuperer-mdp/recuperer-mdp.component';
 
 export const routes: Routes = [
     {
@@ -14,13 +13,12 @@ export const routes: Routes = [
 
     {path:'login',component: LoginComponent},
 
-    {path:'mdp',component:  MdpComponent },
-
-    {path:'RecupererPW',component:  RecupererPWComponent },
-
     {path:'cart', component:  CartComponent},
 
     {path:'commander',component:  CommanderComponent},
+
+    {path:'recuperermdp',component:  RecupererMdpComponent },
+
 
 
     

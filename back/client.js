@@ -5,12 +5,16 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'hotmail',
+    service: 'gmail',
     auth: {
-        user: 'techshoptn@hotmail.com',
-        pass: 'ehxojzjpkqeoibqb'
+        user: 'meriem.trabelsi@etudiant-fst.utm.tn',
+        pass: 'kikc ynav vxgc ypje'
     }
   });
+
+  function generateVerificationCode() {
+    return Math.floor(10000000 + Math.random() * 90000000);
+}
 
 clientRoutes.post('/registerClient', async (req, res) => {
     const pool = req.pool;
@@ -29,18 +33,18 @@ clientRoutes.post('/registerClient', async (req, res) => {
             }
 
             console.log('Client registered successfully with ID: ' + result.insertId);
-            /*transporter.sendMail({
-                from: 'techshoptn@hotmail.com',
+            transporter.sendMail({
+                from: 'meriem.trabelsi@etudiant-fst.utm.tn',
                 to: email,
-                subject: 'Welcome to Techshop',
-                text: 'Thank you for registering with us!'
+                subject: 'Bienvenue chez Techshop',
+                text: 'Merci de vous être inscrit chez nous !'
             }, (error, info) => {
                 if (error) {
                     console.error('Error sending email:', error);
                 } else {
                     console.log('Email sent:', info.response);
                 }
-            });*/
+            });
             return res.status(201).json({ message: 'Client registered successfully', clientId: result.insertId });
         });
     } catch (error) {
@@ -49,7 +53,7 @@ clientRoutes.post('/registerClient', async (req, res) => {
     }
 });
 
-// Route to login candidate
+// Route to login client
 clientRoutes.post('/loginClient', async (req, res) => {
     const pool = req.pool;
     const { email, password, rememberme } = req.body;
@@ -84,6 +88,94 @@ clientRoutes.post('/loginClient', async (req, res) => {
     } catch (error) {
         console.error('Error logging in:', error);
         return res.status(500).json({ error: 'An error occurred while logging in.' });
+    }
+});
+
+clientRoutes.post('/forgotpassword', async (req, res) => {
+    const pool = req.pool;
+    const { email } = req.body;
+
+    try {
+        const query = 'SELECT * FROM Client WHERE email = ?';
+        pool.query(query, [email], async (error, results) => {
+            if (error) {
+                console.error('Error querying client:', error);
+                return res.status(500).json({ error: 'An error occurred while changing password.' });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'Client not found.' });
+            }
+
+            const verificationCode = generateVerificationCode();
+            transporter.sendMail({
+                from: 'meriem.trabelsi@etudiant-fst.utm.tn',
+                to: email,
+                subject: 'Request to change password',
+                text: `Your verification code is: ${verificationCode}`
+            }, (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                    return res.status(500).json({ error: 'An error occurred while sending verification code email.' });
+                } else {
+                    console.log('Email sent:', info.response);
+                    return res.status(200).json({ code: verificationCode });
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error changing password:', error);
+        return res.status(500).json({ error: 'An error occurred while changing password.' });
+    }
+});
+
+
+clientRoutes.post('/changepass', async (req, res) => {
+    const pool = req.pool;
+    const { email, newPassword } = req.body;
+
+    try {
+        const query = 'SELECT * FROM Client WHERE email = ?';
+        pool.query(query, [email], async (error, results) => {
+            if (error) {
+                console.error('Error querying client:', error);
+                return res.status(500).json({ error: 'An error occurred while changing password.' });
+            }
+
+            if (results.length === 0) {
+                // Client not found
+                return res.status(404).json({ error: 'Client not found.' });
+            }
+
+            // Hash the new password
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+            // Update the client's password in the database
+            const updateQuery = 'UPDATE Client SET motdepasse = ? WHERE email = ?';
+            pool.query(updateQuery, [hashedPassword, email], (error, result) => {
+                if (error) {
+                    console.error('Error updating password:', error);
+                    return res.status(500).json({ error: 'An error occurred while changing password.' });
+                }
+                console.log('Password changed successfully');
+                transporter.sendMail({
+                    from: 'meriem.trabelsi@etudiant-fst.utm.tn',
+                    to: email,
+                    subject: 'Your Password has been changed',
+                    text: 'Your Password has been changed successfully!'
+                }, (error, info) => {
+                    if (error) {
+                        console.error('Error sending email:', error);
+                    } else {
+                        console.log('Email sent:', info.response);
+                    }
+                });
+                res.status(200).json({ message: 'Password changed successfully' });
+            });
+        });
+    } catch (error) {
+        console.error('Error changing password:', error);
+        return res.status(500).json({ error: 'An error occurred while changing password.' });
     }
 });
 

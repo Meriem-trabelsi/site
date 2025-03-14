@@ -75,13 +75,12 @@ export class LoginComponent {
       region: regionSelect.value
     };
 
-    this.http.post('http://localhost:5000/Client/registerClient', formData).subscribe({
+    this.http.post('http://localhost:5000/Client/registerClient', formData, { withCredentials: true }).subscribe({
       next: (response: any) => {
         alert('Inscription réussie! Votre compte a été créé.');
-        this.http.post('http://localhost:5000/Client/loginClient', formData).subscribe({
+        this.http.post('http://localhost:5000/Client/loginClient', formData, { withCredentials: true }).subscribe({
           next: (response: any) => {
             alert('Connexion réussie!');
-            localStorage.setItem('token', response.token);
           },
           error: (error) => {
             alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
@@ -111,10 +110,9 @@ export class LoginComponent {
       rememberme: rememberMeCheckbox.checked
     };
 
-    this.http.post('http://localhost:5000/Client/loginClient', loginData).subscribe({
+    this.http.post('http://localhost:5000/Client/loginClient', loginData, { withCredentials: true }).subscribe({
       next: (response: any) => {
         alert('Connexion réussie!');
-        localStorage.setItem('token', response.token);
       },
       error: (error) => {
         alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));

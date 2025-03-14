@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MdpComponent } from './mdp.component';
+import { RecupererMdpComponent } from './recuperer-mdp.component';
 
-describe('MdpComponent', () => {
-  let component: MdpComponent;
-  let fixture: ComponentFixture<MdpComponent>;
+describe('RecupererMdpComponent', () => {
+  let component: RecupererMdpComponent;
+  let fixture: ComponentFixture<RecupererMdpComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MdpComponent]
+      imports: [RecupererMdpComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MdpComponent);
+    fixture = TestBed.createComponent(RecupererMdpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
