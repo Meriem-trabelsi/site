@@ -2,15 +2,16 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-login',
-  imports: [],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  selector: 'app-login', // Defines the component selector
+  imports: [], // No additional module imports
+  templateUrl: './login.component.html', // Template file for the component
+  styleUrl: './login.component.css' // Styles for the component
 })
 export class LoginComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {} // Injects HttpClient for API calls
   
   ngOnInit(): void {
+    // Get references to the sign-up and sign-in buttons
     const signUpButton = document.getElementById('signUp') as HTMLButtonElement;
     const signInButton = document.getElementById('signIn') as HTMLButtonElement;
     const container = document.getElementById('container') as HTMLElement;
@@ -18,21 +19,22 @@ export class LoginComponent {
     const loginForm = document.querySelector('.sign-in-container form') as HTMLFormElement;
     const loginButton = document.getElementById('loginBtn') as HTMLButtonElement; // ✅ Target login button directly
 
-    
+    // Add event listener for "Sign Up" button click - activates right panel
     if (signUpButton && signInButton && container) {
       signUpButton.addEventListener('click', () => {
         container.classList.add("right-panel-active");
       });
 
+      // Add event listener for "Sign In" button click - deactivates right panel
       signInButton.addEventListener('click', () => {
         container.classList.remove("right-panel-active");
       });
     }
-
+    // Attach event listener for form submission
     if (registerForm) {
       registerForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        this.handleRegistration();
+        event.preventDefault(); // Prevent default form submission
+        this.handleRegistration(); // Call registration function
       });
     }
 
@@ -44,7 +46,9 @@ export class LoginComponent {
   }
   }
 
+  /* Handles the registration process by collecting form data and sending it to the backend.*/
   handleRegistration(): void {
+    // Retrieve form input fields by their IDs
     const nameInput = document.getElementById('name') as HTMLInputElement;
     const emailInput = document.getElementById('r-email') as HTMLInputElement;
     const passwordInput = document.getElementById('r-password') as HTMLInputElement;
@@ -53,19 +57,19 @@ export class LoginComponent {
     const addressInput = document.getElementById('adresse') as HTMLInputElement;
     const regionSelect = document.getElementById('region') as HTMLSelectElement;
     const termsCheckbox = document.getElementById('termes') as HTMLInputElement;
-
+    // Perform basic validation to ensure all fields are filled
     if (!nameInput.value || !emailInput.value || !passwordInput.value || 
         !confirmPasswordInput.value || !telInput.value || !addressInput.value || 
         !regionSelect.value || !termsCheckbox.checked) {
       alert('Veuillez remplir tous les champs et accepter les termes et conditions.');
       return;
     }
-
+    // Validate that password and confirm password match
     if (passwordInput.value !== confirmPasswordInput.value) {
       alert('Les mots de passe ne correspondent pas.');
       return;
     }
-
+    // Prepare form data object for backend submission
     const formData = {
       name: nameInput.value,
       email: emailInput.value,
@@ -74,7 +78,7 @@ export class LoginComponent {
       tel: telInput.value,
       region: regionSelect.value
     };
-
+    // Send the form data to the backend API
     this.http.post('http://localhost:5000/Client/registerClient', formData, { withCredentials: true }).subscribe({
       next: (response: any) => {
         alert('Inscription réussie! Votre compte a été créé.');
@@ -86,6 +90,7 @@ export class LoginComponent {
             alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
           }
         });
+        // Reset the form after successful registration
         (document.querySelector('form') as HTMLFormElement).reset();
       },
       error: (error) => {
