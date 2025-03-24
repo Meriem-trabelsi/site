@@ -19,7 +19,7 @@ export const routes: Routes = [
 
     {path:'commander',component:  CommanderComponent},
 
-    {path:'recuperermdp',component:  RecupererMdpComponent },
+    {path:'recuperer-mdp',component:  RecupererMdpComponent },
 
     {path:'cart-1',component:  Cart1Component },
 
