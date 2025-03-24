@@ -3,6 +3,8 @@ import { LoginComponent } from './login/login.component';
 import { CartComponent } from './cart/cart.component';
 import { CommanderComponent } from './commander/commander.component';
 import { RecupererMdpComponent } from './recuperer-mdp/recuperer-mdp.component';
+import { Cart1Component } from './cart-1/cart-1.component';
+
 
 export const routes: Routes = [
     {
@@ -10,7 +12,7 @@ export const routes: Routes = [
         redirectTo:'login',
         pathMatch:'full',
     },
-
+    
     {path:'login',component: LoginComponent},
 
     {path:'cart', component:  CartComponent},
@@ -18,6 +20,11 @@ export const routes: Routes = [
     {path:'commander',component:  CommanderComponent},
 
     {path:'recuperermdp',component:  RecupererMdpComponent },
+
+    {path:'cart-1',component:  Cart1Component },
+
+
+    
 
 
 
