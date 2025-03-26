@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';  // Directly import HttpClient
 import { ActivatedRoute } from '@angular/router';  // To get clientID from URL or route params
 
 @Component({
   selector: 'app-cart-1',
+  imports: [
+    CommonModule,
+  ],
   templateUrl: './cart-1.component.html',
   styleUrls: ['./cart-1.component.css']
 })
