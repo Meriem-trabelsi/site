@@ -3,6 +3,7 @@ const mysql = require("mysql");
 const cors = require('cors');
 const bodyParser = require("body-parser");
 const clientRoutes = require('./client.js');
+const cartRoutes = require('./cart.js');
 
 const app = express();
 
@@ -50,3 +51,6 @@ app.listen(PORT, () => {
 });
 
 app.use('/Client', clientRoutes);
+app.use('/Cart', cartRoutes);
+
+
