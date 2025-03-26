@@ -1,103 +1,253 @@
 const express = require('express');
 const cartRoutes = express.Router();
+const jwt = require('jsonwebtoken');
 
-// Helper function to get panierID for a client
-async function getPanierID(pool, clientID) {
-    const [panier] = await pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID]);
-    if (panier.length === 0) {
-        const [result] = await pool.query("INSERT INTO Panier (clientID) VALUES (?)", [clientID]);
-        return result.insertId;
-    }
-    return panier[0].panierID;
-}
-
-// ✅ Récupérer le panier d'un client
+// Récupérer le panier d'un client
 cartRoutes.get('/:clientID', async (req, res) => {
     const pool = req.pool;
-    const clientID = req.params.clientID;
+    const { clientID } = req.params;
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "Accès refusé, token manquant." });
+    }
 
     try {
-        const [rows] = await pool.query(`
-            SELECT p.produitID, p.nom, p.description, p.prix, p.imageURL, pp.quantite 
+        // Verify token
+        const decoded = jwt.verify(token, 'mariem');
+        
+        // Ensure the user is accessing their own cart
+        if (decoded.client.clientID !== parseInt(clientID)) {
+            return res.status(403).json({ error: "Accès non autorisé." });
+        }
+
+        // Fetch the cart and its products
+        const cartQuery = `
+            SELECT pp.produitID, p.nom, p.prix, pp.quantite, 
+                   (p.prix * pp.quantite) as total_ligne
             FROM Panier_Produit pp
             JOIN Produit p ON pp.produitID = p.produitID
-            JOIN Panier pan ON pp.panierID = pan.panierID
-            WHERE pan.clientID = ?
-        `, [clientID]);
+            JOIN Panier pa ON pp.panierID = pa.panierID
+            WHERE pa.clientID = ?
+        `;
 
-        res.status(200).json({ panier: rows });
+        const cartProducts = await new Promise((resolve, reject) => {
+            pool.query(cartQuery, [clientID], (error, results) => {
+                if (error) reject(error);
+                else resolve(results);
+            });
+        });
+
+        // Calculate total cart value
+        const totalCart = cartProducts.reduce((sum, item) => sum + item.total_ligne, 0);
+
+        res.status(200).json({
+            produits: cartProducts,
+            total: totalCart
+        });
     } catch (error) {
-        console.error("Erreur lors de la récupération du panier :", error);
-        res.status(500).json({ error: "Erreur lors de la récupération du panier." });
+        console.error('Erreur lors de la récupération du panier:', error);
+        
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ error: "Token invalide." });
+        }
+        
+        res.status(500).json({ error: "Une erreur est survenue lors de la récupération du panier." });
     }
 });
 
 // ✅ Ajouter un produit au panier
 cartRoutes.post('/add', async (req, res) => {
     const pool = req.pool;
-    const { clientID, produitID, quantite } = req.body;
+    const { produitID, quantite } = req.body;
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "Accès refusé, token manquant." });
+    }
 
     try {
-        // Vérifier si le panier existe
-        let [panier] = await pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID]);
+        // Extract clientID from token
+        const decoded = jwt.verify(token, 'mariem');
+        const clientID = decoded.client.clientID;
+        
+        // Check if the cart exists
+        const cartRows = await new Promise((resolve, reject) => {
+            pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID], (error, rows) => {
+                if (error) reject(error);
+                else resolve(rows);
+            });
+        });
 
         let panierID;
-        if (panier.length === 0) {
-            const [result] = await pool.query("INSERT INTO Panier (clientID) VALUES (?)", [clientID]);
-            panierID = result.insertId;
+        if (cartRows.length === 0) {
+            // Create a new cart
+            const cartResult = await new Promise((resolve, reject) => {
+                pool.query("INSERT INTO Panier (clientID) VALUES (?)", [clientID], (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                });
+            });
+            panierID = cartResult.insertId;
         } else {
-            panierID = panier[0].panierID;
-        }
+            panierID = cartRows[0].panierID;
+        }        
 
-        // Vérifier si le produit est déjà dans le panier
-        let [existingProduct] = await pool.query("SELECT quantite FROM Panier_Produit WHERE panierID = ? AND produitID = ?", [panierID, produitID]);
+        // Check if the product is already in the cart
+        const existingProductRows = await new Promise((resolve, reject) => {
+            pool.query(
+                "SELECT quantite FROM Panier_Produit WHERE panierID = ? AND produitID = ?",
+                [panierID, produitID],
+                (error, rows) => {
+                    if (error) reject(error);
+                    else resolve(rows);
+                }
+            );
+        });
 
-        if (existingProduct.length > 0) {
-            await pool.query("UPDATE Panier_Produit SET quantite = quantite + ? WHERE panierID = ? AND produitID = ?", [quantite, panierID, produitID]);
+        if (existingProductRows.length > 0) {
+            // Update existing product quantity
+            await new Promise((resolve, reject) => {
+                pool.query(
+                    "UPDATE Panier_Produit SET quantite = quantite + ? WHERE panierID = ? AND produitID = ?",
+                    [quantite, panierID, produitID],
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+            });
         } else {
-            await pool.query("INSERT INTO Panier_Produit (panierID, produitID, quantite) VALUES (?, ?, ?)", [panierID, produitID, quantite]);
+            // Insert new product to cart
+            await new Promise((resolve, reject) => {
+                pool.query(
+                    "INSERT INTO Panier_Produit (panierID, produitID, quantite) VALUES (?, ?, ?)",
+                    [panierID, produitID, quantite],
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+            });
         }
 
         res.status(200).json({ message: "Produit ajouté au panier" });
     } catch (error) {
-        console.error("Erreur lors de l'ajout au panier :", error);
-        res.status(500).json({ error: "Erreur lors de l'ajout au panier." });
+        console.error('Erreur lors de l\'ajout au panier:', error);
+        
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ error: "Token invalide." });
+        }
+        
+        res.status(500).json({ error: "Une erreur est survenue lors de l'ajout du produit au panier." });
     }
 });
 
-//  Modifier la quantité d'un produit dans le panier
+// Modifier la quantité d'un produit dans le panier
 cartRoutes.put('/update', async (req, res) => {
     const pool = req.pool;
-    const { clientID, produitID, quantite } = req.body;
+    const { produitID, quantite } = req.body;
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "Accès refusé, token manquant." });
+    }
 
     try {
-        let [panier] = await pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID]);
-        if (panier.length === 0) return res.status(404).json({ error: "Panier non trouvé." });
+        // Verify token and get client ID
+        const decoded = jwt.verify(token, 'mariem');
+        const clientID = decoded.client.clientID;
 
-        await pool.query("UPDATE Panier_Produit SET quantite = ? WHERE panierID = ? AND produitID = ?", [quantite, panier[0].panierID, produitID]);
+        // Find the cart for this client
+        const cartRows = await new Promise((resolve, reject) => {
+            pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID], (error, rows) => {
+                if (error) reject(error);
+                else resolve(rows);
+            });
+        });
 
-        res.status(200).json({ message: "Quantité mise à jour" });
+        if (cartRows.length === 0) {
+            return res.status(404).json({ error: "Panier non trouvé." });
+        }
+
+        const panierID = cartRows[0].panierID;
+
+        // Update product quantity in cart
+        await new Promise((resolve, reject) => {
+            pool.query(
+                "UPDATE Panier_Produit SET quantite = ? WHERE panierID = ? AND produitID = ?",
+                [quantite, panierID, produitID],
+                (error, result) => {
+                    if (error) reject(error);
+                    else if (result.affectedRows === 0) reject(new Error('Produit non trouvé dans le panier'));
+                    else resolve(result);
+                }
+            );
+        });
+
+        res.status(200).json({ message: "Quantité mise à jour avec succès" });
     } catch (error) {
-        console.error("Erreur lors de la mise à jour du panier :", error);
-        res.status(500).json({ error: "Erreur lors de la mise à jour du panier." });
+        console.error('Erreur lors de la mise à jour de la quantité:', error);
+        
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ error: "Token invalide." });
+        }
+        
+        res.status(500).json({ error: "Une erreur est survenue lors de la mise à jour de la quantité." });
     }
 });
 
 // Supprimer un produit du panier
 cartRoutes.delete('/remove', async (req, res) => {
     const pool = req.pool;
-    const { clientID, produitID } = req.body;
+    const { produitID } = req.body;
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "Accès refusé, token manquant." });
+    }
 
     try {
-        let [panier] = await pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID]);
-        if (panier.length === 0) return res.status(404).json({ error: "Panier non trouvé." });
+        // Verify token and get client ID
+        const decoded = jwt.verify(token, 'mariem');
+        const clientID = decoded.client.clientID;
 
-        await pool.query("DELETE FROM Panier_Produit WHERE panierID = ? AND produitID = ?", [panier[0].panierID, produitID]);
+        // Find the cart for this client
+        const cartRows = await new Promise((resolve, reject) => {
+            pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID], (error, rows) => {
+                if (error) reject(error);
+                else resolve(rows);
+            });
+        });
 
-        res.status(200).json({ message: "Produit retiré du panier" });
+        if (cartRows.length === 0) {
+            return res.status(404).json({ error: "Panier non trouvé." });
+        }
+
+        const panierID = cartRows[0].panierID;
+
+        // Remove product from cart
+        await new Promise((resolve, reject) => {
+            pool.query(
+                "DELETE FROM Panier_Produit WHERE panierID = ? AND produitID = ?",
+                [panierID, produitID],
+                (error, result) => {
+                    if (error) reject(error);
+                    else if (result.affectedRows === 0) reject(new Error('Produit non trouvé dans le panier'));
+                    else resolve(result);
+                }
+            );
+        });
+
+        res.status(200).json({ message: "Produit supprimé du panier avec succès" });
     } catch (error) {
-        console.error("Erreur lors de la suppression du produit :", error);
-        res.status(500).json({ error: "Erreur lors de la suppression du produit." });
+        console.error('Erreur lors de la suppression du produit:', error);
+        
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ error: "Token invalide." });
+        }
+        
+        res.status(500).json({ error: "Une erreur est survenue lors de la suppression du produit." });
     }
 });
 

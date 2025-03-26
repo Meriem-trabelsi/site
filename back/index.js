@@ -6,6 +6,9 @@ const clientRoutes = require('./client.js');
 const cartRoutes = require('./cart.js');
 
 const app = express();
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 
 app.use(bodyParser.json());
 const corsOptions = {
