@@ -24,7 +24,7 @@ CREATE TABLE Produit (
     produitID INT PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(100) NOT NULL,
     description TEXT,
-    prix FLOAT NOT NULL CHECK (prix >= 0),
+    prix DECIMAL(10, 2) NOT NULL CHECK (prix >= 0),
     stock INT NOT NULL CHECK (stock >= 0),
     imageURL VARCHAR(255),
     categorieID INT,
@@ -55,7 +55,7 @@ CREATE TABLE Commande (
     clientID INT NOT NULL,
     dateCommande DATE NOT NULL,
     statut VARCHAR(50) NOT NULL,
-    total FLOAT NOT NULL CHECK (total >= 0),
+    total DECIMAL(10, 2) NOT NULL CHECK (total >= 0),
     FOREIGN KEY (clientID) REFERENCES Client(clientID) ON DELETE CASCADE
 );
 

@@ -38,7 +38,6 @@ cartRoutes.get('/fetch', async (req, res) => {
                 else resolve(results);
             });
         });
-
         // Calculate total cart value
         const totalCart = cartProducts.reduce((sum, item) => sum + item.total_ligne, 0);
 

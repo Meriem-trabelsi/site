@@ -1,3 +1,4 @@
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <div class="cart-container">
   <div class="cart-items">
     <div class="cart-header">
@@ -9,12 +10,13 @@
 
     <div *ngFor="let item of cartItems" class="cart-item">
       <div class="item-details">
-        <img [src]="item.imageURL || 'https://via.placeholder.com/50'" alt="{{ item.nom }}">
+        <img [src]="item.imageURL || 'https://placehold.co/50'" alt="{{ item.nom }}">
         <span>{{ item.nom }}</span>
       </div>
       <div class="item-price">{{ item.prix }}€</div>
 
       <input
+        class="cart-quantity"
         type="number"
         [value]="item.quantite"
         (input)="onQuantityChange(item, $event)"
@@ -22,9 +24,11 @@
         max="100" 
       />
 
-      <div class="item-total">{{ item.prix * item.quantite }}€</div>
-      <i class='bx bxs-trash' (click)="removeFromCart(item.produitID)"></i>
-    </div>
+      <div class="item-total">{{ ((item.prix * 1) * (item.quantite * 1)).toFixed(2) }}€</div>
+      <button class="remove-btn" (click)="removeFromCart(item.produitID)">
+        <i class="bx bxs-trash"></i> <!-- Icon inside button -->
+      </button>
+              </div>
   </div>
 
   <div class="order-summary">
@@ -32,7 +36,7 @@
     <div class="summary-details">
       <div class="summary-row">
         <span>Sous-total</span>
-        <span>{{ totalPrice }}€</span>
+        <span>{{ (totalPrice * 1).toFixed(2) }}€</span>
       </div>
       <div class="summary-row">
         <span>Livraison</span>

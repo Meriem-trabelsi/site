@@ -41,32 +41,6 @@ export class Cart1Component implements OnInit {
     );
   }
 
-  // Add an item to the cart
-  /*addToCart(produitID: number, quantite: number): void {
-    this.http.post(`http://localhost:5000/Cart/add`, { clientID: this.clientID, produitID, quantite }).subscribe(
-      () => {
-        console.log('Item added to cart');
-        this.fetchCart(); // Refresh the cart data
-      },
-      (error) => {
-        console.error('Error adding item to cart:', error);
-      }
-    );
-  }
-
-  // Remove an item from the cart
-  removeFromCart(produitID: number): void {
-    this.http.delete(`${this.apiUrl}/remove`, { body: { clientID: this.clientID, produitID } }).subscribe(
-      () => {
-        console.log('Item removed from cart');
-        this.fetchCart(); // Refresh the cart data
-      },
-      (error) => {
-        console.error('Error removing item from cart:', error);
-      }
-    );
-  }
-
   // Update the quantity of an item in the cart
   onQuantityChange(item: any, event: any): void {
     const newQuantity = parseInt(event.target.value, 10);
@@ -83,7 +57,7 @@ export class Cart1Component implements OnInit {
 
   // Update quantity via API
   updateQuantity(produitID: number, quantite: number): void {
-    this.http.put(`${this.apiUrl}/update`, { clientID: this.clientID, produitID, quantite }).subscribe(
+    this.http.put(`http://localhost:5000/Cart/update`,{ produitID, quantite }, { withCredentials: true }).subscribe(
       () => {
         console.log('Quantity updated');
         this.fetchCart(); // Refresh the cart data
@@ -92,5 +66,21 @@ export class Cart1Component implements OnInit {
         console.error('Error updating quantity:', error);
       }
     );
-  }*/
+  }
+
+  // Remove an item from the cart
+  removeFromCart(produitID: number): void {
+    this.http.delete(`http://localhost:5000/Cart/remove`, { 
+      body: { produitID }, 
+      withCredentials: true 
+    }).subscribe(
+      () => {
+        console.log('Item removed from cart');
+        this.fetchCart(); // Refresh the cart data
+      },
+      (error) => {
+        console.error('Error removing item from cart:', error);
+      }
+    );
+  }
 }

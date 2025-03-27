@@ -127,21 +127,31 @@ h1 {
     border-color: #474747; /* Bordure discrète au focus */
 }
 
-/* Icône de suppression */
-.item-remove {
-    text-align: center;
-    cursor:auto;
+/* Style for the Remove button with icon */
+.remove-btn {
+    background-color: transparent; /* Transparent background */
+    border: none; /* Remove border */
+    padding: 5px;
+    font-size: 20px; /* Icon size */
+    cursor: pointer;
+    color: #ff4c4c; /* Red color for the icon */
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
-.item-remove i {
-    font-size: 14px; /* Icône plus petite */
-    color: #484343; /* Couleur plus douce */
-    transition: color 0.3s ease;
+.remove-btn:hover {
+    color: #e03e3e; /* Darker red on hover */
+    transform: scale(1.1); /* Slight scale effect on hover */
 }
 
-.item-remove i:hover {
-    color: #333; /* Couleur plus foncée au survol */
+.remove-btn:focus {
+    outline: none;
 }
+
+/* Boxicon specific styling for the icon */
+.remove-btn i {
+    font-size: 20px; /* Ensure icon size is appropriate */
+}
+
 
 /* Résumé de la commande */
 .order-summary {
