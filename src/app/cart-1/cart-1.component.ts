@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';  // Directly import HttpClient
-import { ActivatedRoute } from '@angular/router';  // To get clientID from URL or route params
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cart-1',
@@ -12,29 +12,28 @@ import { ActivatedRoute } from '@angular/router';  // To get clientID from URL o
   styleUrls: ['./cart-1.component.css']
 })
 export class Cart1Component implements OnInit {
-  clientID: number = 1; // Example static clientID (you should get it dynamically, e.g., from session or auth)
+  
   cartItems: any[] = [];
   totalPrice: number = 0;
-  private apiUrl = 'http://localhost:3636/api/cart';  // Direct API URL
+  
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     // Dynamically fetch clientID from route if available
-    this.route.params.subscribe(params => {
-      if (params['clientID']) {
-        this.clientID = +params['clientID'];  // Use the clientID from URL
-      }
-    });
-    this.fetchCart(); // Fetch cart data when the component initializes
-  }
+    
+      this.fetchCart(); // Fetch cart after setting clientID
+    }
+  
 
   // Fetch cart items from the backend
   fetchCart(): void {
-    this.http.get<any[]>(`${this.apiUrl}/${this.clientID}`).subscribe(
-      (data) => {
-        this.cartItems = data;
-        this.calculateTotalPrice();
+    this.http.get<{produits: any[], total: number}>(`http://localhost:5000/Cart/fetch`,{ withCredentials: true }).subscribe(
+      (response) => {
+        // The backend returns an object with 'produits' and 'total'
+        this.cartItems = response.produits;
+        this.totalPrice = response.total;
+        console.log(response);
       },
       (error) => {
         console.error('Error fetching cart data:', error);
@@ -43,11 +42,11 @@ export class Cart1Component implements OnInit {
   }
 
   // Add an item to the cart
-  addToCart(produitID: number, quantite: number): void {
-    this.http.post(`${this.apiUrl}/add`, { clientID: this.clientID, produitID, quantite }).subscribe(
+  /*addToCart(produitID: number, quantite: number): void {
+    this.http.post(`http://localhost:5000/Cart/add`, { clientID: this.clientID, produitID, quantite }).subscribe(
       () => {
         console.log('Item added to cart');
-        this.refreshCart(); // Refresh the cart data
+        this.fetchCart(); // Refresh the cart data
       },
       (error) => {
         console.error('Error adding item to cart:', error);
@@ -60,44 +59,38 @@ export class Cart1Component implements OnInit {
     this.http.delete(`${this.apiUrl}/remove`, { body: { clientID: this.clientID, produitID } }).subscribe(
       () => {
         console.log('Item removed from cart');
-        this.refreshCart(); // Refresh the cart data
+        this.fetchCart(); // Refresh the cart data
       },
       (error) => {
         console.error('Error removing item from cart:', error);
       }
     );
   }
-  // **Here is the onQuantityChange method**
+
+  // Update the quantity of an item in the cart
   onQuantityChange(item: any, event: any): void {
-    const newQuantity = event.target.value;
-    item.quantite = newQuantity;
+    const newQuantity = parseInt(event.target.value, 10);
+    
+    // Validate the input
+    if (isNaN(newQuantity) || newQuantity < 1) {
+      // Reset to the previous quantity if invalid
+      event.target.value = item.quantite;
+      return;
+    }
 
     this.updateQuantity(item.produitID, newQuantity);
   }
 
-
-  // Update the quantity of an item in the cart
+  // Update quantity via API
   updateQuantity(produitID: number, quantite: number): void {
     this.http.put(`${this.apiUrl}/update`, { clientID: this.clientID, produitID, quantite }).subscribe(
       () => {
         console.log('Quantity updated');
-        this.refreshCart(); // Refresh the cart data
+        this.fetchCart(); // Refresh the cart data
       },
       (error) => {
         console.error('Error updating quantity:', error);
       }
     );
-  }
-
-  // Refresh the cart data
-  private refreshCart(): void {
-    this.fetchCart();
-  }
-
-  // Calculate the total price for the cart
-  calculateTotalPrice(): void {
-    this.totalPrice = this.cartItems.reduce((sum, item) => {
-      return sum + item.prix * item.quantite;
-    }, 0);
-  }
+  }*/
 }

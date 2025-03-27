@@ -3,10 +3,11 @@ const cartRoutes = express.Router();
 const jwt = require('jsonwebtoken');
 
 // Récupérer le panier d'un client
-cartRoutes.get('/:clientID', async (req, res) => {
+cartRoutes.get('/fetch', async (req, res) => {
     const pool = req.pool;
-    const { clientID } = req.params;
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+    const decoded = jwt.verify(token, 'mariem');
+    const clientID = decoded.client.clientID;
 
     if (!token) {
         return res.status(401).json({ error: "Accès refusé, token manquant." });

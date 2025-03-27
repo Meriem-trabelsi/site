@@ -1,54 +1,48 @@
 <div class="cart-container">
-    <div class="cart-items">
-      <div class="cart-header">
-        <span>Produit</span>
-        <span>Prix</span>
-        <span>Quantité</span>
-        <span>Total</span>
-      </div>
-  
-      <!-- Use *ngFor to loop through the cartItems -->
-      <div *ngFor="let item of cartItems" class="cart-item">
-        <div class="item-details">
-          <!-- Dynamically set the image source and item name -->
-          <img [src]="item.imageURL || 'https://via.placeholder.com/50'" alt="{{ item.nom }}">
-          <span>{{ item.nom }}</span>
-        </div>
-        <div class="item-price">{{ item.prix }}€</div>
-  
-        <!-- Using a method to update the quantity when the user changes it -->
-        <input 
-          type="number" 
-          [value]="item.quantite" 
-          (input)="onQuantityChange(item, $event)" 
-          min="1" 
-          max="100" />
-  
-        <div class="item-total">{{ item.prix * item.quantite }}€</div>
-  
-        <!-- Trash icon to remove item -->
-        <i class='bx bxs-trash' (click)="removeFromCart(item.produitID)"></i>
-      </div>
+  <div class="cart-items">
+    <div class="cart-header">
+      <span>Produit</span>
+      <span>Prix</span>
+      <span>Quantité</span>
+      <span>Total</span>
     </div>
-  
-    <!-- Order Summary -->
-    <div class="order-summary">
-      <h2>Résumé de la Commande</h2>
-      <div class="summary-details">
-        <div class="summary-row">
-          <span>Sous-total</span>
-          <span>{{ totalPrice }}€</span>
-        </div>
-        <div class="summary-row">
-          <span>Livraison</span>
-          <span>Gratuite</span>
-        </div>
-        <div class="summary-row total">
-          <span>Total</span>
-          <span>{{ totalPrice }}€</span>
-        </div>
+
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <div class="item-details">
+        <img [src]="item.imageURL || 'https://via.placeholder.com/50'" alt="{{ item.nom }}">
+        <span>{{ item.nom }}</span>
       </div>
-      <button class="checkout-btn">Passer la commande</button>
+      <div class="item-price">{{ item.prix }}€</div>
+
+      <input
+        type="number"
+        [value]="item.quantite"
+        (input)="onQuantityChange(item, $event)"
+        min="1"
+        max="100" 
+      />
+
+      <div class="item-total">{{ item.prix * item.quantite }}€</div>
+      <i class='bx bxs-trash' (click)="removeFromCart(item.produitID)"></i>
     </div>
   </div>
-  
+
+  <div class="order-summary">
+    <h2>Résumé de la Commande</h2>
+    <div class="summary-details">
+      <div class="summary-row">
+        <span>Sous-total</span>
+        <span>{{ totalPrice }}€</span>
+      </div>
+      <div class="summary-row">
+        <span>Livraison</span>
+        <span>Gratuite</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span>{{ totalPrice }}€</span>
+      </div>
+    </div>
+    <button class="checkout-btn">Passer la commande</button>
+  </div>
+</div>
