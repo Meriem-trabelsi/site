@@ -98,6 +98,7 @@ input {
 	justify-content: center;
 	align-items: center;
 	margin: auto;
+	margin-top: 10px;
 	width: 65%;
 	min-height: 97vh;
 }
@@ -373,7 +374,7 @@ user-select: none;
 
 input{
 	width: 100%;
-	padding: 12px 15px;
+	padding: 8px 15px;
 	border-radius: 5px;
 	border: 1px solid #ccc;
 }

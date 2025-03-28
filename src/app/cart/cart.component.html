@@ -1,71 +1,52 @@
-<h1>Panier d'Achat</h1>
-
-<div class="shopping-cart">
-
-  <div class="products-section">
-    <div class="column-labels">
-      <label class="product-details">Produit</label>
-      <label class="product-price">Prix</label>
-      <label class="product-quantity">Quantité</label>
-      <label class="product-removal">Supprimer</label>
-      <label class="product-line-price">Total</label>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<div class="cart-container">
+  <div class="cart-items">
+    <div class="cart-header">
+      <span>Produit</span>
+      <span>Prix</span>
+      <span>Quantité</span>
+      <span>Total</span>
     </div>
 
-    <!-- Existing Product -->
-    <div class="product">
-      <div class="product-image">
-        <img src="" alt="im1">
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <div class="item-details">
+        <img [src]="item.imageURL || 'https://placehold.co/50'" alt="{{ item.nom }}">
+        <span>{{ item.nom }}</span>
       </div>
-      <div class="product-details">
-        <div class="product-title">pc protable</div>
-      </div>
-      <div class="product-price">12.99</div>
-      <div class="product-quantity">
-        <input type="number" value="2" min="1">
-      </div>
-      <div class="product-removal">
-        <button class="remove-product">Supprimer</button>
-      </div>
-      <div class="product-line-price">25.98</div>
-    </div>
+      <div class="item-price">{{ item.prix }}€</div>
 
-    
-    <div class="product">
-      <div class="product-image">
-        <img src="" alt="im2">
-      </div>
-      <div class="product-details">
-        <div class="product-title">Pc gamer</div>
-      </div>
-      <div class="product-price">45.99</div>
-      <div class="product-quantity">
-        <input type="number" value="1" min="1">
-      </div>
-      <div class="product-removal">
-        <button class="remove-product">Supprimer</button>
-      </div>
-      <div class="product-line-price">45.99</div>
-    </div>
+      <input
+        class="cart-quantity"
+        type="number"
+        [value]="item.quantite"
+        (input)="onQuantityChange(item, $event)"
+        min="1"
+        max="100" 
+      />
 
+      <div class="item-total">{{ ((item.prix * 1) * (item.quantite * 1)).toFixed(2) }}€</div>
+      <button class="remove-btn" (click)="removeFromCart(item.produitID)">
+        <i class="bx bxs-trash"></i> <!-- Icon inside button -->
+      </button>
+              </div>
   </div>
 
-  <div class="totals-section">
-    <div class="totals-item">
-      <label>Sous-total</label>
-      <div class="totals-value" id="cart-subtotal">71.97</div>
+  <div class="order-summary">
+    <h2>Résumé de la Commande</h2>
+    <div class="summary-details">
+      <div class="summary-row">
+        <span>Sous-total</span>
+        <span>{{ (totalPrice * 1).toFixed(2) }}€</span>
+      </div>
+      <div class="summary-row">
+        <span>Livraison</span>
+        <span>Gratuite</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span>{{ totalPrice }}€</span>
+      </div>
     </div>
-    <div class="totals-item">
-      <label>Taxe (5%)</label>
-      <div class="totals-value" id="cart-tax">3.60</div>
-    </div>
-    <div class="totals-item">
-      <label>Livraison</label>
-      <div class="totals-value" id="cart-shipping">15.00</div>
-    </div>
-    <div class="totals-item totals-item-total">
-      <label>Total Général</label>
-      <div class="totals-value" id="cart-total">90.57</div>
-    </div>
-    <button class="checkout">Commander</button>
+    <button class="checkout-btn">Passer la commande</button>
   </div>
 </div>

@@ -1,0 +1,18 @@
+<style>
+
+</style>
+
+<div class="container">
+    <!-- Product Grid -->
+    <div class="flex flex-wrap justify-center gap-25 ">
+      <app-product-card 
+        *ngFor="let product of products"
+        [title]="product.title"
+        [category]="product.category"
+        [price]="product.price"
+        [oldPrice]="product.oldPrice"
+        [image]="product.image"
+        [isNew]="product.isNew">
+      </app-product-card>
+    </div>
+  </div>

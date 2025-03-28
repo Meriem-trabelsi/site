@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -8,10 +9,11 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './login.component.css' // Styles for the component
 })
 export class LoginComponent {
-  constructor(private http: HttpClient) {} // Injects HttpClient for API calls
+  constructor(private http: HttpClient, private router: Router) {} // Injects HttpClient and Router for API calls and navigation
   
   ngOnInit(): void {
     // Get references to the sign-up and sign-in buttons
+    this.checkAuthStatus();
     const signUpButton = document.getElementById('signUp') as HTMLButtonElement;
     const signInButton = document.getElementById('signIn') as HTMLButtonElement;
     const container = document.getElementById('container') as HTMLElement;
@@ -118,10 +120,23 @@ export class LoginComponent {
     this.http.post('http://localhost:5000/Client/loginClient', loginData, { withCredentials: true }).subscribe({
       next: (response: any) => {
         alert('Connexion réussie!');
+        this.router.navigate(['/home']);
       },
       error: (error) => {
         alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
       }
     });
+}
+
+checkAuthStatus(): void {
+  this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', { withCredentials: true }).subscribe(
+    (response) => {
+      console.log('Already logged in:', response);
+      this.router.navigate(['/home']);  // Redirect to home if authenticated
+    },
+    (error) => {
+      console.log('Not logged in:', error);
+    }
+  );
 }
 }

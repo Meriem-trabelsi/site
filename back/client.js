@@ -179,4 +179,29 @@ clientRoutes.post('/changepass', async (req, res) => {
     }
 });
 
+// Route to check if the client is authenticated
+clientRoutes.get('/checkAuth', async (req, res) => {
+    const token = req.cookies.token;  // Get the token from cookies
+    
+    if (!token) {
+        return res.status(401).json({ error: 'No token provided, authentication required.' });
+    }
+
+    try {
+        // 🔹 Verify the JWT token
+        jwt.verify(token, 'mariem', (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ error: 'Invalid or expired token.' });
+            }
+            // Token is valid, send back client data
+            const client = decoded.client;  // Get client info from token
+            res.status(200).json({ message: 'Client is authenticated', client });
+        });
+    } catch (error) {
+        console.error('Error checking authentication:', error);
+        return res.status(500).json({ error: 'An error occurred while checking authentication.' });
+    }
+});
+
+
 module.exports = clientRoutes;

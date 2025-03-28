@@ -1,0 +1,39 @@
+<style>
+  .category-card {
+    width: 500px;
+    height: 200px;
+    background-color: #F3F6FB;
+    align-items: center;
+  }
+  .category-card-inner-div2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 150px;
+    height: 120px;
+  }
+  .category-card-image {
+    width: 250px;
+    height: 150px;
+  }
+  .category-card-anchor {
+    font-size: 16px;
+    color: #020052;
+    font-weight: 500;
+    transition: color 0.3s ease-out;
+  }
+  .category-card-anchor:hover {
+    color: #5653ff;
+  }
+</style>
+
+<div class="category-card p-8 rounded-lg shadow-md flex flex-row justify-content-between">
+  <div class="category-card-inner-div2">
+    <h3 class="text-lg font-semibold">{{ title }}</h3>
+    <a [href]="link" class="category-card-anchor inline-block text-decoration-none">
+      Shop Now →
+    </a>
+  </div>
+  <img [src]="image" alt="{{ title }}" class="object-contain border-1 category-card-image">
+</div>

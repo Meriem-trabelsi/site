@@ -1,0 +1,36 @@
+<style>
+.featured-products {
+  width: 90%;
+  margin: 0 auto;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 50px;
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+</style>
+
+<section class="featured-products">
+    <h2>Featured products</h2>
+    <div class="product-grid">
+      <app-product-card 
+        *ngFor="let product of products"
+        [title]="product.title"
+        [category]="product.category"
+        [price]="product.price"
+        [oldPrice]="product.oldPrice"
+        [image]="product.image"
+        [isNew]="product.isNew">
+      </app-product-card>
+    </div>
+  </section>

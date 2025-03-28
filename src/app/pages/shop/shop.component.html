@@ -1,0 +1,28 @@
+<style>
+    .shop-body {
+        width: 90%;
+        margin: 0 auto;
+        justify-items: stretch;
+        margin-top: 100px;
+        margin-bottom: 100px;
+    }
+    .shop-inner-body {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+</style>
+
+<main>
+    <app-header></app-header>
+    <div class="min-h-screen bg-white flex flex-col">
+        <app-shop-title></app-shop-title>
+        <div class="shop-body">
+            <div class="shop-inner-body">
+                <app-filter></app-filter>
+                <app-shop-grid></app-shop-grid>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</main>

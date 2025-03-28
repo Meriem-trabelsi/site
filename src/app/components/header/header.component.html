@@ -1,0 +1,131 @@
+<style>
+
+.header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 130px;
+    background-color: #020052;
+    border-bottom: 1px solid #D5D5E2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-section-1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 75px;
+    background-color: #02005b;
+}
+
+.header-inner-section-1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+}
+
+.header-inner-section-1 a img {
+    width: 70px;
+    height: 50px;
+}
+
+.header-inner-section-1 input{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 40px;
+    background-color: white;
+    font-family: "poppins";
+    font-size: 16px;
+    width: 25%;
+}
+
+.header-section-1-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 250px;
+}
+
+.header-section-1-buttons a img {
+    width: 40px;
+    height: 40px;
+}
+
+.header-section-1-buttons button {
+    padding: 10px 32px;
+    background-color: #FF9D00;
+    color: #020052;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    font-family: "poppins";
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease-out;
+}
+
+.header-section-1-buttons button:hover {
+    background-color: #ffd898;
+}
+
+.header-section-2 {
+    width: 100%;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #D5D5E2;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.header-inner-section-2 {
+    width: 90%;
+    height: 55px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-section-2 a {
+    text-decoration: none;
+    color: #020052;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s ease-out;
+}
+
+.header-section-2 a:hover {
+    color: #5653ff;
+}
+</style>
+
+<div class="header">
+    <div class="header-section-1">
+        <div class="header-inner-section-1">
+            <a href=""><img src="/assets/logo.png" alt=""></a>
+            <input type="text" placeholder="Search...">
+            <div class="header-section-1-buttons">
+                <a href="cart"><img src="/assets/cart.png" alt=""></a>
+                <button (click)="goToPage()">S'inscrire</button>
+            </div>
+        </div>
+    </div>
+    <div class="header-section-2">
+        <div class="header-inner-section-2">
+            <a href="shop">Ordinateurs</a>
+            <a href="shop">Smartphones</a>
+            <a href="shop">Périphériques</a>
+            <a href="shop">Electroménager</a>
+            <a href="shop">Energie & Mobilité</a>
+            <a href="shop">DIY</a>
+            <a href="shop">Composants</a>
+        </div>
+    </div>
+</div>

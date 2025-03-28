@@ -1,0 +1,152 @@
+<style>
+    p {
+        font-size: 14px;
+    }
+    .outer-footer {
+        background-color: #020052;
+        color: white;
+        width: 100%;
+        height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .footer {
+        width: 90%;
+        height: 80%;
+        margin-top: 5%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .footer-section-1, .footer-section-2 {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .footer-section-1 {
+        height: 270px;
+        justify-content: space-between;
+        gap: 50px;
+    }
+    .footer-section-2 {
+        height: 80px;
+        justify-content: center;
+    }
+    .footer-inner-section {
+        max-width: 400px;
+        width: 350px;
+        height: 100%;
+    }
+    .footer-inner-section-1 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    .footer-inner-section-1 img {
+        width: 150px;
+        height: 150px;
+    }
+    .footer-inner-section-2, .footer-inner-section-3, .footer-inner-section-4 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 300px;
+    }
+    .footer-navigation-links {
+        width: 100%;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
+        font-family: "poppins";
+        font-size: 16px;
+        color: white;
+    }
+    .footer-navigation-links a {
+        font-family: "poppins";
+        font-size: 14px;
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s ease-out;
+    }
+    .footer-navigation-links a:hover {
+        color: #5653ff;
+    }
+    .contact-navigation-1 {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+    }
+    .contact-navigation-1 img {
+        width: 40px;
+        height: 40px;
+        margin-top: 7px;
+        margin-right: 20px;
+    }
+    .footer-section-2 {
+        border-top: 1px solid #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<div class="outer-footer">
+    <div class="footer">
+        <div class="footer-section-1">
+            <div class="footer-inner-section-1 footer-inner-section">
+                <a href=""><img src="/assets/logo.png" alt=""></a>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.</p>
+            </div>
+            <div class="footer-inner-section-2 footer-inner-section">
+                <h2>Navigation</h2>
+                <div class="footer-navigation-links">
+                    <a href="">Accueil</a>
+                    <a href="">Boutique</a>
+                    <a href="">Categories</a>
+                    <a href="">Panier</a>
+                    <a href="">Connexion</a>
+                </div>
+            </div>
+            <div class="footer-inner-section-3 footer-inner-section">
+                <h2>Contact</h2>
+                <div class="footer-navigation-links">
+                    <div class="contact-navigation-1">
+                        <a href=""><img src="" alt=""></a>
+                        <a href="">+216 123 456 78</a>
+                    </div>
+                    <div class="contact-navigation-1">
+                        <a href=""><img src="" alt=""></a>
+                        <a href="">example.com</a>
+                    </div>
+                    <div class="contact-navigation-1">
+                        <a href=""><img src="" alt=""></a>
+                        <a href="">Adresse 1 Rue 1 ville 1</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-inner-section-4 footer-inner-section">
+                <h2>Votre compte</h2>
+                <div class="footer-navigation-links">
+                    <a href="">Informations generales</a>
+                    <a href="">Paramètres</a>
+                    <a href="">Panier</a>
+                    <a href="">Terms & Condition</a>
+                    <a href="">Déconnexion</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-section-2">
+            <p>2025 Techshop - all rights reserved</p>
+        </div>
+    </div>
+</div>
