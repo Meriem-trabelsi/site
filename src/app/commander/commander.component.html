@@ -3,25 +3,20 @@
     <h2>Formulaire de commande</h2>
   </div>
 
-  <!-- Login/Sign-up Option under the title -->
   <div class="auth-option">
     <h3><a href="/login">Se connecter</a> | <a href="/login">S'inscrire</a></h3>
   </div>
 
   <div class="d-flex">
-    <form action="" method="">
-      <label>
-        <span>Prénom <span class="required">*</span></span>
-        <input type="text" name="fname" placeholder="Votre prénom" required>
-      </label>
+    <form>
       <label>
         <span>Nom <span class="required">*</span></span>
-        <input type="text" name="lname" placeholder="Votre nom" required>
+        <input type="text" name="lname" placeholder="Votre nom" [(ngModel)]="form.lname" required>
       </label>
 
       <label>
         <span>Région <span class="required">*</span></span>
-        <select name="selection" required>
+        <select name="selection" [(ngModel)]="form.region" required>
           <option value="Tunis">Tunis</option>
           <option value="Sfax">Sfax</option>
           <option value="Sousse">Sousse</option>
@@ -51,17 +46,12 @@
       </label>
       <label>
         <span>Adresse <span class="required">*</span></span>
-        <input type="text" name="houseadd" placeholder="Numéro et nom de la rue" required>
+        <input type="text" name="houseadd" placeholder="Numéro et nom de la rue" [(ngModel)]="form.houseadd" required>
       </label>
 
       <label>
         <span>Téléphone <span class="required">*</span></span>
-        <input type="tel" name="phone" placeholder="Numéro de téléphone" required>
-      </label>
-
-      <label>
-        <span>Email <span class="required">*</span></span>
-        <input type="email" name="email" placeholder="Votre email" required>
+        <input type="tel" name="phone" placeholder="Numéro de téléphone" [(ngModel)]="form.phone" required>
       </label>
     </form>
 
@@ -72,29 +62,30 @@
         </tr>
         <tr>
           <td>Produit</td>
-          <td>800</td>
+          <td>Prix</td>
+        </tr>
+        <tr *ngFor="let item of cartItems">
+          <td>{{ item.quantite }} × {{ item.nom }}</td>
+          <td>{{ (item.prix * item.quantite) | number:'1.2-2' }}DT</td>
         </tr>
         <tr>
-          <td>Sous-total</td>
-          <td>800</td>
+          <td><strong>Total</strong></td>
+          <td><strong>{{ getTotal() | number:'1.2-2' }}DT</strong></td>
         </tr>
         <tr>
           <td>Livraison</td>
           <td>Gratuite</td>
         </tr>
       </table>
+
       <br>
       <div>
-        <input type="radio" name="payment" value="virement" checked> Virement bancaire
+        <input type="radio" name="payment" value="virement" [(ngModel)]="form.payment"> Virement bancaire
       </div>
       <div>
-        <input type="radio" name="payment" value="livraison"> Paiement à la livraison
+        <input type="radio" name="payment" value="livraison" [(ngModel)]="form.payment"> Paiement à la livraison
       </div>
-      <div>
-        <input type="radio" name="payment" value="paypal"> Paypal
-        <img src="https://www.logolynx.com/images/logolynx/c3/c36093ca9fb6c250f74d319550acac4d.jpeg" alt="Paypal" width="50">
-      </div>
-      <button type="button">Commander</button>
+      <button (click)="passerCommande()">Commander</button>
     </div>
   </div>
 </div>

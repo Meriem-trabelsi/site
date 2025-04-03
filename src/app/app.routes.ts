@@ -7,6 +7,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ShopComponent } from './pages/shop/shop.component';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
 import { SimpleAuthGuard } from './auth-guard';  // Import the SimpleAuthGuard
+import { PaymentComponent } from './payment/payment.component';
 
 export const routes: Routes = [
   {
@@ -29,4 +30,6 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'shop', component: ShopComponent },
   { path: 'product', component: ProductDetailsComponent },
+  { path: 'payment', component: PaymentComponent },
+  
 ];

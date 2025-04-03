@@ -13,7 +13,8 @@
         <img [src]="item.imageURL || 'https://placehold.co/50'" alt="{{ item.nom }}">
         <span>{{ item.nom }}</span>
       </div>
-      <div class="item-price">{{ item.prix }}€</div>
+      <!-- Format price to 2 decimal places -->
+      <div class="item-price">{{ item.prix.toFixed(2) }}DT</div>
 
       <input
         class="cart-quantity"
@@ -24,11 +25,12 @@
         max="100" 
       />
 
-      <div class="item-total">{{ ((item.prix * 1) * (item.quantite * 1)).toFixed(2) }}€</div>
+      <!-- Format total price to 2 decimal places -->
+      <div class="item-total">{{ (item.prix * item.quantite).toFixed(2) }}DT</div>
       <button class="remove-btn" (click)="removeFromCart(item.produitID)">
         <i class="bx bxs-trash"></i> <!-- Icon inside button -->
       </button>
-              </div>
+    </div>
   </div>
 
   <div class="order-summary">
@@ -36,7 +38,8 @@
     <div class="summary-details">
       <div class="summary-row">
         <span>Sous-total</span>
-        <span>{{ (totalPrice * 1).toFixed(2) }}€</span>
+        <!-- Format totalPrice to 2 decimal places -->
+        <span>{{ totalPrice.toFixed(2) }}DT</span>
       </div>
       <div class="summary-row">
         <span>Livraison</span>
@@ -44,7 +47,8 @@
       </div>
       <div class="summary-row total">
         <span>Total</span>
-        <span>{{ totalPrice }}€</span>
+        <!-- Format totalPrice to 2 decimal places -->
+        <span>{{ totalPrice.toFixed(2) }}DT</span>
       </div>
     </div>
     <button class="checkout-btn">Passer la commande</button>

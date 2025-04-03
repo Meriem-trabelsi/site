@@ -1,196 +1,187 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
 
-body{
-  background: url('http://all4desktop.com/data_images/original/4236532-background-images.jpg');
-  font-family: 'Roboto Condensed', sans-serif;
+body {
+  background: url('http://all4desktop.com/data_images/original/4236532-background-images.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Roboto', sans-serif;
   color: #262626;
   margin: 5% 0;
 }
-.container{
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
+
+.container {
+  width: 90%;
+  max-width: 1140px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
-@media (min-width: 1200px)
-{
-  .container{
-    max-width: 1140px;
-  }
+
+.title {
+  background: lightgrey;
+  border-radius: 5px 5px 0 0;
+  padding: 20px;
+  color: #020052;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
 }
-.d-flex{
+
+h2, h3, label, span, th, td, button {
+  font-family: 'Roboto', sans-serif;
+}
+
+h2 {
+  margin: 0;
+}
+
+.required {
+  color: red;
+}
+
+/* Removed auth-option (Se connecter / S'inscrire) */
+.auth-option {
+  display: none;
+}
+
+.d-flex {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   background: #f6f6f6;
   border-radius: 0 0 5px 5px;
   padding: 25px;
 }
-form{
-  flex: 4;
-}
-.Yorder{
+
+form {
   flex: 2;
+  min-width: 300px;
 }
-.title{
-  background: lightgrey;
-  border-radius:5px 5px 0 0 ;
-  padding: 20px;
-  color: #020052;
-}
-h2{
-  margin: 0;
-  padding-left: 15px; 
-}
-.required{
-  color: red;
-}
-label, table{
-  display: block;
-  margin: 15px;
-}
-label>span{
-  float: left;
-  width: 25%;
-  margin-top: 12px;
-  padding-right: 10px;
-}
-input[type="text"], input[type="tel"], input[type="email"], select
-{
-  width: 70%;
-  height: 30px;
-  padding: 5px 10px;
-  margin-bottom: 10px;
-  border: 1px solid #dadada;
-  color: #888;
-}
-select{
-  width: 72%;
-  height: 45px;
-  padding: 5px 10px;
-  margin-bottom: 10px;
-}
-.Yorder{
-  margin-top: 15px;
-  height: 600px;
+
+.Yorder {
+  flex: 1;
+  min-width: 280px;
   padding: 20px;
   border: 1px solid #dadada;
+  background: #fff;
+  margin-top: -15px; /* Moves it slightly down */
+  margin-left: 30px; /* Moves it more to the right */
+  align-self: flex-start;
 }
-table{
-  margin: 0;
-  padding: 0;
+
+
+
+label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
 }
-th{
+
+label > span {
+  width: 30%;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="tel"],
+select {
+  flex: 1;
+  height: 35px;
+  padding: 5px;
+  border: 1px solid #dadada;
+  color: #333;
+  border-radius: 5px;
+}
+
+select {
+  height: 40px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
   border-bottom: 1px solid #dadada;
-  padding: 10px 0;
+  padding: 10px;
 }
-tr>td:nth-child(1){
+
+th {
   text-align: left;
-  color: #2d2d2a;
-  padding-right: 200px;
+  background: #f3f3f3;
 }
-tr>td:nth-child(2){
-  text-align: right;
+/* Product names (black) */
+tr > td:first-child {
+  color: black;
+  font-weight: bold;
+}
+
+/* Prices (red) */
+tr > td:last-child {
   color: red;
-}
-td{
-  border-bottom: 1px solid #dadada;
-  padding: 25px 25px 25px 0;
+  font-weight: bold;
 }
 
 
-.Yorder>div{
-  padding: 15px 0; 
+td {
+  text-align: right;
 }
 
-button{
+tr > td:first-child {
+  text-align: left;
+}
+
+
+.Yorder div {
+  margin-top: 10px;
+}
+
+.Yorder input[type="radio"] {
+  margin-right: 10px;
+}
+
+.Yorder img {
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+button {
   width: 100%;
   margin-top: 10px;
-  padding: 10px;
+  padding: 12px;
   border: none;
   border-radius: 30px;
   background: #FF9D00;
   color: #fff;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
+  transition: background 0.3s ease-in-out;
 }
-button:hover{
+
+button:hover {
   cursor: pointer;
-  background: #FF9D00;
+  background: #E08A00;
 }
 
-.phone-number-container {
-  display: flex;
-  align-items: center;
-  margin: 15px; /* Match with other elements */
-}
+/* Responsive Fixes */
+@media (max-width: 768px) {
+  .d-flex {
+    flex-direction: column;
+  }
 
-.phone-number-container label {
-  width: 25%; /* Label width */
-  margin: 0;
-}
+  label {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.phone-number-container label .required {
-  color: red; /* Red asterisk for required fields */
-  margin-left: 3px; /* Spacing */
-}
+  label > span {
+    width: 100%;
+    margin-bottom: 5px;
+  }
 
-.phone-number {
-  display: flex;
-  align-items: center; /* Align country code and phone number vertically */
-  gap: 0; /* Remove extra gap between elements */
-  width: 70%; /* Width of the input container */
-  border: 1px solid #dadada;
-  border-radius: 5px;
-  overflow: hidden; /* Prevent border spilling */
+  input[type="text"],
+  input[type="tel"],
+  select {
+    width: 100%;
+  }
 }
-
-.phone-number .country-code {
-  width: 60px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f3f3f3;
-  color: #333;
-  font-weight: bold;
-  border-right: 1px solid #dadada;
-}
-
-.phone-number input[type="tel"] {
-  flex: 1;
-  height: 40px;
-  padding: 0 10px;
-  border: none;
-  outline: none;
-  color: #888;
-}
-
-.phone-number input[type="tel"]:focus {
-  color: #333;
-  outline: none;
-}
-
-.auth-option {
-  background-color: #f6f6f6;
-  padding: 10px;
-  text-align: left;
-  margin-bottom: 0;  /* Remove the bottom margin */
-}
-
-.auth-option h3 {
-  margin: 0;
-  font-size: 18px;
-}
-
-.auth-option a {
-  color: #007bff;
-  text-decoration: none;
-  margin: 0 10px;
-  font-weight: bold;
-}
-
-.auth-option a:hover {
-  text-decoration: underline;
-}
-

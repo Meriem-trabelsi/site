@@ -11,32 +11,25 @@ import { Component } from '@angular/core';
 export class AdsCarouselComponent {
   slides = [
     {
-      image: 'client/src/assets/image1.jpeg',
-      title: 'Computers up to -15% off',
-      description: 'The biggest risk is a missed opportunity.',
-      button: 'Shop Now',
-      link: '#'
+      image: 'assets/images/promo1.jpg',
+      title: 'Offre Spéciale PC Gamer',
+      description: 'Profitez de -20% sur notre sélection de PC Gamer.',
+      button: 'Voir l\'offre',
+      link: '/pc-gamer'
     },
     {
-      image: 'https://source.unsplash.com/1200x500/?smartphone,gadgets',
-      title: 'Latest Smartphones Available',
-      description: 'Get the newest devices at unbeatable prices!',
-      button: 'Browse Phones',
-      link: '#'
+      image: 'assets/images/promo2.jpg',
+      title: 'Promo Smartphone',
+      description: 'Réductions incroyables sur les derniers smartphones.',
+      button: 'Acheter maintenant',
+      link: '/smartphones'
     },
     {
-      image: 'https://source.unsplash.com/1200x500/?gaming,console',
-      title: 'Gaming Gear on Discount',
-      description: 'Upgrade your setup with the best gaming accessories.',
-      button: 'Explore Now',
-      link: '#'
-    },
-    {
-      image: 'https://source.unsplash.com/1200x500/?headphones,audio',
-      title: 'Premium Headphones & Audio',
-      description: 'Experience sound like never before.',
-      button: 'Check Deals',
-      link: '#'
+      image: 'assets/images/promo3.jpg',
+      title: 'Téléviseurs 4K en promo',
+      description: 'Des prix imbattables sur les TV 4K et OLED.',
+      button: 'Découvrir',
+      link: '/tvs'
     }
   ];
 }

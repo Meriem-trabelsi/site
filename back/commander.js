@@ -1,8 +1,10 @@
 const express = require('express');
 const commanderRoutes = express.Router();
 const jwt = require('jsonwebtoken');
+const pool = require('./index'); // Assurez-vous que ce fichier exporte bien la connexion MySQL
+const bcrypt = require('bcrypt');
 
-// Middleware pour vérifier l'authentification
+// Middleware d'authentification
 const verifyAuth = (req, res, next) => {
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
@@ -19,27 +21,35 @@ const verifyAuth = (req, res, next) => {
   }
 };
 
+// Route pour tester la connexion
+commanderRoutes.post("/", (req, res) => {
+  console.log("Réception d'une commande:", req.body);
+  res.json({ message: "Commande reçue !" });
+});
+
 // Route pour passer une commande (seulement si l'utilisateur est authentifié)
 commanderRoutes.post('/commander', verifyAuth, async (req, res) => {
-  const pool = req.pool;
   const clientID = req.clientID;
 
   try {
-    //  Vérifier que le client existe dans la base de données
-    const [clientRows] = await pool.promise().query("SELECT * FROM Client WHERE clientID = ?;", [clientID]);
+    // Vérifier que le client existe
+    const [clientRows] = await pool.promise().query(
+      "SELECT * FROM Client WHERE clientID = ?;",
+      [clientID]
+    );
 
     if (clientRows.length === 0) {
       return res.status(404).json({ error: "Client non trouvé. Vérifiez votre compte." });
     }
 
-    //  Mise à jour des infos client
-    const { nom, adresse, telephone, region } = req.body;
+    // Mise à jour des infos client (pas de fname ici, juste lname, adresse, telephone, region)
+    const { lname, adresse, telephone, region } = req.body.client;
     await pool.promise().query(
       "UPDATE Client SET nom = ?, adresse = ?, telephone = ?, region = ? WHERE clientID = ?;",
-      [nom, adresse, telephone, region, clientID]
+      [lname, adresse, telephone, region, clientID]
     );
 
-    //  Récupération du panier du client
+    // Récupération du panier du client
     const [cartRows] = await pool.promise().query(
       "SELECT panierID FROM Panier WHERE clientID = ?;",
       [clientID]
@@ -59,13 +69,13 @@ commanderRoutes.post('/commander', verifyAuth, async (req, res) => {
 
     const orderID = orderResult.insertId;
 
-    //  Récupération des produits du panier
+    // Récupération des produits du panier
     const [cartProducts] = await pool.promise().query(
       `SELECT pp.produitID, pp.quantite, p.prix 
        FROM Panier_Produit pp
        JOIN Produit p ON pp.produitID = p.produitID
-       WHERE pp.panierID = ?;`,
-      [panierID]
+       WHERE pp.panierID = ? AND p.clientID = ?;`,
+      [panierID, clientID]
     );
 
     if (cartProducts.length === 0) {
@@ -88,7 +98,7 @@ commanderRoutes.post('/commander', verifyAuth, async (req, res) => {
       [total, orderID]
     );
 
-    //  Mise à jour du stock des produits
+    // Mise à jour du stock des produits
     await pool.promise().query(
       `UPDATE Produit p
        JOIN Panier_Produit pp ON p.produitID = pp.produitID
@@ -97,7 +107,7 @@ commanderRoutes.post('/commander', verifyAuth, async (req, res) => {
       [panierID]
     );
 
-    //  Suppression des produits du panier après validation
+    // Suppression des produits du panier après validation
     await pool.promise().query("DELETE FROM Panier_Produit WHERE panierID = ?;", [panierID]);
 
     res.status(200).json({
