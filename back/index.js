@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const clientRoutes = require("./client.js");
-const commanderRoutes = require("./commander.js");
 const cartRoutes = require("./cart.js");
 
 const app = express();
@@ -32,26 +31,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello, Express Backend!");
-});
-
-// Route to Fetch All Clients
-app.get("/clients", (req, res) => {
-  pool.query("SELECT * FROM Client", (err, results) => {
-    if (err) {
-      console.error("Database query failed:", err);
-      res.status(500).json({ error: "Database query failed" });
-    } else {
-      res.json(results);
-    }
-  });
-});
-
 // Use API Routes
 app.use("/Client", clientRoutes);
 app.use("/Cart", cartRoutes);
-app.use("/Commander", commanderRoutes);
 
 const PORT = 5000;
 app.listen(PORT, () => {

@@ -12,8 +12,10 @@
             <input type="text" placeholder="Search...">
             <div class="header-section-1-buttons">
                 <a href="cart" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
-                <button (click)="goToPage()">S'inscrire</button>
-            </div>
+                <button (click)="goToPage()">
+                    {{ isLoggedIn ? 'Se déconnecter' : "S'authentifier" }}
+                  </button>
+                              </div>
         </div>
     </div>
     <div class="header-section-2">

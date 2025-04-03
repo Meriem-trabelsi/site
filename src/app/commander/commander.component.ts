@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 interface CartItem {
   produitID: number;
@@ -10,7 +11,7 @@ interface CartItem {
   prix: number;
 }
 
-interface CartResponse {
+interface CommandeResponse {
   produits: CartItem[];
   total: number;
 }
@@ -37,16 +38,28 @@ export class CommanderComponent implements OnInit {
     payment: ''
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-    this.fetchCart(); // Récupération du panier au chargement du composant
+    this.fetchClient(); // Récupération du panier au chargement du composant
   }
 
   // Fonction pour récupérer le panier depuis le serveur
-  fetchCart(): void {
+  fetchClient(): void {
     this.isLoading = true;
-    this.http.get<CartResponse>('http://localhost:5000/Cart/fetch', { withCredentials: true }).subscribe(
+    this.http.get<any>('http://localhost:5000/Client/getClientInfo', { withCredentials: true }).subscribe(
+      (response) => {
+        this.form.lname = response.nom;
+        this.form.region = response.region;
+        this.form.houseadd = response.adresse;
+        this.form.phone = response.tel;
+      },
+      (error) => {
+        console.error('Error fetching client info:', error);
+        this.isLoading = false;
+      }
+    );
+    this.http.get<CommandeResponse>('http://localhost:5000/Cart/fetch', { withCredentials: true }).subscribe(
       (response) => {
         this.cartItems = response.produits;
         this.totalPrice = response.total;
@@ -63,49 +76,33 @@ export class CommanderComponent implements OnInit {
   getTotal(): number {
     return this.cartItems.reduce((total, item) => total + (item.prix * item.quantite), 0);
   }
-
-  // Fonction pour valider et envoyer la commande
-  // Function to pass the order
-  passerCommande(): void {
-    // Vérification des champs obligatoires
-    if (!this.form.lname || !this.form.region || !this.form.houseadd || !this.form.phone) {
-      alert("Veuillez remplir tous les champs obligatoires !");
-      return;
-    }
   
-    // Vérification si une méthode de paiement est sélectionnée
-    if (!this.form.payment) {
-      alert("Veuillez choisir une méthode de paiement !");
-      return;
-    }
+  passerComm() {
+    const nom = this.form.lname;
+    const region = this.form.region;
+    const adresse = this.form.houseadd; // FIXED: should be houseadd, not region
+    const tel = this.form.phone;
   
-    // Vérification si le panier est vide
-    if (this.cartItems.length === 0) {
-      alert("Votre panier est vide !");
-      return;
-    }
+    var form2 = { nom, region, adresse, tel };
   
-    // Continue with order submission
-    this.isLoading = true;
-    const orderData = {
-      client: this.form,
-      produits: this.cartItems
-    };
-    this.http.post('http://localhost:5000/commander', orderData, { withCredentials: true }).subscribe(
-      () => {
-        alert('Commande validée !');
-        this.cartItems = [];  // Vider le panier après la commande
-        this.totalPrice = 0;
-        this.isLoading = false;
+    // Update client info first
+    this.http.put('http://localhost:5000/Client/updateClientInfo', form2, { withCredentials: true }).subscribe({
+      next: () => {
+        // If client info is updated successfully, proceed with order
+        this.http.post('http://localhost:5000/Cart/commander', {}, { withCredentials: true }).subscribe({
+          next: () => {
+            alert('Commande passée avec succès');
+          },
+          error: (error) => {
+            alert('Erreur lors du passage de la commande: ' + error.error?.error || error.message);
+          }
+        });
       },
-      (error) => {
-        console.error('Erreur lors de la validation de la commande:', error);
-        alert('Erreur lors de la validation de la commande.');
-        this.isLoading = false;
+      error: (error) => {
+        alert('Erreur lors de la mise à jour des informations du client: ' + error.error?.error || error.message);
       }
-    );
+    });
+    this.router.navigate(['/home']);
   }
-  
-
   
 }

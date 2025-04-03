@@ -203,5 +203,82 @@ clientRoutes.get('/checkAuth', async (req, res) => {
     }
 });
 
+clientRoutes.post('/logout', async (req, res) => {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Successfully logged out' });
+});
+
+
+clientRoutes.get('/getClientInfo', async (req, res) => {
+    const pool = req.pool;
+    const token = req.cookies.token;  // Get the token from cookies
+
+    if (!token) {
+        return res.status(401).json({ error: 'No token provided, authentication required.' });
+    }
+
+    try {
+        jwt.verify(token, 'mariem', (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ error: 'Invalid or expired token.' });
+            }
+
+            const clientID = decoded.client.clientID;
+            const query = 'SELECT nom, region, adresse, tel FROM Client WHERE clientID = ?';
+
+            pool.query(query, [clientID], (error, results) => {
+                if (error) {
+                    console.error('Error fetching client info:', error);
+                    return res.status(500).json({ error: 'An error occurred while fetching client info.' });
+                }
+
+                if (results.length === 0) {
+                    return res.status(404).json({ error: 'Client not found.' });
+                }
+
+                res.status(200).json(results[0]); // Send back the client info
+            });
+        });
+    } catch (error) {
+        console.error('Error verifying token:', error);
+        return res.status(500).json({ error: 'An error occurred while verifying authentication.' });
+    }
+});
+
+clientRoutes.put('/updateClientInfo', async (req, res) => {
+    const pool = req.pool;
+    const token = req.cookies.token;  // Get the token from cookies
+    const { nom, region, adresse, tel } = req.body;
+    if (!token) {
+        return res.status(401).json({ error: 'No token provided, authentication required.' });
+    }
+
+    try {
+        jwt.verify(token, 'mariem', (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ error: 'Invalid or expired token.' });
+            }
+
+            const clientID = decoded.client.clientID;
+            const query = 'UPDATE Client SET nom = ?, region = ?, adresse = ?, tel = ? WHERE clientID = ?';
+
+            pool.query(query, [nom, region, adresse, tel, clientID], (error, result) => {
+                if (error) {
+                    console.error('Error updating client info:', error);
+                    return res.status(500).json({ error: 'An error occurred while updating client info.' });
+                }
+
+                if (result.affectedRows === 0) {
+                    return res.status(404).json({ error: 'Client not found or no changes made.' });
+                }
+
+                res.status(200).json({ message: 'Client info updated successfully' });
+            });
+        });
+    } catch (error) {
+        console.error('Error verifying token:', error);
+        return res.status(500).json({ error: 'An error occurred while verifying authentication.' });
+    }
+});
 
 module.exports = clientRoutes;

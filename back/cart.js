@@ -143,7 +143,6 @@ cartRoutes.post('/add', async (req, res) => {
     }
 });
 
-// Modifier la quantité d'un produit dans le panier
 cartRoutes.put('/update', async (req, res) => {
     const pool = req.pool;
     const { produitID, quantite } = req.body;
@@ -172,6 +171,47 @@ cartRoutes.put('/update', async (req, res) => {
 
         const panierID = cartRows[0].panierID;
 
+        // Check current quantity in the cart
+        const currentQuantityQuery = "SELECT quantite FROM Panier_Produit WHERE panierID = ? AND produitID = ?";
+        const currentQuantityResult = await new Promise((resolve, reject) => {
+            pool.query(currentQuantityQuery, [panierID, produitID], (error, rows) => {
+                if (error) reject(error);
+                else if (rows.length === 0) reject(new Error('Produit non trouvé dans le panier'));
+                else resolve(rows[0].quantite);
+            });
+        });
+
+        // If the quantity is the same as the current one, skip stock update
+        if (quantite === currentQuantityResult) {
+            // Just update the cart without modifying stock
+            await new Promise((resolve, reject) => {
+                pool.query(
+                    "UPDATE Panier_Produit SET quantite = ? WHERE panierID = ? AND produitID = ?",
+                    [quantite, panierID, produitID],
+                    (error, result) => {
+                        if (error) reject(error);
+                        else if (result.affectedRows === 0) reject(new Error('Produit non trouvé dans le panier'));
+                        else resolve(result);
+                    }
+                );
+            });
+            return res.status(200).json({ message: "Quantité mise à jour avec succès" });
+        }
+
+        // Check if there is enough stock for the product
+        const stockQuery = "SELECT stock FROM Produits WHERE produitID = ?";
+        const stockResult = await new Promise((resolve, reject) => {
+            pool.query(stockQuery, [produitID], (error, rows) => {
+                if (error) reject(error);
+                else if (rows.length === 0) reject(new Error('Produit non trouvé.'));
+                else resolve(rows[0].stock);
+            });
+        });
+
+        if (quantite > stockResult) {
+            return res.status(400).json({ error: "Quantité demandée dépasse le stock disponible." });
+        }
+
         // Update product quantity in cart
         await new Promise((resolve, reject) => {
             pool.query(
@@ -185,17 +225,30 @@ cartRoutes.put('/update', async (req, res) => {
             );
         });
 
-        res.status(200).json({ message: "Quantité mise à jour avec succès" });
+        // Update stock in the Produits table
+        await new Promise((resolve, reject) => {
+            pool.query(
+                "UPDATE Produits SET stock = stock - ? WHERE produitID = ?",
+                [quantite - currentQuantityResult, produitID],  // Subtract the difference, not the full quantity
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+        });
+
+        res.status(200).json({ message: "Quantité mise à jour avec succès et stock ajusté." });
     } catch (error) {
         console.error('Erreur lors de la mise à jour de la quantité:', error);
-        
+
         if (error.name === 'JsonWebTokenError') {
             return res.status(401).json({ error: "Token invalide." });
         }
-        
+
         res.status(500).json({ error: "Une erreur est survenue lors de la mise à jour de la quantité." });
     }
 });
+
 
 // Supprimer un produit du panier
 cartRoutes.delete('/remove', async (req, res) => {
@@ -248,6 +301,111 @@ cartRoutes.delete('/remove', async (req, res) => {
         }
         
         res.status(500).json({ error: "Une erreur est survenue lors de la suppression du produit." });
+    }
+});
+
+// Passer commande
+cartRoutes.post('/commander', async (req, res) => {
+    const pool = req.pool;
+    const token = req.cookies.token;  // Get the token from cookies
+
+    try {
+        // Vérifier le token et extraire clientID
+        const decoded = jwt.verify(token, 'mariem');
+        const clientID = decoded.client.clientID;
+
+        // Vérifier si le client a un panier
+        const cartRows = await new Promise((resolve, reject) => {
+            pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID], (error, rows) => {
+                if (error) reject(error);
+                else resolve(rows);
+            });
+        });
+
+        if (cartRows.length === 0) {
+            return res.status(400).json({ error: "Panier vide ou inexistant." });
+        }
+
+        const panierID = cartRows[0].panierID;
+
+        // Récupérer les produits du panier
+        const cartProducts = await new Promise((resolve, reject) => {
+            pool.query(
+                "SELECT produitID, quantite FROM Panier_Produit WHERE panierID = ?",
+                [panierID],
+                (error, rows) => {
+                    if (error) reject(error);
+                    else resolve(rows);
+                }
+            );
+        });
+
+        if (cartProducts.length === 0) {
+            return res.status(400).json({ error: "Aucun produit dans le panier." });
+        }
+
+        // Calculer le total de la commande
+        const totalCommande = await new Promise((resolve, reject) => {
+            pool.query(
+                `SELECT SUM(p.prix * pp.quantite) AS total 
+                 FROM Panier_Produit pp 
+                 JOIN Produit p ON pp.produitID = p.produitID 
+                 WHERE pp.panierID = ?`,
+                [panierID],
+                (error, results) => {
+                    if (error) reject(error);
+                    else resolve(results[0].total);
+                }
+            );
+        });
+
+        // Créer la commande
+        const commandeResult = await new Promise((resolve, reject) => {
+            pool.query(
+                "INSERT INTO Commande (clientID, dateCommande, statut, total) VALUES (?, NOW(), 'En attente', ?)",
+                  [clientID, totalCommande],
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+        });
+
+        const commandeID = commandeResult.insertId;
+
+        // Ajouter les produits de la commande
+        for (const item of cartProducts) {
+            await new Promise((resolve, reject) => {
+                pool.query(
+                    "INSERT INTO Commande_Produit (commandeID, produitID, quantite) VALUES (?, ?, ?)",
+                    [commandeID, item.produitID, item.quantite],
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+            });
+        }
+
+        // Supprimer les produits du panier
+        await new Promise((resolve, reject) => {
+            pool.query(
+                "DELETE FROM Panier_Produit WHERE panierID = ?",
+                [panierID],
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+        });
+
+        res.status(200).json({ message: "Commande passée avec succès", commandeID });
+    } catch (error) {
+        console.error("Erreur lors du passage de la commande:", error);
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ error: "Token invalide." });
+        }
+        res.status(500).json({ error: "Une erreur est survenue lors du passage de la commande." });
     }
 });
 

@@ -55,18 +55,25 @@ export class CartComponent implements OnInit {
     this.updateQuantity(item.produitID, newQuantity);
   }
 
-  // Update quantity via API
-  updateQuantity(produitID: number, quantite: number): void {
-    this.http.put(`http://localhost:5000/Cart/update`,{ produitID, quantite }, { withCredentials: true }).subscribe(
-      () => {
-        console.log('Quantity updated');
-        this.fetchCart(); // Refresh the cart data
-      },
-      (error) => {
-        console.error('Error updating quantity:', error);
+// Update quantity via API
+updateQuantity(produitID: number, quantite: number): void {
+  this.http.put(`http://localhost:5000/Cart/update`, { produitID, quantite }, { withCredentials: true }).subscribe(
+    () => {
+      console.log('Quantity updated');
+      this.fetchCart(); // Refresh the cart data
+    },
+    (error) => {
+      console.error('Error updating quantity:', error);
+      // Check if the error response contains the stock-related issue
+      if (error.status === 400 && error.error?.error === "Quantité demandée dépasse le stock disponible.") {
+        alert("La quantité demandée dépasse le stock disponible.");
+      } else {
+        alert("Une erreur est survenue lors de la mise à jour de la quantité.");
       }
-    );
-  }
+    }
+  );
+}
+
 
   // Remove an item from the cart
   removeFromCart(produitID: number): void {

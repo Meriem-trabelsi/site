@@ -80,12 +80,12 @@
 
       <br>
       <div>
-        <input type="radio" name="payment" value="virement" [(ngModel)]="form.payment"> Virement bancaire
+        <input type="radio" name="payment" value="virement" disabled> Virement bancaire
       </div>
       <div>
-        <input type="radio" name="payment" value="livraison" [(ngModel)]="form.payment"> Paiement à la livraison
+        <input type="radio" name="payment" value="livraison" [defaultChecked]="1"> Paiement à la livraison
       </div>
-      <button (click)="passerCommande()">Commander</button>
+      <button (click)="passerComm()">Commander</button>
     </div>
   </div>
 </div>
