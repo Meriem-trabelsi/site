@@ -87,6 +87,7 @@ export class LoginComponent {
         this.http.post('http://localhost:5000/Client/loginClient', formData, { withCredentials: true }).subscribe({
           next: (response: any) => {
             alert('Connexion réussie!');
+            this.router.navigate(['/home']);
           },
           error: (error) => {
             alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));

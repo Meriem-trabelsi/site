@@ -199,7 +199,7 @@ cartRoutes.put('/update', async (req, res) => {
         }
 
         // Check if there is enough stock for the product
-        const stockQuery = "SELECT stock FROM Produits WHERE produitID = ?";
+        const stockQuery = "SELECT stock FROM Produit WHERE produitID = ?";
         const stockResult = await new Promise((resolve, reject) => {
             pool.query(stockQuery, [produitID], (error, rows) => {
                 if (error) reject(error);
@@ -224,19 +224,6 @@ cartRoutes.put('/update', async (req, res) => {
                 }
             );
         });
-
-        // Update stock in the Produits table
-        await new Promise((resolve, reject) => {
-            pool.query(
-                "UPDATE Produits SET stock = stock - ? WHERE produitID = ?",
-                [quantite - currentQuantityResult, produitID],  // Subtract the difference, not the full quantity
-                (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                }
-            );
-        });
-
         res.status(200).json({ message: "Quantité mise à jour avec succès et stock ajusté." });
     } catch (error) {
         console.error('Erreur lors de la mise à jour de la quantité:', error);
@@ -385,7 +372,20 @@ cartRoutes.post('/commander', async (req, res) => {
                     }
                 );
             });
+            await new Promise((resolve, reject) => {
+                pool.query(
+                    "UPDATE Produit SET stock = stock - ? WHERE produitID = ?",
+                    [item.quantite, item.produitID],  // Subtract the difference, not the full quantity
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+            });
         }
+
+        // Update stock in the Produits table
+        
 
         // Supprimer les produits du panier
         await new Promise((resolve, reject) => {
