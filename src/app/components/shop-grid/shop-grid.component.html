@@ -1,18 +1,19 @@
 <style>
-
+  .shop-inner-body {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 </style>
-
+<div class="shop-inner-body">
+<app-filter (categoryChanged)="onCategoryChange($event)"></app-filter>
 <div class="container">
-    <!-- Product Grid -->
+  <div *ngIf="products.length === 0">No products found.</div>
     <div class="flex flex-wrap justify-center gap-25 ">
       <app-product-card 
         *ngFor="let product of products"
-        [title]="product.title"
-        [category]="product.category"
-        [price]="product.price"
-        [oldPrice]="product.oldPrice"
-        [image]="product.image"
-        [isNew]="product.isNew">
+        [product]="product">
       </app-product-card>
     </div>
   </div>
+</div>

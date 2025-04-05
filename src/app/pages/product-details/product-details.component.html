@@ -26,32 +26,26 @@
           <span class="mx-2">/</span>
           <a href="shop" class="hover:text-blue-600 shop-title-breadcumbs">Shop</a>
           <span class="mx-2">/</span>
-          <span class="text-gray-700 shop-title-breadcumbs">Product name</span>
+          <span class="text-gray-700 shop-title-breadcumbs">{{ product.nomProd }}</span>
         </nav>
       </div>
     <div class="grid md:grid-cols-2 gap-8">
       <div>
-        <img src="assets/shoe.jpg" alt="Product Image" class="product-main-img rounded-lg shadow">
-        <div class="flex gap-2 mt-4">
-          <img src="assets/thumb1.jpg" alt="Thumbnail" class="w-16 h-16 border rounded-lg cursor-pointer">
-          <img src="assets/thumb2.jpg" alt="Thumbnail" class="w-16 h-16 border rounded-lg cursor-pointer">
-          <img src="assets/thumb1.jpg" alt="Thumbnail" class="w-16 h-16 border rounded-lg cursor-pointer">
-          <img src="assets/thumb3.jpg" alt="Thumbnail" class="w-16 h-16 border rounded-lg cursor-pointer">
-        </div>
+        <img [src]="product.imageURL" alt="Product Image" class="product-main-img rounded-lg shadow">
       </div>
       <div>
-        <h1 class="text-2xl font-semibold">Product Title</h1>
+        <h1 class="text-2xl font-semibold">{{ product.nomProd }}</h1>
         <div class="flex items-center space-x-2 text-yellow-500">
         </div>
-        <p class="text-red-500 font-semibold my-2 price-text">99.99 TND</p>
-        <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+        <p class="text-red-500 font-semibold my-2 price-text">{{ product.prix }} TND</p>
+        <p class="text-gray-600">{{ product.description }}</p>
         <hr />
         <div class="mt-4 flex add-to-cart-container">
-          <input type="number" value="1" class="border rounded w-20 text-center">
-          <button class="bg-black text-white px-10 py-3 rounded hover:bg-gray-800">ADD TO CART</button>
+          <input type="number" [(ngModel)]="selectedQuantity" min="1" class="border rounded w-20 text-center">
+          <button (click)="addToCart()" class="bg-black text-white px-10 py-3 rounded hover:bg-gray-800">ADD TO CART</button>
         </div>
         <hr />
-        <p class="mt-4 text-gray-500">Categories: Clothing, Laptops & Desktops</p>
+        <p class="mt-4 text-gray-500">Categories: {{ product.nom }}</p>
         <p class="text-gray-500">Tag: Blouse</p>
       </div>
     </div>
@@ -59,21 +53,10 @@
     <div class="mt-8 border-t pt-4">
         <h2 class="text-2xl font-semibold text-green-600">Fiche Technique</h2>
         <table class="w-full mt-4 border border-gray-300 text-gray-600">
-          <tbody>
-            <tr class="border-b"><td class="p-2 font-semibold">Brand</td><td class="p-2">MSI</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Model</td><td class="p-2">Model Name</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Processor</td><td class="p-2">Intel i7 / Snapdragon 8 Gen 2</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">RAM</td><td class="p-2">8GB / 16GB</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Storage</td><td class="p-2">256GB SSD / 512GB NVMe</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Graphics</td><td class="p-2">NVIDIA RTX 3060 / Integrated</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Display</td><td class="p-2">15.6" Full HD / 6.7" AMOLED</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Battery</td><td class="p-2">4500mAh / 80W Fast Charge</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Connectivity</td><td class="p-2">Wi-Fi 6, Bluetooth 5.2, USB-C</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Operating System</td><td class="p-2">Windows 11 / Android 13</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Ports</td><td class="p-2">USB 3.2, HDMI, 3.5mm Audio Jack</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Weight</td><td class="p-2">1.5kg / 200g</td></tr>
-            <tr class="border-b"><td class="p-2 font-semibold">Features</td><td class="p-2">High Refresh Rate, RGB Lighting, Water Resistance</td></tr>
-          </tbody>
+            <tr *ngFor="let spec of specifications">
+              <td><strong>{{ spec.specKey }}</strong></td>
+              <td>{{ spec.specValue }}</td>
+            </tr>
         </table>
       </div>
   </div>

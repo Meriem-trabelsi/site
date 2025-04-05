@@ -1,42 +1,52 @@
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import * as bootstrap from 'bootstrap'; // ✅ Import correct
 
 @Component({
   selector: 'app-ads-carousel',
-  standalone: true, // Ensures it's a standalone component
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './ads-carousel.component.html',
-  styleUrl: './ads-carousel.component.css'
+  styleUrls: ['./ads-carousel.component.css']
 })
-export class AdsCarouselComponent {
+export class AdsCarouselComponent implements AfterViewInit {
+
   slides = [
     {
-      image: 'client/src/assets/image1.jpeg',
-      title: 'Computers up to -15% off',
-      description: 'The biggest risk is a missed opportunity.',
-      button: 'Shop Now',
-      link: '#'
+      image: 'assets/images/promo11.jpg',
+      title: '',
+      description: '',
+      link: '#',
+      button: 'Voir Plus'
     },
     {
-      image: 'https://source.unsplash.com/1200x500/?smartphone,gadgets',
-      title: 'Latest Smartphones Available',
-      description: 'Get the newest devices at unbeatable prices!',
-      button: 'Browse Phones',
-      link: '#'
+      image: 'assets/images/promo1.jpg',
+      title: '',
+      description: '',
+      link: '#',
+      button: 'Voir Plus'
     },
     {
-      image: 'https://source.unsplash.com/1200x500/?gaming,console',
-      title: 'Gaming Gear on Discount',
-      description: 'Upgrade your setup with the best gaming accessories.',
-      button: 'Explore Now',
-      link: '#'
+      image: 'assets/images/promo111.jpg',
+      title: '',
+      description: '',
+      link: '#',
+      button: 'Voir Plus'
     },
     {
-      image: 'https://source.unsplash.com/1200x500/?headphones,audio',
-      title: 'Premium Headphones & Audio',
-      description: 'Experience sound like never before.',
-      button: 'Check Deals',
-      link: '#'
+      image: 'assets/images/promo2.jpg',
+      title: '',
+      description: '',
+      link: '#',
+      button: 'Voir Plus'
     }
   ];
+ 
+
+  ngAfterViewInit() {
+    const carouselElement = document.querySelector('#promoCarousel');
+    if (carouselElement) {
+      new bootstrap.Carousel(carouselElement); // ✅ Correction ici
+    }
+  }
 }

@@ -2,6 +2,13 @@
     .filter-cats {
         font-size: 16px;
     }
+    .filter-price {
+      font-size: 18px;
+    }
+    .priice-slider {
+      width: 100%;
+      margin-bottom: 50px;
+    }
 </style>
 
 <div class="w-80 bg-white pr-5">
@@ -10,56 +17,21 @@
       <h2 class="text-lg font-semibold text-gray-900 border-b pb-2">CATEGORIES</h2>
       <ul class="mt-2 space-y-2 text-sm text-gray-700">
         <li *ngFor="let category of categories" class="filter-cats">
-          <input type="radio" name="category" [(ngModel)]="selectedCategory" [value]="category" class="mr-2"> {{ category }}
+          <input [id]="'category' + category.categorieID"  (change)="onCategoryChange(category.categorieID)" type="radio" name="categoryFilter" [(ngModel)]="selectedCategoryId" [value]="category.categorieID" class="mr-2">
+          <label [for]="'category' + category.categorieID" class="ml-2">{{ category.nom }}</label>
         </li>
       </ul>
-    </div>
-  
-    <!-- Gender -->
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 border-b pb-2">GENDER</h2>
-      <ul class="mt-2 space-y-2 text-sm text-gray-700">
-        <li *ngFor="let gender of genders" class="filter-cats">
-          <input type="radio" name="gender" [(ngModel)]="selectedGender" [value]="gender" class="mr-2"> {{ gender }}
-        </li>
-      </ul>
-    </div>
-  
-    <!-- Colors -->
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 border-b pb-2">COLORS</h2>
-      <div class="flex space-x-2 mt-3">
-        <span *ngFor="let color of colors" (click)="toggleColor(color)"
-          [class.border-4]="selectedColors.includes(color)"
-          [ngStyle]="{'background-color': color}"
-          class="w-10 h-10 rounded-full cursor-pointer border">
-        </span>
-      </div>
-    </div>
-  
-    <!-- Size -->
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 border-b pb-2">SIZE</h2>
-      <div class="grid grid-cols-4 gap-2 mt-3">
-        <button *ngFor="let size of sizes" (click)="toggleSize(size)"
-          [class.bg-gray-300]="selectedSizes.includes(size)"
-          class="border text-sm px-3 py-1 rounded-md hover:bg-gray-200">
-          {{ size }}
-        </button>
-      </div>
     </div>
   
     <!-- Price -->
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 border-b pb-2">PRICE</h2>
-      <div class="flex flex-wrap gap-2 mt-3">
-        <button *ngFor="let price of prices" (click)="togglePrice(price)"
-          [class.bg-gray-300]="selectedPrices.includes(price)"
-          class="border text-sm px-3 py-1 rounded-md hover:bg-gray-200">
-          {{ price }}
-        </button>
-      </div>
-    </div>
+    <h2 class="text-lg font-semibold text-gray-900 border-b pb-2">prix</h2>
+  <div class="price-values my-3 filter-price">
+      Prix sélectionné: <span>{{ selectedPrice }} DT</span>
+  </div>
+
+  <div class="slider-container">
+      <input type="range" class='priice-slider' min="0" max="2000" step="100" [(ngModel)]="selectedPrice" (input)="updatePrice($event)" />
+  </div>
   
     <!-- Reset Button -->
     <button (click)="resetFilters()" class="w-full text-center bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Reset</button>

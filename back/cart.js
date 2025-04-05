@@ -1,6 +1,7 @@
 const express = require('express');
 const cartRoutes = express.Router();
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 // Récupérer le panier d'un client
 cartRoutes.get('/fetch', async (req, res) => {
@@ -15,7 +16,7 @@ cartRoutes.get('/fetch', async (req, res) => {
 
     try {
         // Verify token
-        const decoded = jwt.verify(token, 'mariem');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
         // Ensure the user is accessing their own cart
         if (decoded.client.clientID !== parseInt(clientID)) {
@@ -61,16 +62,15 @@ cartRoutes.post('/add', async (req, res) => {
     const pool = req.pool;
     const { produitID, quantite } = req.body;
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-
     if (!token) {
         return res.status(401).json({ error: "Accès refusé, token manquant." });
     }
 
     try {
         // Extract clientID from token
-        const decoded = jwt.verify(token, 'mariem');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const clientID = decoded.client.clientID;
-        
+
         // Check if the cart exists
         const cartRows = await new Promise((resolve, reject) => {
             pool.query("SELECT panierID FROM Panier WHERE clientID = ?", [clientID], (error, rows) => {
@@ -155,7 +155,7 @@ cartRoutes.put('/update', async (req, res) => {
 
     try {
         // Verify token and get client ID
-        const decoded = jwt.verify(token, 'mariem');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const clientID = decoded.client.clientID;
 
         // Find the cart for this client
@@ -209,7 +209,7 @@ cartRoutes.delete('/remove', async (req, res) => {
 
     try {
         // Verify token and get client ID
-        const decoded = jwt.verify(token, 'mariem');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const clientID = decoded.client.clientID;
 
         // Find the cart for this client
