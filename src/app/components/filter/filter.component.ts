@@ -30,6 +30,7 @@ export class FilterComponent implements OnInit {
           console.error('Error fetching categories:', error);
         }
       );
+      
   }
     
   onCategoryChange(categoryID: number | null): void {
@@ -40,6 +41,7 @@ export class FilterComponent implements OnInit {
   // Fonction pour mettre à jour la valeur du prix
   updatePrice(event: any) {
     this.selectedPrice = event.target.value;
+    
   }
 
   resetFilters() {

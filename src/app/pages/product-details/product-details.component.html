@@ -22,9 +22,9 @@
 <div class="container mx-auto py-8 px-4">
     <div class="products-breadcrumbs">
         <nav class="text-sm text-gray-500">
-          <a href="" class="hover:text-blue-600 shop-title-breadcumbs">Home</a>
+          <a href="" class="hover:text-blue-600 shop-title-breadcumbs">Accueil</a>
           <span class="mx-2">/</span>
-          <a href="shop" class="hover:text-blue-600 shop-title-breadcumbs">Shop</a>
+          <a href="shop" class="hover:text-blue-600 shop-title-breadcumbs">Boutique</a>
           <span class="mx-2">/</span>
           <span class="text-gray-700 shop-title-breadcumbs">{{ product.nomProd }}</span>
         </nav>
@@ -37,16 +37,16 @@
         <h1 class="text-2xl font-semibold">{{ product.nomProd }}</h1>
         <div class="flex items-center space-x-2 text-yellow-500">
         </div>
-        <p class="text-red-500 font-semibold my-2 price-text">{{ product.prix }} TND</p>
+        <p class="text-red-500 font-semibold my-2 price-text">{{ product.prix }} DT</p>
         <p class="text-gray-600">{{ product.description }}</p>
         <hr />
         <div class="mt-4 flex add-to-cart-container">
           <input type="number" [(ngModel)]="selectedQuantity" min="1" class="border rounded w-20 text-center">
-          <button (click)="addToCart()" class="bg-black text-white px-10 py-3 rounded hover:bg-gray-800">ADD TO CART</button>
+          <button (click)="addToCart()" class="bg-black text-white px-10 py-3 rounded hover:bg-gray-800">AJOUTER AU PANIER</button>
         </div>
         <hr />
-        <p class="mt-4 text-gray-500">Categories: {{ product.nom }}</p>
-        <p class="text-gray-500">Tag: Blouse</p>
+        <p class="mt-4 text-gray-500">Catégories : {{ product.nom }}</p>
+        <p class="text-gray-500">Étiquette: Blouse</p>
       </div>
     </div>
   

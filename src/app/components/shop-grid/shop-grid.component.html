@@ -8,7 +8,7 @@
 <div class="shop-inner-body">
 <app-filter (categoryChanged)="onCategoryChange($event)"></app-filter>
 <div class="container">
-  <div *ngIf="products.length === 0">No products found.</div>
+  <div *ngIf="products.length === 0">Aucun produit trouvé.</div>
     <div class="flex flex-wrap justify-center gap-25 ">
       <app-product-card 
         *ngFor="let product of products"
