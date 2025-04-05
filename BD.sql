@@ -3,68 +3,89 @@ use  techshop;
 
 -- Table Client (relation 1:1 avec Utilisateur)
 CREATE TABLE Client (
-    clientID INT PRIMARY KEY AUTO_INCREMENT,
-    nom VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    motdepasse VARCHAR(100) NOT NULL,
-    adresse VARCHAR(255),
-    tel INT,
-    region VARCHAR(30)
+  `clientID` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `motdepasse` varchar(100) NOT NULL,
+  `adresse` varchar(255) DEFAULT NULL,
+  `tel` int DEFAULT NULL,
+  `region` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`clientID`),
+  UNIQUE KEY `email` (`email`)
 );
 
 -- Table Categorie
 CREATE TABLE Categorie (
-    categorieID INT PRIMARY KEY AUTO_INCREMENT,
-    nom VARCHAR(100) NOT NULL,
-    description TEXT
+  `categorieID` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `description` text,
+  PRIMARY KEY (`categorieID`)
 );
 
 -- Table Produit
 CREATE TABLE Produit (
-    produitID INT PRIMARY KEY AUTO_INCREMENT,
-    nomProd VARCHAR(100) NOT NULL,
-    description TEXT,
-    prix DECIMAL(10, 2) NOT NULL CHECK (prix >= 0),
-    stock INT NOT NULL CHECK (stock >= 0),
-    imageURL VARCHAR(255),
-    categorieID INT,
-    fournisseurID INT, -- Note: Fournisseur n’est pas défini dans le diagramme, mais laissé pour cohérence
-    FOREIGN KEY (categorieID) REFERENCES Categorie(categorieID) ON DELETE SET NULL
+  `produitID` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `description` text,
+  `prix` decimal(10,2) NOT NULL,
+  `stock` int NOT NULL,
+  `imageURL` varchar(255) DEFAULT NULL,
+  `categorieID` int DEFAULT NULL,
+  `fournisseurID` int DEFAULT NULL,
+  `oldPrice` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`produitID`),
+  KEY `categorieID` (`categorieID`),
+  CONSTRAINT `produit_ibfk_1` FOREIGN KEY (`categorieID`) REFERENCES `categorie` (`categorieID`) ON DELETE SET NULL,
+  CONSTRAINT `produit_chk_1` CHECK ((`prix` >= 0)),
+  CONSTRAINT `produit_chk_2` CHECK ((`stock` >= 0)),
+  CONSTRAINT `produit_chk_3` CHECK ((`oldPrice` >= 0))
 );
 
 -- Table Panier
 CREATE TABLE Panier (
-    panierID INT PRIMARY KEY AUTO_INCREMENT,
-    clientID INT NOT NULL,
-    FOREIGN KEY (clientID) REFERENCES Client(clientID) ON DELETE CASCADE
+  `panierID` int NOT NULL AUTO_INCREMENT,
+  `clientID` int NOT NULL,
+  PRIMARY KEY (`panierID`),
+  KEY `clientID` (`clientID`),
+  CONSTRAINT `panier_ibfk_1` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`) ON DELETE CASCADE
 );
 
 -- Table d’association Panier_Produit (pour gérer les quantités)
 CREATE TABLE Panier_Produit (
-    panierID INT,
-    produitID INT,
-    quantite INT NOT NULL CHECK (quantite > 0),
-    PRIMARY KEY (panierID, produitID),
-    FOREIGN KEY (panierID) REFERENCES Panier(panierID) ON DELETE CASCADE,
-    FOREIGN KEY (produitID) REFERENCES Produit(produitID) ON DELETE CASCADE
+  `panierID` int NOT NULL,
+  `produitID` int NOT NULL,
+  `quantite` int NOT NULL,
+  PRIMARY KEY (`panierID`,`produitID`),
+  KEY `produitID` (`produitID`),
+  CONSTRAINT `panier_produit_ibfk_1` FOREIGN KEY (`panierID`) REFERENCES `panier` (`panierID`) ON DELETE CASCADE,
+  CONSTRAINT `panier_produit_ibfk_2` FOREIGN KEY (`produitID`) REFERENCES `produit` (`produitID`) ON DELETE CASCADE,
+  CONSTRAINT `panier_produit_chk_1` CHECK ((`quantite` > 0))
 );
 
 -- Table Commande
 CREATE TABLE Commande (
-    commandeID INT PRIMARY KEY AUTO_INCREMENT,
-    clientID INT NOT NULL,
-    dateCommande DATE NOT NULL,
-    statut VARCHAR(50) NOT NULL,
-    total DECIMAL(10, 2) NOT NULL CHECK (total >= 0),
-    FOREIGN KEY (clientID) REFERENCES Client(clientID) ON DELETE CASCADE
+  `commandeID` int NOT NULL AUTO_INCREMENT,
+  `clientID` int NOT NULL,
+  `dateCommande` date NOT NULL,
+  `statut` varchar(50) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`commandeID`),
+  KEY `clientID` (`clientID`),
+  CONSTRAINT `commande_ibfk_1` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`) ON DELETE CASCADE,
+  CONSTRAINT `commande_chk_1` CHECK ((`total` >= 0))
 );
 
 -- Table d’association Commande_Produit (pour gérer les quantités)
 CREATE TABLE Commande_Produit (
-    commandeID INT,
-    produitID INT,
-    quantite INT NOT NULL CHECK (quantite > 0),
-    PRIMARY KEY (commandeID, produitID),
-    FOREIGN KEY (commandeID) REFERENCES Commande(commandeID) ON DELETE CASCADE,
-    FOREIGN KEY (produitID) REFERENCES Produit(produitID) ON DELETE CASCADE
+  `commandeID` int NOT NULL,
+  `produitID` int NOT NULL,
+  `quantite` int NOT NULL,
+  PRIMARY KEY (`commandeID`,`produitID`),
+  KEY `produitID` (`produitID`),
+  CONSTRAINT `commande_produit_ibfk_1` FOREIGN KEY (`commandeID`) REFERENCES `commande` (`commandeID`) ON DELETE CASCADE,
+  CONSTRAINT `commande_produit_ibfk_2` FOREIGN KEY (`produitID`) REFERENCES `produit` (`produitID`) ON DELETE CASCADE,
+  CONSTRAINT `commande_produit_chk_1` CHECK ((`quantite` > 0))
 );
+
+INSERT INTO `categorie` VALUES (22,'Smartphone','Téléphones intelligents avec fonctionnalités avancées.'),(23,'Composants','Composants pour le rendu graphique dans les ordinateurs.'),(24,'Ordinateur Portable','Ordinateurs personnels portables.'),(25,'Ordinateur Gaming','Ordinateurs personnels portables.'),(26,'Écran PC','Périphérique d\'affichage pour ordinateurs.'),(27,'Clavier PC','Périphérique d\'entrée textuel pour ordinateurs.'),(28,'Souris PC','Périphérique de pointage pour ordinateurs.'),(29,'Casque PC','Casque audio conçu pour une utilisation avec un ordinateur.'),(30,'Tablette','Ordinateurs portables à écran tactile.'),(31,'Montres','Montres avec fonctionnalités informatiques avancées.'),(32,'Speakers','Écouteurs fonctionnant sans fil.');
+INSERT INTO `produit` VALUES (69,'iPhone 15 Pro Max','Le dernier smartphone haut de gamme d\'Apple avec puce A17 Bionic et triple caméra avancée.',1299.00,97,'/assets/images/iphone15PM produit 1.webp',22,0,1399.00),(70,'Samsung Galaxy S24 Ultra','Smartphone Android phare avec écran Dynamic AMOLED 2X, Snapdragon 8 Gen 3 et quadruple caméra 200MP.',1199.99,103,'/assets/images/promoooo1.png',22,0,1399.00),(71,'Carte Graphique NVIDIA GeForce RTX 4080','Carte graphique haute performance pour le gaming 4K et le ray tracing.',1100.00,201,'/assets/images/NVIDIA GeForce RTX 4080 produit 4.png',23,0,1199.00),(72,'Processeur Intel Core i9-14900K','Processeur de bureau haut de gamme avec 24 cœurs pour des performances extrêmes.',600.00,202,'/assets/images/Processeur Intel Core i9-14900K produit 5.webp',23,0,700.00),(73,'Mémoire Vive Corsair Vengeance DDR5 32GB (2x16GB) 6000MHz','Kit de mémoire RAM haute vitesse pour les systèmes de jeu et les stations de travail.',150.00,203,'/assets/images/Mémoire Vive Corsair Vengeance DDR5 produit 6.jpg',23,0,75.00),(74,'SSD Samsung 990 Pro 2TB NVMe','Disque SSD ultra-rapide pour des temps de chargement réduits et des transferts de fichiers rapides.',180.00,204,'/assets/images/SSD Samsung 990 Pro 2TB NVMe produit 7.avif',23,0,55.00),(75,'Carte Mère ASUS ROG Strix Z790-E Gaming WiFi','Carte mère haut de gamme pour processeurs Intel de 12ème, 13ème et 14ème génération.',400.00,205,'/assets/images/Carte Mère ASUS ROG Strix Z790-E produit 8.png',23,0,490.00),(76,'Ordinateur Portable Dell XPS 15','Ordinateur portable haut de gamme avec écran OLED, processeur Intel Core i7 et carte graphique NVIDIA GeForce RTX.',1999.00,301,'/assets/images/Ordinateur Portable Dell XPS 15 produit 9.avif',24,0,2099.00),(77,'Ordinateur Portable Apple MacBook Air M3','Ordinateur portable ultra-léger et puissant avec la puce Apple M3.',1199.00,302,'/assets/images/Ordinateur Portable Apple MacBook Air M3 produit 10.jpeg',24,0,1249.00),(78,'Écran PC Gaming ASUS ROG Swift PG27AQDM OLED','Écran gaming 27 pouces OLED avec résolution QHD et taux de rafraîchissement de 240Hz.',900.00,205,'/assets/images/Écran PC Gaming ASUS ROG Swift PG27AQDM OLED produit 11.webp',26,0,900.00),(79,'Clavier Mécanique Corsair K70 RGB PRO','Clavier mécanique gaming avec rétroéclairage RGB personnalisable et commutateurs Cherry MX.',160.00,203,'/assets/images/Clavier Mécanique Corsair K70 RGB PRO produit 12.webp',27,0,160.00),(80,'Souris Gaming Logitech G Pro X SUPERLIGHT 2','Souris gaming sans fil ultra-légère pour les joueurs professionnels.',150.00,206,'/assets/images/Souris Gaming Logitech G Pro X SUPERLIGHT 2 produit 13.png',28,0,150.00),(81,'Casque Gaming HyperX Cloud III Wireless','Casque gaming sans fil confortable avec un son de haute qualité.',120.00,207,'/assets/images/Casque Gaming HyperX Cloud III Wireless produit 14.png',32,0,120.00),(82,'Tablette Apple iPad Pro 12.9 pouces (M2)','Tablette haut de gamme avec écran Liquid Retina XDR et puce Apple M2.',1099.00,302,'/assets/images/Tablette Apple iPad Pro 12.9 pouces (M2) produit 15.png',30,0,1099.00),(83,'Tablette Samsung Galaxy Tab S9 Ultra','Tablette Android haut de gamme avec grand écran Dynamic AMOLED 2X et S Pen inclus.',1199.00,102,'/assets/images/Tablette Samsung Galaxy Tab S9 Ultra produit 16.avif',30,0,1299.00),(84,'Montre Connectée Apple Watch Series 9','Montre connectée avec fonctionnalités avancées de santé et de fitness.',399.00,302,'/assets/images/Montre Connectée Apple Watch Series 9 produit 17.webp',31,0,550.00),(85,'Montre Connectée Samsung Galaxy Watch 6 Classic','Montre connectée élégante avec suivi de la santé et du fitness.',349.00,102,'/assets/images/Enceinte Bluetooth Bose SoundLink Revolve + II produit 18.png',31,0,400.00),(86,'Enceinte Bluetooth Bose SoundLink Revolve+ II','Enceinte Bluetooth portable avec un son à 360 degrés et une longue autonomie.',299.00,401,'/assets/images/Écouteurs sans fil Sony WF-1000XM5 produit 19.png',32,0,400.00),(87,'Écouteurs sans fil Sony WF-1000XM5','Écouteurs sans fil à réduction de bruit de haute qualité.',279.00,402,'/assets/images/Écouteurs sans fil Sony WF-1000XM5 produit 19.png',32,0,60.00);
