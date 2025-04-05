@@ -8,8 +8,8 @@ require('dotenv').config();
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.JWT_MAIL,
-        pass: process.env.JWT_PASS
+        user: process.env.MAIL,
+        pass: process.env.PASS
     }
   });
 

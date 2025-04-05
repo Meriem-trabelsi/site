@@ -90,7 +90,7 @@ export class RecupererMdpComponent {
       next: (response) => {
         console.log('Password changed successfully:', response);
         alert('Votre mot de passe a été modifié avec succès!');
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
 
       },
       error: (error) => {
