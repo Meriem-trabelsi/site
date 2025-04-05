@@ -25,6 +25,7 @@ export class HeaderComponent implements OnInit {
         console.error('Error fetching categories:', error);
       }
     );
+    this.checkAuthStatus();
   }
 
   goToCategory(categoryId: number): void {

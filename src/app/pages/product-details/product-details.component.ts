@@ -17,8 +17,7 @@ import { FormsModule } from '@angular/forms';
 export class ProductDetailsComponent implements OnInit {
   product!: Product;
   specifications: any[] = [];
-
-  @Input() produitID!: number; // input from parent, ensure it's passed
+  produitID!: number;
   selectedQuantity: number = 1;
 
   constructor(
@@ -27,55 +26,40 @@ export class ProductDetailsComponent implements OnInit {
     private http: HttpClient
   ) {}
 
-  /*ngOnInit(): void {
-    const productId = Number(this.route.snapshot.paramMap.get('id'));
-    this.productService.getProductById(productId).subscribe(
-      (data) => (this.product = data),
-      (error) => console.error('Error fetching product:', error)
-    );
-  }*/
-
     ngOnInit(): void {
-      const productId = Number(this.route.snapshot.paramMap.get('id'));
-    
-      this.productService.getProductById(productId).subscribe(
+      this.produitID = Number(this.route.snapshot.paramMap.get('id'));
+
+      this.productService.getProductById(this.produitID).subscribe(
         (data) => this.product = data,
         (error) => console.error('Error fetching product:', error)
       );
     
-      this.productService.getProductSpecifications(productId).subscribe(
+      this.productService.getProductSpecifications(this.produitID).subscribe(
         (data) => this.specifications = data,
         (error) => console.error('Error fetching specifications:', error)
       );
     } 
 
-    addToCart() {
-      const token = localStorage.getItem('token'); // or use cookies if you store it there
-
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      });
-  
-      this.http.post('http://localhost:5000/cart/add', {
-        produitID: this.produitID,
-        quantite: this.selectedQuantity,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        withCredentials: true  // This should be outside the headers object
-      }).subscribe({
-        next: (res) => {
-          console.log('Produit ajouté au panier:', res);
+    // Update quantity via API
+    addToCart(): void {
+      this.http.post(
+        `http://localhost:5000/Cart/add`,
+        { produitID: this.produitID, quantite: this.selectedQuantity },
+        { withCredentials: true }
+      ).subscribe(
+        () => {
           alert('Produit ajouté au panier !');
         },
-        error: (err) => {
-          console.error('Erreur:', err);
-          alert('Erreur lors de l\'ajout au panier');
+        (error) => {
+          console.error('Error updating quantity:', error);
+          if (error.status === 400) {
+            alert("La quantité demandée dépasse le stock disponible.");
+          } else if (error.status === 401) {
+              alert("Veuillez vous authentifier");} 
+            else {
+            alert("Une erreur est survenue lors de la mise à jour de la quantité.");
+          }
         }
-      });
+      );
     }
-   
-}
+  }

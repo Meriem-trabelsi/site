@@ -77,19 +77,8 @@ cartRoutes.post('/add', async (req, res) => {
         });
 
         let panierID;
-        if (cartRows.length === 0) {
-            // Create a new cart
-            const cartResult = await new Promise((resolve, reject) => {
-                pool.query("INSERT INTO Panier (clientID) VALUES (?)", [clientID], (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                });
-            });
-            panierID = cartResult.insertId;
-        } else {
-            panierID = cartRows[0].panierID;
-        }        
-
+        panierID = cartRows[0].panierID;     
+        
         // Check if the product is already in the cart
         const existingProductRows = await new Promise((resolve, reject) => {
             pool.query(

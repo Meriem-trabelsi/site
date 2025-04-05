@@ -39,8 +39,5 @@ export class ProductService {
   getProductSpecifications(id: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/fiche-technique/${id}`);
   }
-  
-  addToCart(produitID: number, quantite: number): Observable<any> {
-    return this.http.post('http://localhost:5000/Cart/add', { produitID, quantite }, { withCredentials: true });
-  }
+
 }

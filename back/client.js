@@ -32,7 +32,10 @@ clientRoutes.post('/registerClient', async (req, res) => {
                 console.error('Error registering client: ' + error);
                 return res.status(500).json({ error: 'An error occurred during client registration.' });
             }
-
+            // Create a new cart
+            pool.query("INSERT INTO Panier (clientID) VALUES (?)", [result.insertId], (error, result) => {
+                if (error) reject(error);
+            });
             console.log('Client registered successfully with ID: ' + result.insertId);
             transporter.sendMail({
                 from: process.env.JWT_MAIL,
