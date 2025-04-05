@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryService } from '../../services/categorie.service';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,8 +13,8 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent implements OnInit {
   categories: any[] = [];
-
-  constructor(private categoryService: CategoryService, private router: Router) {}
+  isLoggedIn = false;
+  constructor(private categoryService: CategoryService, private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe(
@@ -32,9 +33,6 @@ export class HeaderComponent implements OnInit {
     });
   }
   
-  goToPage() {
-    this.router.navigate(['/login']);
-  }
 
   checkAuthStatus(): void {
     this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', { withCredentials: true }).subscribe(

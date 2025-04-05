@@ -9,7 +9,7 @@ import { FooterComponent } from "../../components/footer/footer.component";
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, ShopTitleComponent, FilterComponent, ShopGridComponent, HeaderComponent, FooterComponent],
+  imports: [CommonModule, ShopTitleComponent, ShopGridComponent, HeaderComponent, FooterComponent],
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.css']
 })

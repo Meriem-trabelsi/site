@@ -3,12 +3,13 @@ const clientRoutes = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'meriem.trabelsi@etudiant-fst.utm.tn',
-        pass: 'kikc ynav vxgc ypje'
+        user: process.env.JWT_MAIL,
+        pass: process.env.JWT_PASS
     }
   });
 
@@ -34,7 +35,7 @@ clientRoutes.post('/registerClient', async (req, res) => {
 
             console.log('Client registered successfully with ID: ' + result.insertId);
             transporter.sendMail({
-                from: 'meriem.trabelsi@etudiant-fst.utm.tn',
+                from: process.env.JWT_MAIL,
                 to: email,
                 subject: 'Bienvenue chez Techshop',
                 text: 'Merci de vous être inscrit chez nous !'
@@ -80,7 +81,8 @@ clientRoutes.post('/loginClient', async (req, res) => {
 
             // 🔹 Generate JWT token
             const expiresIn = rememberme ? '30d' : '1d';
-            const token = jwt.sign({ client: client}, 'mariem', { expiresIn });            
+            console.log(process.env.JWT_SECRET);
+            const token = jwt.sign({ client: client}, process.env.JWT_SECRET, { expiresIn });            
             res.cookie('token', token, { httpOnly: true, maxAge: rememberme ? 30 * 24 * 60 * 60 * 1000 : undefined });
             res.status(200).json({ message: 'Login successful', token: token });
 
@@ -109,7 +111,7 @@ clientRoutes.post('/forgotpassword', async (req, res) => {
 
             const verificationCode = generateVerificationCode();
             transporter.sendMail({
-                from: 'meriem.trabelsi@etudiant-fst.utm.tn',
+                from: process.env.JWT_MAIL,
                 to: email,
                 subject: 'Request to change password',
                 text: `Your verification code is: ${verificationCode}`
@@ -159,7 +161,7 @@ clientRoutes.post('/changepass', async (req, res) => {
                 }
                 console.log('Password changed successfully');
                 transporter.sendMail({
-                    from: 'meriem.trabelsi@etudiant-fst.utm.tn',
+                    from: process.env.JWT_MAIL,
                     to: email,
                     subject: 'Your Password has been changed',
                     text: 'Your Password has been changed successfully!'
@@ -189,7 +191,7 @@ clientRoutes.get('/checkAuth', async (req, res) => {
 
     try {
         // 🔹 Verify the JWT token
-        jwt.verify(token, 'mariem', (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 return res.status(401).json({ error: 'Invalid or expired token.' });
             }
@@ -218,7 +220,7 @@ clientRoutes.get('/getClientInfo', async (req, res) => {
     }
 
     try {
-        jwt.verify(token, 'mariem', (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 return res.status(401).json({ error: 'Invalid or expired token.' });
             }
@@ -254,7 +256,7 @@ clientRoutes.put('/updateClientInfo', async (req, res) => {
     }
 
     try {
-        jwt.verify(token, 'mariem', (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 return res.status(401).json({ error: 'Invalid or expired token.' });
             }

@@ -7,17 +7,14 @@ require('dotenv').config();
 cartRoutes.get('/fetch', async (req, res) => {
     const pool = req.pool;
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-    const decoded = jwt.verify(token, 'mariem');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const clientID = decoded.client.clientID;
 
     if (!token) {
         return res.status(401).json({ error: "Accès refusé, token manquant." });
     }
 
-    try {
-        // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
+    try {       
         // Ensure the user is accessing their own cart
         if (decoded.client.clientID !== parseInt(clientID)) {
             return res.status(403).json({ error: "Accès non autorisé." });
@@ -298,7 +295,7 @@ cartRoutes.post('/commander', async (req, res) => {
 
     try {
         // Vérifier le token et extraire clientID
-        const decoded = jwt.verify(token, 'mariem');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const clientID = decoded.client.clientID;
 
         // Vérifier si le client a un panier

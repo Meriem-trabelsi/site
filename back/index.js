@@ -21,7 +21,7 @@ const pool = mysql.createPool({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: /*"admin"*/ "eE3cm77A71i23z" ,
+  password: "admin" ,
   database: "techshop",
 });
 
@@ -49,7 +49,6 @@ app.get("/produit", (req, res) => {
       console.error("Error fetching products:", err);
       return res.status(500).json({ error: "Database query failed" });
     } else {
-      console.log(results)
       res.status(200).json(results);
     }
   });
@@ -62,7 +61,6 @@ app.get("/categorie", (req, res) => {
       console.error("Error fetching categories:", err);
       return res.status(500).json({ error: "Database query failed" });
     } else {
-      console.log(results)
       res.status(200).json(results);
     }
   });
