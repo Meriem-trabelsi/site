@@ -24,7 +24,6 @@
 .product-image {
   width: 300px;
   height: 300px;
-  border: 1px solid;
   object-fit: contain;
 }
 
@@ -78,15 +77,15 @@
 
 <div class="product-card shadow-md">
     <div class="image-container">
-      <a href="product"><img [src]="image" [alt]="title" class="product-image" /></a>
+      <a [routerLink]="['/product', product.produitID]"><img [src]="product.imageURL" [alt]="product.nom" class="product-image" /></a>
     </div>
     <div class="product-info">
-      <p class="category">{{ category }}</p>
-      <h3 class="title">{{ title }}</h3>
+      <p class="category">{{ product.nom}}</p>
+      <h3 class="title">{{ product.nomProd }}</h3>
       <div class="price">
-        <span class="current-price">${{ price }}</span>
-        <span *ngIf="oldPrice" class="old-price">${{ oldPrice }}</span>
+        <span class="current-price">${{ product.prix}}</span>
+        <span *ngIf="product.nom" class="old-price">${{ product.oldPrice }}</span>
       </div>
     </div>
-    <span *ngIf="isNew" class="badge">NEW</span>
+    <span *ngIf="product.stock" class="badge">NEW</span>
 </div>

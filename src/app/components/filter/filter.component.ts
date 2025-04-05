@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Category, CategoryService } from '../../services/categorie.service';
 
 @Component({
   selector: 'app-filter',
@@ -9,51 +10,41 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css'
 })
-export class FilterComponent {
-  categories = ['Electronics', 'NFT', 'Jewellery', 'Fashion', 'Furniture'];
-  selectedCategory: string = '';
+export class FilterComponent implements OnInit {
+  selectedPrice: number = 1000; // Valeur initiale du prix (peut être modifiée selon les besoins)
+  minPrice: number = 0; // Prix minimum
+  maxPrice: number = 2000; // Prix maximum
+  categories: any[] = [];
+  selectedCategoryId: number | null = null;
 
-  genders = ['Men', 'Women', 'Unisex'];
-  selectedGender: string = '';
+  @Output() categoryChanged = new EventEmitter<number | null>();
 
-  colors = ['#FF0000', '#000000', '#CCCCCC', '#0000FF', '#FFFF00']; // Red, Black, Gray, Blue, Yellow
-  selectedColors: string[] = [];
-
-  sizes = ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS'];
-  selectedSizes: string[] = [];
-
-  prices = [50, 100, 200, 300, 400, 500];
-  selectedPrices: number[] = [];
-
-  toggleColor(color: string) {
-    if (this.selectedColors.includes(color)) {
-      this.selectedColors = this.selectedColors.filter(c => c !== color);
-    } else {
-      this.selectedColors.push(color);
-    }
+  constructor(private categoryService: CategoryService) {}
+  
+  ngOnInit(): void {
+      this.categoryService.getCategories().subscribe(
+        (data) => {
+          this.categories = data;
+        },
+        (error) => {
+          console.error('Error fetching categories:', error);
+        }
+      );
+  }
+    
+  onCategoryChange(categoryID: number | null): void {
+      this.selectedCategoryId = categoryID !== null ? +categoryID : null;
+      this.categoryChanged.emit(this.selectedCategoryId);
   }
 
-  toggleSize(size: string) {
-    if (this.selectedSizes.includes(size)) {
-      this.selectedSizes = this.selectedSizes.filter(s => s !== size);
-    } else {
-      this.selectedSizes.push(size);
-    }
-  }
-
-  togglePrice(price: number) {
-    if (this.selectedPrices.includes(price)) {
-      this.selectedPrices = this.selectedPrices.filter(p => p !== price);
-    } else {
-      this.selectedPrices.push(price);
-    }
+  // Fonction pour mettre à jour la valeur du prix
+  updatePrice(event: any) {
+    this.selectedPrice = event.target.value;
   }
 
   resetFilters() {
-    this.selectedCategory = '';
-    this.selectedGender = '';
-    this.selectedColors = [];
-    this.selectedSizes = [];
-    this.selectedPrices = [];
+    this.selectedCategoryId = null;
+    this.categoryChanged.emit(null);
+    this.selectedPrice = 1000;
   }
 }

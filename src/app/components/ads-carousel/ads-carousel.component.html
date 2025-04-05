@@ -1,43 +1,65 @@
 <style>
-    .carousel-inner img {
-        height: 600px;
-        object-fit: cover;
-    }
-    .carousel-indicators button {
+  .carousel-indicators button {
         width: 10px;
         height: 10px;
         border-radius: 50%;
     }
+    .carousel-indicators .active {
+        background-color: #6694f1; /* Couleur bleue pour l'indicateur actif */
+    }
+    .carousel-inner img {
+        height: 400px;
+        width: 200px;
+        object-fit: cover;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre portée */
+    }
+    .carousel-inner img {
+        width: 100%; /* Ajuste la largeur à 100% du conteneur */
+        height: auto; /* La hauteur sera ajustée en fonction de la largeur pour conserver les proportions */
+    }
+    
+    @media (max-width: 768px) {
+        .carousel-inner img {
+            height: 400px; /* Réduit la taille de l'image sur les petits écrans */
+        }
+    }
 </style>
 
 <div id="promoCarousel" class="carousel slide relative" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button *ngFor="let slide of slides; let i = index"
-        type="button"
-        data-bs-target="#promoCarousel"
-        [attr.data-bs-slide-to]="i"
-        [class.active]="i === 0"
-        aria-current="true"
-        [attr.aria-label]="'Slide ' + (i + 1)">
-      </button>
-    </div>
-    <div class="carousel-inner">
-      <div *ngFor="let slide of slides; let i = index" class="carousel-item" [class.active]="i === 0">
-        <img [src]="slide.image" class="d-block w-full" alt="Slide Image">
-        <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-center items-center text-white p-8">
-          <h2 class="text-3xl font-bold">{{ slide.title }}</h2>
-          <p class="text-lg my-4">{{ slide.description }}</p>
-          <a [href]="slide.link" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-            {{ slide.button }}
-          </a>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  <!-- Indicateurs -->
+  <div class="carousel-indicators">
+    <button *ngFor="let slide of slides; let i = index"
+      type="button"
+      data-bs-target="#promoCarousel"
+      [attr.data-bs-slide-to]="i"
+      [ngClass]="{ 'active': i === 0 }"
+      [attr.aria-current]="i === 0 ? 'true' : null"
+      [attr.aria-label]="'Slide ' + (i + 1)">
     </button>
   </div>
+ 
+  <!-- Slides -->
+  <div class="carousel-inner">
+    
+          <div *ngFor="let slide of slides; let i = index" 
+         class="carousel-item" 
+         [ngClass]="{'active': i === 0 }">
+      <img [src]="slide.image" class="d-block w-100" alt="Slide Image">
+      <div class="absolute inset-0 bg-transparent flex flex-col justify-center items-center text-white p-8">
+        <h2 class="text-3xl font-bold">{{ slide.title }}</h2>
+        <p class="text-lg my-4">{{ slide.description }}</p>
+        <a [href]="slide.link" class="bg-transparent-600 text-white px-6 py-2 rounded-lg hover:bg-oranger-200">{{ slide.button }}</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boutons de navigation -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  </button>
+</div>
+
   

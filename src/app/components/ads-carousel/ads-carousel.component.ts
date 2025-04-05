@@ -1,35 +1,52 @@
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import * as bootstrap from 'bootstrap'; // ✅ Import correct
 
 @Component({
   selector: 'app-ads-carousel',
-  standalone: true, // Ensures it's a standalone component
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './ads-carousel.component.html',
-  styleUrl: './ads-carousel.component.css'
+  styleUrls: ['./ads-carousel.component.css']
 })
-export class AdsCarouselComponent {
+export class AdsCarouselComponent implements AfterViewInit {
+
   slides = [
     {
+      image: 'assets/images/promo11.jpg',
+      title: '',
+      description: '',
+      link: '#',
+      button: 'Voir Plus'
+    },
+    {
       image: 'assets/images/promo1.jpg',
-      title: 'Offre Spéciale PC Gamer',
-      description: 'Profitez de -20% sur notre sélection de PC Gamer.',
-      button: 'Voir l\'offre',
-      link: '/pc-gamer'
+      title: '',
+      description: '',
+      link: '#',
+      button: 'Voir Plus'
+    },
+    {
+      image: 'assets/images/promo111.jpg',
+      title: '',
+      description: '',
+      link: '#',
+      button: 'Voir Plus'
     },
     {
       image: 'assets/images/promo2.jpg',
-      title: 'Promo Smartphone',
-      description: 'Réductions incroyables sur les derniers smartphones.',
-      button: 'Acheter maintenant',
-      link: '/smartphones'
-    },
-    {
-      image: 'assets/images/promo3.jpg',
-      title: 'Téléviseurs 4K en promo',
-      description: 'Des prix imbattables sur les TV 4K et OLED.',
-      button: 'Découvrir',
-      link: '/tvs'
+      title: '',
+      description: '',
+      link: '#',
+      button: 'Voir Plus'
     }
   ];
+ 
+
+  ngAfterViewInit() {
+    const carouselElement = document.querySelector('#promoCarousel');
+    if (carouselElement) {
+      new bootstrap.Carousel(carouselElement); // ✅ Correction ici
+    }
+  }
 }

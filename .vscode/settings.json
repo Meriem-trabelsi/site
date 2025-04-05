@@ -1,0 +1,20 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "xprotocol",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 33060,
+            "driver": "MySQL",
+            "name": "Techshop",
+            "database": "Techshop",
+            "username": "root",
+            "password": "eE3cm77A71i23z",
+            "connectionTimeout": 30
+        }
+    ],
+    "postman.settings.dotenv-detection-notification-visibility": false
+}

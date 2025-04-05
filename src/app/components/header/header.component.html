@@ -8,7 +8,7 @@
 <div class="header">
     <div class="header-section-1">
         <div class="header-inner-section-1">
-            <a href=""><img src="/logo.png" alt=""></a>
+            <a href=""><img src="assets\images\logo.png" alt=""></a>
             <input type="text" placeholder="Search...">
             <div class="header-section-1-buttons">
                 <a href="cart" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
@@ -20,13 +20,9 @@
     </div>
     <div class="header-section-2">
         <div class="header-inner-section-2">
-            <a href="shop">Ordinateurs</a>
-            <a href="shop">Smartphones</a>
-            <a href="shop">Périphériques</a>
-            <a href="shop">Electroménager</a>
-            <a href="shop">Energie & Mobilité</a>
-            <a href="shop">DIY</a>
-            <a href="shop">Composants</a>
+            <a *ngFor="let category of categories" (click)="goToCategory(category.categorieID)">
+                {{ category.nom }}
+              </a>
         </div>
     </div>
 </div>
