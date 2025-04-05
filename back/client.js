@@ -36,7 +36,6 @@ clientRoutes.post('/registerClient', async (req, res) => {
             pool.query("INSERT INTO Panier (clientID) VALUES (?)", [result.insertId], (error, result) => {
                 if (error) reject(error);
             });
-            console.log('Client registered successfully with ID: ' + result.insertId);
             transporter.sendMail({
                 from: process.env.JWT_MAIL,
                 to: email,
@@ -84,7 +83,6 @@ clientRoutes.post('/loginClient', async (req, res) => {
 
             // 🔹 Generate JWT token
             const expiresIn = rememberme ? '30d' : '1d';
-            console.log(process.env.JWT_SECRET);
             const token = jwt.sign({ client: client}, process.env.JWT_SECRET, { expiresIn });            
             res.cookie('token', token, { httpOnly: true, maxAge: rememberme ? 30 * 24 * 60 * 60 * 1000 : undefined });
             res.status(200).json({ message: 'Login successful', token: token });
