@@ -83,9 +83,9 @@
       <p class="category">{{ product.nom}}</p>
       <h3 class="title">{{ product.nomProd }}</h3>
       <div class="price">
-        <span class="current-price">${{ product.prix}}</span>
-        <span *ngIf="product.nom" class="old-price">${{ product.oldPrice }}</span>
+        <span class="current-price">{{ product.prix}} DT</span>
+        <span *ngIf="product.nom" class="old-price">{{ product.oldPrice }}DT</span>
       </div>
     </div>
-    <span *ngIf="product.stock" class="badge">NEW</span>
+    <span *ngIf="product.stock" class="badge">nouveau</span>
 </div>

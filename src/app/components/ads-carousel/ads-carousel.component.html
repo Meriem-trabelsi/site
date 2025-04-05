@@ -40,19 +40,18 @@
  
   <!-- Slides -->
   <div class="carousel-inner">
-    
-          <div *ngFor="let slide of slides; let i = index" 
+    <div *ngFor="let slide of slides; let i = index" 
          class="carousel-item" 
          [ngClass]="{'active': i === 0 }">
       <img [src]="slide.image" class="d-block w-100" alt="Slide Image">
       <div class="absolute inset-0 bg-transparent flex flex-col justify-center items-center text-white p-8">
         <h2 class="text-3xl font-bold">{{ slide.title }}</h2>
         <p class="text-lg my-4">{{ slide.description }}</p>
-        <a [href]="slide.link" class="bg-transparent-600 text-white px-6 py-2 rounded-lg hover:bg-oranger-200">{{ slide.button }}</a>
+       
       </div>
     </div>
   </div>
-
+  
   <!-- Boutons de navigation -->
   <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -60,6 +59,4 @@
   <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
   </button>
-</div>
-
   

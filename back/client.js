@@ -29,8 +29,8 @@ clientRoutes.post('/registerClient', async (req, res) => {
 
         pool.query(sql, values, (error, result) => {
             if (error) {
-                console.error('Error registering client: ' + error);
-                return res.status(500).json({ error: 'An error occurred during client registration.' });
+                console.error('Erreur lors de l\'inscription du client :  ' + error);
+                return res.status(500).json({ error: 'Une erreur est survenue lors de l\'inscription du client.' });
             }
             // Create a new cart
             pool.query("INSERT INTO Panier (clientID) VALUES (?)", [result.insertId], (error, result) => {
@@ -40,18 +40,18 @@ clientRoutes.post('/registerClient', async (req, res) => {
                 from: process.env.JWT_MAIL,
                 to: email,
                 subject: 'Bienvenue chez Techshop',
-                text: 'Merci de vous être inscrit chez nous !'
+                text: 'Merci pour votre inscription à notre site !'
             }, (error, info) => {
                 if (error) {
-                    console.error('Error sending email:', error);
+                    console.error('Erreur lors de l\'envoi de l\'email :', error);
                 } else {
-                    console.log('Email sent:', info.response);
+                    console.log('Email envoyé :', info.response);
                 }
             });
-            return res.status(201).json({ message: 'Client registered successfully', clientId: result.insertId });
+            return res.status(201).json({ message: 'Client inscrit avec succès', clientId: result.insertId });
         });
     } catch (error) {
-        console.error('Error hashing password:', error);
+        console.error('Erreur lors du hachage du mot de passe :', error);
         return res.status(500).json({ error: 'An error occurred while hashing the password.' });
     }
 });
@@ -65,12 +65,12 @@ clientRoutes.post('/loginClient', async (req, res) => {
         const query = 'SELECT * FROM Client WHERE email = ?';
         pool.query(query, [email], async (error, results) => {
             if (error) {
-                console.error('Error querying client:', error);
-                return res.status(500).json({ error: 'Database error' });
+                console.error('Erreur lors de la recherche du client :', error);
+                return res.status(500).json({ error: 'Erreur dans la base de données' });
             }
 
             if (results.length === 0) {
-                return res.status(404).json({ error: 'Client not found.' });
+                return res.status(404).json({ error: 'Client non trouvé.' });
             }
 
             const client = results[0];
@@ -78,19 +78,19 @@ clientRoutes.post('/loginClient', async (req, res) => {
             // 🔹 Compare passwords safely
             const passwordMatch = await bcrypt.compare(password, client.motdepasse);
             if (!passwordMatch) {
-                return res.status(401).json({ error: 'Invalid password.' });
+                return res.status(401).json({ error: 'Mot de passe invalide.' });
             }
 
             // 🔹 Generate JWT token
             const expiresIn = rememberme ? '30d' : '1d';
             const token = jwt.sign({ client: client}, process.env.JWT_SECRET, { expiresIn });            
             res.cookie('token', token, { httpOnly: true, maxAge: rememberme ? 30 * 24 * 60 * 60 * 1000 : undefined });
-            res.status(200).json({ message: 'Login successful', token: token });
+            res.status(200).json({ message: 'Connexion réussie', token: token });
 
         });
     } catch (error) {
-        console.error('Error logging in:', error);
-        return res.status(500).json({ error: 'An error occurred while logging in.' });
+        console.error('Erreur lors de la connexion :', error);
+        return res.status(500).json({ error: 'Une erreur est survenue lors de la connexion.' });
     }
 });
 
@@ -102,33 +102,33 @@ clientRoutes.post('/forgotpassword', async (req, res) => {
         const query = 'SELECT * FROM Client WHERE email = ?';
         pool.query(query, [email], async (error, results) => {
             if (error) {
-                console.error('Error querying client:', error);
-                return res.status(500).json({ error: 'An error occurred while changing password.' });
+                console.error('Erreur lors de la recherche du client :', error);
+                return res.status(500).json({ error: 'Une erreur est survenue lors du changement du mot de passe.' });
             }
 
             if (results.length === 0) {
-                return res.status(404).json({ error: 'Client not found.' });
+                return res.status(404).json({ error: 'Client non trouvé.' });
             }
 
             const verificationCode = generateVerificationCode();
             transporter.sendMail({
                 from: process.env.JWT_MAIL,
                 to: email,
-                subject: 'Request to change password',
-                text: `Your verification code is: ${verificationCode}`
+                subject: 'Demande de changement de mot de passe',
+                text: `Votre code de vérification est: ${verificationCode}`
             }, (error, info) => {
                 if (error) {
-                    console.error('Error sending email:', error);
-                    return res.status(500).json({ error: 'An error occurred while sending verification code email.' });
+                    console.error('Erreur lors de l\'envoi de l\'email :', error);
+                    return res.status(500).json({ error: 'Une erreur est survenue lors de l\'envoi du code de vérification.' });
                 } else {
-                    console.log('Email sent:', info.response);
+                    console.log('Email envoyé :', info.response);
                     return res.status(200).json({ code: verificationCode });
                 }
             });
         });
     } catch (error) {
-        console.error('Error changing password:', error);
-        return res.status(500).json({ error: 'An error occurred while changing password.' });
+        console.error('Erreur lors du changement de mot de passe :', error);
+        return res.status(500).json({ error: 'Une erreur est survenue lors du changement du mot de passe.' });
     }
 });
 
@@ -141,13 +141,13 @@ clientRoutes.post('/changepass', async (req, res) => {
         const query = 'SELECT * FROM Client WHERE email = ?';
         pool.query(query, [email], async (error, results) => {
             if (error) {
-                console.error('Error querying client:', error);
-                return res.status(500).json({ error: 'An error occurred while changing password.' });
+                console.error('Erreur lors de la recherche du client :', error);
+                return res.status(500).json({ error: 'Une erreur est survenue lors du changement du mot de passe.' });
             }
 
             if (results.length === 0) {
                 // Client not found
-                return res.status(404).json({ error: 'Client not found.' });
+                return res.status(404).json({ error: 'Client non trouvé.' });
             }
 
             // Hash the new password
@@ -157,28 +157,28 @@ clientRoutes.post('/changepass', async (req, res) => {
             const updateQuery = 'UPDATE Client SET motdepasse = ? WHERE email = ?';
             pool.query(updateQuery, [hashedPassword, email], (error, result) => {
                 if (error) {
-                    console.error('Error updating password:', error);
-                    return res.status(500).json({ error: 'An error occurred while changing password.' });
+                    console.error('Erreur lors de la mise à jour du mot de passe :', error);
+                    return res.status(500).json({ error: 'Une erreur est survenue lors du changement du mot de passe.' });
                 }
-                console.log('Password changed successfully');
+                console.log('Mot de passe changé avec succès');
                 transporter.sendMail({
                     from: process.env.JWT_MAIL,
                     to: email,
-                    subject: 'Your Password has been changed',
-                    text: 'Your Password has been changed successfully!'
+                    subject: 'Votre mot de passe a été changé',
+                    text: 'Votre mot de passe a été changé avec succès !'
                 }, (error, info) => {
                     if (error) {
-                        console.error('Error sending email:', error);
+                        console.error('Erreur lors de l\'envoi de l\'email :', error);
                     } else {
-                        console.log('Email sent:', info.response);
+                        console.log('Email envoyé :', info.response);
                     }
                 });
-                res.status(200).json({ message: 'Password changed successfully' });
+                res.status(200).json({ message: 'Mot de passe changé avec succès' });
             });
         });
     } catch (error) {
-        console.error('Error changing password:', error);
-        return res.status(500).json({ error: 'An error occurred while changing password.' });
+        console.error('Erreur lors du changement de mot de passe :', error);
+        return res.status(500).json({ error: 'Une erreur est survenue lors du changement du mot de passe.' });
     }
 });
 
@@ -187,28 +187,28 @@ clientRoutes.get('/checkAuth', async (req, res) => {
     const token = req.cookies.token;  // Get the token from cookies
     
     if (!token) {
-        return res.status(401).json({ error: 'No token provided, authentication required.' });
+        return res.status(401).json({ error: 'Aucun token fourni, l\'authentification est requise.' });
     }
 
     try {
         // 🔹 Verify the JWT token
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                return res.status(401).json({ error: 'Invalid or expired token.' });
+                return res.status(401).json({ error: 'Token invalide ou expiré.' });
             }
             // Token is valid, send back client data
             const client = decoded.client;  // Get client info from token
-            res.status(200).json({ message: 'Client is authenticated', client });
+            res.status(200).json({ message: 'Client authentifié', client });
         });
     } catch (error) {
-        console.error('Error checking authentication:', error);
-        return res.status(500).json({ error: 'An error occurred while checking authentication.' });
+        console.error('Erreur lors de la vérification de l\'authentification :', error);
+        return res.status(500).json({ error: 'Une erreur est survenue lors de la vérification de l\'authentification.' });
     }
 });
 
 clientRoutes.post('/logout', async (req, res) => {
     res.clearCookie('token');
-    res.status(200).json({ message: 'Successfully logged out' });
+    res.status(200).json({ message: 'Déconnexion réussie' });
 });
 
 
@@ -217,13 +217,13 @@ clientRoutes.get('/getClientInfo', async (req, res) => {
     const token = req.cookies.token;  // Get the token from cookies
 
     if (!token) {
-        return res.status(401).json({ error: 'No token provided, authentication required.' });
+        return res.status(401).json({ error: 'Aucun token fourni, l\'authentification est requise.' });
     }
 
     try {
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                return res.status(401).json({ error: 'Invalid or expired token.' });
+                return res.status(401).json({ error: 'Token invalide ou expiré.' });
             }
 
             const clientID = decoded.client.clientID;
@@ -231,20 +231,20 @@ clientRoutes.get('/getClientInfo', async (req, res) => {
 
             pool.query(query, [clientID], (error, results) => {
                 if (error) {
-                    console.error('Error fetching client info:', error);
-                    return res.status(500).json({ error: 'An error occurred while fetching client info.' });
+                    console.error('Erreur lors de la récupération des informations du client:', error);
+                    return res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des informations du client.' });
                 }
 
                 if (results.length === 0) {
-                    return res.status(404).json({ error: 'Client not found.' });
+                    return res.status(404).json({ error: 'Client non trouvé.' });
                 }
 
                 res.status(200).json(results[0]); // Send back the client info
             });
         });
     } catch (error) {
-        console.error('Error verifying token:', error);
-        return res.status(500).json({ error: 'An error occurred while verifying authentication.' });
+        console.error('Erreur lors de la vérification du token:', error);
+        return res.status(500).json({ error: 'Une erreur est survenue lors de la vérification de l\'authentification.' });
     }
 });
 
@@ -253,13 +253,13 @@ clientRoutes.put('/updateClientInfo', async (req, res) => {
     const token = req.cookies.token;  // Get the token from cookies
     const { nom, region, adresse, tel } = req.body;
     if (!token) {
-        return res.status(401).json({ error: 'No token provided, authentication required.' });
+        return res.status(401).json({ error: 'Token non fourni, authentification requise.' });
     }
 
     try {
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                return res.status(401).json({ error: 'Invalid or expired token.' });
+                return res.status(401).json({ error: 'Token invalide ou expiré.' });
             }
 
             const clientID = decoded.client.clientID;
@@ -267,20 +267,20 @@ clientRoutes.put('/updateClientInfo', async (req, res) => {
 
             pool.query(query, [nom, region, adresse, tel, clientID], (error, result) => {
                 if (error) {
-                    console.error('Error updating client info:', error);
-                    return res.status(500).json({ error: 'An error occurred while updating client info.' });
+                    console.error('Erreur lors de la mise à jour des informations du client:', error);
+                    return res.status(500).json({ error: 'Une erreur est survenue lors de la mise à jour des informations du client.' });
                 }
 
                 if (result.affectedRows === 0) {
-                    return res.status(404).json({ error: 'Client not found or no changes made.' });
+                    return res.status(404).json({ error: 'Client non trouvé ou aucune modification effectuée.' });
                 }
 
-                res.status(200).json({ message: 'Client info updated successfully' });
+                res.status(200).json({ message: 'Les informations du client ont été mises à jour avec succès.' });
             });
         });
     } catch (error) {
-        console.error('Error verifying token:', error);
-        return res.status(500).json({ error: 'An error occurred while verifying authentication.' });
+        console.error('Erreur lors de la vérification du token:', error);
+        return res.status(500).json({ error: 'Une erreur est survenue lors de la vérification de l\'authentification.' });
     }
 });
 

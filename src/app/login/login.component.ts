@@ -132,11 +132,11 @@ export class LoginComponent {
 checkAuthStatus(): void {
   this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', { withCredentials: true }).subscribe(
     (response) => {
-      console.log('Already logged in:', response);
+      console.log('Déjà connecté:', response);
       this.router.navigate(['/home']);  // Redirect to home if authenticated
     },
     (error) => {
-      console.log('Not logged in:', error);
+      console.log('Non connecté:', error);
     }
   );
 }
