@@ -30,16 +30,10 @@
   </div>
 
   <div class="slider-container">
-    <input
-    type="range"
-    class='priice-slider'
-    min="0"
-    max="2000"
-    step="100"
-    [value]="selectedPrice"
-    (input)="updatePrice($event)"
-  />
+    <div class="slider-container">
+      <input type="range" class='priice-slider' min="20" max="2000" step="20" [(ngModel)]="selectedPrice" (input)="onPriceChange($event)" />
     </div>
+  </div>
   
     <!-- Reset Button -->
     <button (click)="resetFilters()" class="w-full text-center bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Réinitialiser</button>

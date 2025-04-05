@@ -14,106 +14,10 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './shop-grid.component.css'
 })
 export class ShopGridComponent implements OnInit {
-  /*products = [
-    {
-      title: "3D™ Wireless Headset",
-      category: "Electronics",
-      price: "$400",
-      oldPrice: "$500",
-      image: "assets/images/headset.png",
-      isNew: true
-    },
-    {
-      title: "PS2 DualShock 2 Wireless Controller",
-      category: "Gaming",
-      price: "$29.99",
-      oldPrice: "$49.99",
-      image: "assets/images/controller.png",
-      isNew: false
-    },
-    {
-      title: "Wired Keyboard & Mouse Combo Pack",
-      category: "Accessories",
-      price: "$32.99",
-      oldPrice: "$55.99",
-      image: "assets/images/keyboard.png",
-      isNew: false
-    },
-    {
-      title: "3D™ Wireless Headset",
-      category: "Electronics",
-      price: "$400",
-      oldPrice: "$500",
-      image: "assets/images/headset.png",
-      isNew: true
-    },
-    {
-      title: "PS2 DualShock 2 Wireless Controller",
-      category: "Gaming",
-      price: "$29.99",
-      oldPrice: "$49.99",
-      image: "assets/images/controller.png",
-      isNew: false
-    },
-    {
-      title: "Wired Keyboard & Mouse Combo Pack",
-      category: "Accessories",
-      price: "$32.99",
-      oldPrice: "$55.99",
-      image: "assets/images/keyboard.png",
-      isNew: false
-    },
-    {
-      title: "3D™ Wireless Headset",
-      category: "Electronics",
-      price: "$400",
-      oldPrice: "$500",
-      image: "assets/images/headset.png",
-      isNew: true
-    },
-    {
-      title: "PS2 DualShock 2 Wireless Controller",
-      category: "Gaming",
-      price: "$29.99",
-      oldPrice: "$49.99",
-      image: "assets/images/controller.png",
-      isNew: false
-    },
-    {
-      title: "Wired Keyboard & Mouse Combo Pack",
-      category: "Accessories",
-      price: "$32.99",
-      oldPrice: "$55.99",
-      image: "assets/images/keyboard.png",
-      isNew: false
-    },
-    {
-      title: "3D™ Wireless Headset",
-      category: "Electronics",
-      price: "$400",
-      oldPrice: "$500",
-      image: "assets/images/headset.png",
-      isNew: true
-    },
-    {
-      title: "PS2 DualShock 2 Wireless Controller",
-      category: "Gaming",
-      price: "$29.99",
-      oldPrice: "$49.99",
-      image: "assets/images/controller.png",
-      isNew: false
-    },
-    {
-      title: "Wired Keyboard & Mouse Combo Pack",
-      category: "Accessories",
-      price: "$32.99",
-      oldPrice: "$55.99",
-      image: "assets/images/keyboard.png",
-      isNew: false
-    }
-  ];*/
   products: any[] = [];
   currentCategoryId: number | null = null;
+  selectedPrice: number = 0;
+  
   constructor(private productService: ProductService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -126,7 +30,9 @@ export class ShopGridComponent implements OnInit {
 
   fetchProducts(): void {
     const categoryID = this.currentCategoryId !== null ? this.currentCategoryId : undefined;
-    this.productService.getProducts(categoryID).subscribe(
+    const maxPrice = this.selectedPrice > 0 ? this.selectedPrice : undefined; 
+
+    this.productService.getProducts(categoryID, maxPrice).subscribe(
       (data) => {
         this.products = data;
       },
@@ -135,8 +41,14 @@ export class ShopGridComponent implements OnInit {
       }
     );
   }
-  onCategoryChange(categoryID: number | null): void {
-    this.currentCategoryId = categoryID;
-    this.fetchProducts();
-  }
+onCategoryChange(categoryID: number | null): void {
+  this.currentCategoryId = categoryID;
+  this.fetchProducts();
+}
+
+onPriceChange(price: number) {
+  this.selectedPrice = price;
+  this.fetchProducts();
+}
+
 }

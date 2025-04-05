@@ -18,6 +18,7 @@ export class FilterComponent implements OnInit {
   selectedCategoryId: number | null = null;
 
   @Output() categoryChanged = new EventEmitter<number | null>();
+  @Output() priceChanged = new EventEmitter<number>();
 
   constructor(private categoryService: CategoryService) {}
   
@@ -39,14 +40,15 @@ export class FilterComponent implements OnInit {
   }
 
   // Fonction pour mettre à jour la valeur du prix
-  updatePrice(event: any) {
-    this.selectedPrice = event.target.value;
-    
+  onPriceChange(event: any) {
+    this.selectedPrice = +event.target.value;
+    this.priceChanged.emit(this.selectedPrice);
   }
 
   resetFilters() {
     this.selectedCategoryId = null;
     this.categoryChanged.emit(null);
     this.selectedPrice = 1000;
+    this.priceChanged.emit(this.selectedPrice);
   }
 }

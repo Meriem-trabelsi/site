@@ -6,7 +6,10 @@
     }
 </style>
 <div class="shop-inner-body">
-<app-filter (categoryChanged)="onCategoryChange($event)"></app-filter>
+  <app-filter
+  (categoryChanged)="onCategoryChange($event)"
+  (priceChanged)="onPriceChange($event)">
+</app-filter>
 <div class="container">
   <div *ngIf="products.length === 0">Aucun produit trouvé.</div>
     <div class="flex flex-wrap justify-center gap-25 ">

@@ -24,10 +24,20 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(categoryID?: number): Observable<any[]> {
+  getProducts(categoryID?: number, maxPrice?: number): Observable<any[]> {
     let url = this.apiUrl;
-    if (categoryID) {
-      url += `?categoryID=${categoryID}`;
+    const params: string[] = [];
+  
+    if (categoryID !== undefined) {
+      params.push(`categoryID=${categoryID}`);
+    }
+  
+    if (maxPrice !== undefined) {
+      params.push(`maxPrice=${maxPrice}`);
+    }
+  
+    if (params.length > 1) {
+      url += `?${params.join('&')}`;
     }
     return this.http.get<Product[]>(url);
   }
@@ -37,7 +47,6 @@ export class ProductService {
   }
 
   getProductSpecifications(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/fiche-technique/${id}`);
+    return this.http.get<any[]>(`http://localhost:5000/fiche-technique/${id}`);
   }
-
 }

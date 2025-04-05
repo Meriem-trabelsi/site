@@ -21,7 +21,7 @@ const pool = mysql.createPool({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "admin" ,
+  password: "admin",
   database: "techshop",
 });
 
@@ -29,29 +29,6 @@ const pool = mysql.createPool({
 app.use((req, res, next) => {
   req.pool = pool;
   next();
-});
-
-// Route to Fetch All products
-app.get("/produit", (req, res) => {
-  const categoryID = req.query.categoryID;
-  let sql = `SELECT produit.*, Categorie.nom 
-              FROM produit
-              LEFT JOIN Categorie ON produit.categorieID = Categorie.categorieID`;
-
-  const params = [];
-  if (categoryID) {
-    sql += ` WHERE produit.categorieID = ?`;
-    params.push(categoryID);
-  }
-
-  pool.query(sql, params, (err, results) => {
-    if (err) {
-      console.error("Error fetching products:", err);
-      return res.status(500).json({ error: "Database query failed" });
-    } else {
-      res.status(200).json(results);
-    }
-  });
 });
 
 // Route to Fetch All categories
@@ -85,12 +62,44 @@ app.get("/produit/:id", (req, res) => {
   });
 });
 
-app.get('/fiche-technique/:productId', (req, res) => {
-    const {productId} = req.params;
-    const specs = pool.query(
-      'SELECT specKey, specValue FROM fiche_technique WHERE produitID = ?',
-      [productId]);
-    res.json(specs);
+app.get('/fiche-technique/:id', (req, res) => {
+  const productId = req.params.id;
+  req.pool.query(
+    'SELECT specKey, specValue FROM fiche_technique WHERE produitID = ?', productId,
+    (err, results) => {
+      if (err) {
+        console.error('Error fetching specifications:', err);
+        return res.status(500).json({ error: 'Failed to fetch specifications' });
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  );
+});
+
+app.get('/produit', (req, res) => {
+  const categoryID = req.query.categoryID;
+  const maxPrice = req.query.maxPrice;
+  let query = 'SELECT * FROM produit WHERE 1=1';
+  const params = [];
+
+  if (categoryID) {
+    query += ' AND categorieID = ?';
+    params.push(categoryID);
+  }
+
+  if (maxPrice) {
+    query += ' AND prix <= ?';
+    params.push(maxPrice);
+  }
+  
+  pool.query(query, params, (err, results) => {
+    if (err) {
+      console.error('Error fetching products:', err);
+      return res.status(500).json({ error: 'Failed to fetch products' });
+    }
+    res.status(200).json(results);
+  });
 });
 
 // Use API Routes
