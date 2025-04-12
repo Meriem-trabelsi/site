@@ -46,7 +46,7 @@ export class AdsCarouselComponent implements AfterViewInit {
   ngAfterViewInit() {
     const carouselElement = document.querySelector('#promoCarousel');
     if (carouselElement) {
-      new bootstrap.Carousel(carouselElement); // ✅ Correction ici
+      new bootstrap.Carousel(carouselElement); 
     }
   }
 }

@@ -36,7 +36,7 @@ export class ProductService {
       params.push(`maxPrice=${maxPrice}`);
     }
   
-    if (params.length > 1) {
+    if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
     return this.http.get<Product[]>(url);

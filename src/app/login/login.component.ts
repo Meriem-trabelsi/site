@@ -1,56 +1,64 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+
+import { Component } from '@angular/core'; 
+import { Router } from '@angular/router'; 
+import { HttpClient } from '@angular/common/http'; 
+
 
 @Component({
-  selector: 'app-login', // Defines the component selector
-  imports: [], // No additional module imports
-  templateUrl: './login.component.html', // Template file for the component
-  styleUrl: './login.component.css' // Styles for the component
+  selector: 'app-login', 
+  imports: [], 
+  templateUrl: './login.component.html', 
+  styleUrl: './login.component.css' 
 })
 export class LoginComponent {
-  constructor(private http: HttpClient, private router: Router) {} // Injects HttpClient and Router for API calls and navigation
-  
+  // Constructeur du composant : injection des services HttpClient et Router
+  constructor(private http: HttpClient, private router: Router) {}
+
+  // Méthode appelée au chargement du composant
   ngOnInit(): void {
-    // Get references to the sign-up and sign-in buttons
-    this.checkAuthStatus();
+    this.checkAuthStatus(); // Vérifie si l'utilisateur est déjà connecté
+
+    // Récupération des éléments HTML 
     const signUpButton = document.getElementById('signUp') as HTMLButtonElement;
     const signInButton = document.getElementById('signIn') as HTMLButtonElement;
     const container = document.getElementById('container') as HTMLElement;
     const registerForm = document.querySelector('.sign-up-container form') as HTMLFormElement;
     const loginForm = document.querySelector('.sign-in-container form') as HTMLFormElement;
-    const loginButton = document.getElementById('loginBtn') as HTMLButtonElement; // ✅ Target login button directly
+    const loginButton = document.getElementById('loginBtn') as HTMLButtonElement;
 
-    // Add event listener for "Sign Up" button click - activates right panel
+    // Gestion des clics sur les boutons "Sign Up" et "Sign In"
     if (signUpButton && signInButton && container) {
+      // Ajoute une classe pour animer vers le panneau d'inscription
       signUpButton.addEventListener('click', () => {
         container.classList.add("right-panel-active");
       });
 
-      // Add event listener for "Sign In" button click - deactivates right panel
+      // Retire la classe pour revenir au panneau de connexion
       signInButton.addEventListener('click', () => {
         container.classList.remove("right-panel-active");
       });
     }
-    // Attach event listener for form submission
+
+    // ecoute l'événement de soumission du formulaire d'inscription
     if (registerForm) {
       registerForm.addEventListener('submit', (event) => {
-        event.preventDefault(); // Prevent default form submission
-        this.handleRegistration(); // Call registration function
+        event.preventDefault(); // Empêche le rechargement de la page
+        this.handleRegistration(); // Lance la méthode d'inscription
       });
     }
 
+    // Écoute du clic sur le bouton de connexion
     if (loginButton) {
       loginButton.addEventListener('click', (event) => {
-          event.preventDefault(); // Prevents form from submitting normally
-          this.handleLogin();
+        event.preventDefault(); // Empêche le comportement par défaut du bouton
+        this.handleLogin(); // Lance la méthode de connexion
       });
-  }
+    }
   }
 
-  /* Handles the registration process by collecting form data and sending it to the backend.*/
+  // Méthode pour gérer l'inscription d'un utilisateur
   handleRegistration(): void {
-    // Retrieve form input fields by their IDs
+    // Récupération des champs du formulaire d'inscription
     const nameInput = document.getElementById('name') as HTMLInputElement;
     const emailInput = document.getElementById('r-email') as HTMLInputElement;
     const passwordInput = document.getElementById('r-password') as HTMLInputElement;
@@ -59,19 +67,29 @@ export class LoginComponent {
     const addressInput = document.getElementById('adresse') as HTMLInputElement;
     const regionSelect = document.getElementById('region') as HTMLSelectElement;
     const termsCheckbox = document.getElementById('termes') as HTMLInputElement;
-    // Perform basic validation to ensure all fields are filled
+
+    // Vérifie que tous les champs sont remplis et que les conditions sont acceptées
     if (!nameInput.value || !emailInput.value || !passwordInput.value || 
         !confirmPasswordInput.value || !telInput.value || !addressInput.value || 
         !regionSelect.value || !termsCheckbox.checked) {
       alert('Veuillez remplir tous les champs et accepter les termes et conditions.');
       return;
     }
-    // Validate that password and confirm password match
+
+    // Vérifie que le numéro de téléphone est bien composé de 8 chiffres
+    const phoneRegex = /^\d{8}$/;
+    if (!phoneRegex.test(telInput.value)) {
+      alert('Le numéro de téléphone doit contenir exactement 8 chiffres.');
+      return;
+    }
+
+    // Vérifie que le mot de passe et sa confirmation sont identiques
     if (passwordInput.value !== confirmPasswordInput.value) {
       alert('Les mots de passe ne correspondent pas.');
       return;
     }
-    // Prepare form data object for backend submission
+
+    // Création d'un objet contenant les données du formulaire
     const formData = {
       name: nameInput.value,
       email: emailInput.value,
@@ -80,20 +98,24 @@ export class LoginComponent {
       tel: telInput.value,
       region: regionSelect.value
     };
-    // Send the form data to the backend API
+
+    // Envoi des données au backend pour l'enregistrement du client
     this.http.post('http://localhost:5000/Client/registerClient', formData, { withCredentials: true }).subscribe({
       next: (response: any) => {
         alert('Inscription réussie! Votre compte a été créé.');
+
+        // Connexion automatique après inscription
         this.http.post('http://localhost:5000/Client/loginClient', formData, { withCredentials: true }).subscribe({
           next: (response: any) => {
             alert('Connexion réussie!');
-            this.router.navigate(['/home']);
+            this.router.navigate(['/home']); // Redirige vers la page d'accueil
           },
           error: (error) => {
             alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
           }
         });
-        // Reset the form after successful registration
+
+        // Réinitialise le formulaire après l'inscription
         (document.querySelector('form') as HTMLFormElement).reset();
       },
       error: (error) => {
@@ -102,42 +124,48 @@ export class LoginComponent {
     });
   }
 
+  // Méthode pour gérer la connexion d'un utilisateur
   handleLogin(): void {
+    // Récupération des champs email et mot de passe
     const emailInput = document.getElementById('l-email') as HTMLInputElement;
     const passwordInput = document.getElementById('l-password') as HTMLInputElement;
     const rememberMeCheckbox = document.getElementById('remember') as HTMLInputElement;
 
+    // Vérifie que les champs ne sont pas vides
     if (!emailInput.value || !passwordInput.value) {
       alert('Veuillez saisir votre email et votre mot de passe.');
       return;
     }
 
+    // Création d'un objet contenant les données de connexion
     const loginData = {
       email: emailInput.value,
       password: passwordInput.value,
       rememberme: rememberMeCheckbox.checked
     };
 
+    // Envoi de la requête de connexion au backend
     this.http.post('http://localhost:5000/Client/loginClient', loginData, { withCredentials: true }).subscribe({
       next: (response: any) => {
         alert('Connexion réussie!');
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home']); // Redirige vers la page d'accueil
       },
       error: (error) => {
         alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
       }
     });
-}
+  }
 
-checkAuthStatus(): void {
-  this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', { withCredentials: true }).subscribe(
-    (response) => {
-      console.log('Déjà connecté:', response);
-      this.router.navigate(['/home']);  // Redirect to home if authenticated
-    },
-    (error) => {
-      console.log('Non connecté:', error);
-    }
-  );
-}
+  // Vérifie si un utilisateur est déjà connecté (session active côté serveur)
+  checkAuthStatus(): void {
+    this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', { withCredentials: true }).subscribe(
+      (response) => {
+        console.log('Déjà connecté:', response); // Affiche les infos si l'utilisateur est authentifié
+        this.router.navigate(['/home']); // Redirige vers la page d'accueil si authentifié
+      },
+      (error) => {
+        console.log('Non connecté:', error); // Affiche une erreur si l'utilisateur n'est pas connecté
+      }
+    );
+  }
 }

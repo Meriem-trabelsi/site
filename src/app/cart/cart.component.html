@@ -1,4 +1,5 @@
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<app-header></app-header>
 <div class="cart-container">
   <div class="cart-items">
     <div class="cart-header">
@@ -10,7 +11,7 @@
 
     <div *ngFor="let item of cartItems" class="cart-item">
       <div class="item-details">
-        <img [src]="item.imageURL || 'https://placehold.co/50'" alt="{{ item.nom }}">
+        <img [src]="item.imageUrl" alt="{{ item.nom }}" width="100" height="100">
         <span>{{ item.nom }}</span>
       </div>
       <!-- Format price to 2 decimal places -->
@@ -54,3 +55,4 @@
     <a href="/commander"><button class="checkout-btn">Passer la commande</button></a>
   </div>
 </div>
+<app-footer></app-footer> 

@@ -10,5 +10,5 @@ import { Component, Input } from '@angular/core';
 export class CategoryCardComponent {
   @Input() title: string = '';
   @Input() image: string = '';
-  @Input() link: string = '#';
+  @Input() link: string = 'shop';
 }

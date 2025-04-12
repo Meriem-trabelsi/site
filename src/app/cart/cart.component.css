@@ -21,8 +21,7 @@ h1 {
 
 /* Conteneur principal */
 .cart-container {
-    position: relative;
-    top: 120px;
+   
     display: flex;
     gap: 30px; /* Espace ajusté pour un look plus serré comme dans l'image */
     max-width: 1200px;

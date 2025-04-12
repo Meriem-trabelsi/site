@@ -103,6 +103,7 @@
 
 .header-section-2 a:hover {
     color: #5653ff;
+    cursor: pointer;
 }
 
 .header-section-1-buttons .cart-icon {
