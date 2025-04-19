@@ -33,7 +33,7 @@ const pool = mysql.createPool({
   port: 3306, 
   user: "root", 
   password: "admin", 
-  database: "techshop", 
+  database: "pawpals", 
 });
 
 // Middleware pour attacher le pool MySQL à chaque requête

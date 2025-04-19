@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 // Set up multer for handling image uploads
 const storage = multer.diskStorage({
@@ -16,18 +18,19 @@ const upload = multer({ storage });
 
 // Route to create an adoption pet entry
 // Inside the backend POST route
-const jwt = require('jsonwebtoken');
 
 // Middleware to extract clientID from JWT token (if you're using JWT for authentication)
 function authenticateJWT(req, res, next) {
-  const token = req.header('Authorization')?.split(' ')[1]; // Assuming Bearer token
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1]; 
   if (!token) return res.status(403).send('Access denied');
-
-  jwt.verify(token, 'your-secret-key', (err, user) => {
-    if (err) return res.status(403).send('Invalid token');
-    req.clientID = user.clientID; // Assuming the clientID is in the token
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); 
+    req.clientID = decoded.client.clientID;
     next();
-  });
+  } catch (error) {
+    return res.status(401).send('Invalid token');
+  }
 }
 
 // Route to create an adoption pet entry
@@ -36,6 +39,11 @@ router.post('/add', authenticateJWT, upload.single('image'), (req, res) => {
   console.log("Received file:", req.file);  // Logs file details to the console
 
   const { petName, breed, age, type, gender, location, shelter, description, goodWithKids, goodWithOtherPets, houseTrained, specialNeeds } = req.body;
+  const goodWithKids2 = goodWithKids ? 1 : 0;
+  const goodWithOtherPets2 = goodWithOtherPets ? 1 : 0;
+  const houseTrained2= houseTrained ? 1 : 0;
+  const specialNeeds2 = specialNeeds ? 1 : 0;
+
   const clientID = req.clientID;  // Get the clientID from the JWT payload
   const imageURL = req.file ? req.file.path : null;  // Handle image upload if present
 
@@ -46,7 +54,7 @@ router.post('/add', authenticateJWT, upload.single('image'), (req, res) => {
 
   req.pool.query(sql, [
     clientID, petName, breed, age, type, gender, imageURL, location, shelter, description,
-    goodWithKids, goodWithOtherPets, houseTrained, specialNeeds
+    goodWithKids2, goodWithOtherPets2, houseTrained2, specialNeeds2
   ], (err, results) => {
     if (err) {
       console.error('Erreur lors de l\'ajout d\'un animal à adopter :', err);

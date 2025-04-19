@@ -23,8 +23,7 @@ interface PostAdoptionForm {
   contactName: string;
   contactPhone: string;
   contactEmail: string;
-  [key: string]: string | File | boolean | null; // Update the index signature to match the types used
-}
+  [key: string]: string | File | boolean | null;}
 
 
 @Component({

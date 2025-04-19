@@ -108,7 +108,7 @@ export class LoginComponent {
         this.http.post('http://localhost:5000/Client/loginClient', formData, { withCredentials: true }).subscribe({
           next: (response: any) => {
             alert('Connexion réussie!');
-            this.router.navigate(['/home']); // Redirige vers la page d'accueil
+            this.router.navigate(['/']); // Redirige vers la page d'accueil
           },
           error: (error) => {
             alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
@@ -148,7 +148,7 @@ export class LoginComponent {
     this.http.post('http://localhost:5000/Client/loginClient', loginData, { withCredentials: true }).subscribe({
       next: (response: any) => {
         alert('Connexion réussie!');
-        this.router.navigate(['/home']); // Redirige vers la page d'accueil
+        this.router.navigate(['/']); // Redirige vers la page d'accueil
       },
       error: (error) => {
         alert('Erreur de connexion: ' + (error.error?.error || 'Identifiants invalides.'));
@@ -161,7 +161,7 @@ export class LoginComponent {
     this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', { withCredentials: true }).subscribe(
       (response) => {
         console.log('Déjà connecté:', response); // Affiche les infos si l'utilisateur est authentifié
-        this.router.navigate(['/home']); // Redirige vers la page d'accueil si authentifié
+        this.router.navigate(['/']); // Redirige vers la page d'accueil si authentifié
       },
       (error) => {
         console.log('Non connecté:', error); // Affiche une erreur si l'utilisateur n'est pas connecté
