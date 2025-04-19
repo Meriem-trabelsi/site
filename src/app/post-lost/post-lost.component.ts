@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http'; // Ensure HttpClient is imported
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -24,9 +25,9 @@ type LostPetFormFields = {
   standalone: true,
   imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
   templateUrl: './post-lost.component.html',
-  styleUrl: './post-lost.component.css'
+  styleUrls: ['./post-lost.component.css']
 })
-export class PostLostComponent {
+export class PostLostComponent implements OnInit {
 
   isSubmitting = false;
   imagePreview: string | null = null;
@@ -44,6 +45,8 @@ export class PostLostComponent {
     contactPhone: '',
     image: null,
   };
+
+  constructor(private http: HttpClient, private router: Router) {}
 
   updateField<K extends keyof LostPetFormFields>(key: K, value: LostPetFormFields[K]) {
     this.formData[key] = value;
@@ -102,9 +105,25 @@ export class PostLostComponent {
     this.imagePreview = null;
   }
 
-  constructor(private router: Router) {}
-
   navigateToLost() {
     this.router.navigate(['/lost']);
+  }
+
+  ngOnInit(): void {
+    this.fetchClient();
+  }
+
+  fetchClient(): void {
+    this.http.get<any>('http://localhost:5000/Client/getClientInfo', { withCredentials: true }).subscribe(
+      (response) => {
+        // Fill in the form with client information
+        this.formData.contactName = response.nom;
+        this.formData.contactPhone = response.tel;
+        this.formData.contactEmail = response.email;
+      },
+      (error) => {
+        console.error('Error fetching client info:', error);
+      }
+    );
   }
 }

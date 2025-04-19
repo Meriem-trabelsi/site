@@ -122,7 +122,7 @@ export class PostAdoptionComponent implements OnInit {
     }
   
     // Post the adoption details
-    this.http.post('http://localhost:5000/Adoption/add', formData, { withCredentials: true }).subscribe(
+    this.http.post('http://localhost:5000/adoptPet/add', formData, { withCredentials: true }).subscribe(
       (response) => {
         alert('Pet adoption posted successfully!');
         this.router.navigate(['/adopted']);
