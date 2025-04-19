@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LostDetailsComponent } from '../../popup/lostdetails/lostdetails.component';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +11,8 @@ import { HttpClient } from '@angular/common/http';
   standalone: true
 })
 export class PetCardComponent implements OnInit {
+  @Input() pet: any;
+
   pets: any[] = [];  // Array to hold the pets retrieved from the backend
   selectedPet: any = null;
 

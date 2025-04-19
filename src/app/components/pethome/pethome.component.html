@@ -1,7 +1,7 @@
 <div class="pet-cards-container">
   <div class="pet-card" *ngFor="let pet of pets">
     <div class="image-wrapper">
-      <img [src]="pet.imageURL" [alt]="pet.petName" />
+      <img [src]="pet.imageURL" [alt]="pet.petName || 'Pet image'" />
       <span class="badge adopt">Adopt Me</span>
     </div>
 

@@ -81,4 +81,50 @@ router.get('/', (req, res) => {
   });
 });
 
+// Route to get all adoption pets with owner details and filters
+router.get('/pets', (req, res) => {
+  const { location, types, ages } = req.query;
+
+  let sql = `
+    SELECT 
+      ap.*, 
+      c.email AS ownerEmail, 
+      c.tel AS ownerPhone,
+      ap.location AS petLocation
+    FROM 
+      AdoptionPet ap
+    INNER JOIN 
+      Client c ON ap.clientID = c.clientID
+    WHERE 1=1
+  `;
+  const params = [];
+
+  if (location) {
+    sql += ` AND ap.location = ?`;
+    params.push(location);
+  }
+
+  if (types) {
+    const typeList = types.split(',');
+    sql += ` AND ap.type IN (${typeList.map(() => '?').join(',')})`;
+    params.push(...typeList);
+  }
+
+  if (ages) {
+    const ageList = ages.split(',');
+    sql += ` AND ap.age IN (${ageList.map(() => '?').join(',')})`;
+    params.push(...ageList);
+  }
+
+  req.pool.query(sql, params, (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des animaux filtrés :', err);
+      return res.status(500).json({ error: 'Erreur de la base de données' });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+
 module.exports = router;

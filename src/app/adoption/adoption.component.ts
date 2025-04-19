@@ -6,18 +6,22 @@ import { FooterComponent } from '../components/footer/footer.component';
 import { PetFiltersComponent } from '../components/pet-filters/pet-filters.component';
 import { PethomeComponent } from '../components/pethome/pethome.component';
 import { HttpClient } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service';
-import { Router } from '@angular/router';  // Import Router for navigation
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-adoption',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent, PethomeComponent, PetFiltersComponent],
+  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent, PetFiltersComponent, PethomeComponent], // Ensure PethomeComponent is included here
   templateUrl: './adoption.component.html',
   styleUrls: ['./adoption.component.css']
 })
 export class AdoptionComponent implements OnInit {
   isLoggedIn: boolean = false;
+  filters: { location: string, types: string[], ages: string[] } = {
+    location: '',
+    types: [],
+    ages: []
+  };
 
   constructor(
     private http: HttpClient,
@@ -28,33 +32,34 @@ export class AdoptionComponent implements OnInit {
     this.checkAuthStatus();
   }
 
-  // Vérifie si l'utilisateur est connecté
   checkAuthStatus(): void {
     this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', {
-      withCredentials: true // Inclut les cookies dans la requête
+      withCredentials: true // Include cookies in request
     }).subscribe(
       (response) => {
-        console.log('Déjà connecté :', response);
+        console.log('Logged in:', response);
         this.isLoggedIn = true;
       },
       (error) => {
-        console.log('Non connecté :', error);
+        console.log('Not logged in:', error);
         this.isLoggedIn = false;
       }
     );
   }
 
-  // Handle click event and navigate to post-lost page
   handlePostAdoption(event: MouseEvent): void {
-    event.preventDefault(); // Prevent default link behavior if needed
-
-    // Check if the user is logged in before allowing them to navigate to the post-lost page
+    event.preventDefault();
     if (this.isLoggedIn) {
-      this.router.navigate(['/post']); // Navigate to the post-lost page
+      this.router.navigate(['/post']); // Navigate to post page
     } else {
-      // If the user is not logged in, redirect to the login page or show an alert
       alert('You must be logged in to post a pet for adoption.');
-      this.router.navigate(['/login']); // Navigate to the login page (or adjust to your actual login route)
+      this.router.navigate(['/login']);
     }
+  }
+
+  // Listen for filter changes
+  onFiltersChanged(filters: { location: string, types: string[], ages: string[] }): void {
+    this.filters = filters;
+    console.log('Filters updated:', this.filters);
   }
 }

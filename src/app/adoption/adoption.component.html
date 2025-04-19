@@ -55,12 +55,13 @@
     <div class="filters-and-listings mt-12 flex">
         <!-- Filters Sidebar -->
         <div class="filter-sidebar w-full md:w-1/4 lg:w-1/4 xl:w-1/5">
-            <app-pet-filters></app-pet-filters>
+            <app-pet-filters (filtersChanged)="onFiltersChanged($event)"></app-pet-filters>
+
         </div>
 
         <!-- Pet Cards Section -->
         <div class="pet-cards-section w-full md:w-3/4 lg:w-3/4 xl:w-4/5 ml-4 pl-4">
-            <app-pethome></app-pethome>
+            <app-pethome [filters]="filters"></app-pethome>
         </div>
     </div>
 </section>
