@@ -1,0 +1,105 @@
+<app-header></app-header>
+
+<main class="main-wrapper">
+  <div class="form-container">
+    <div class="form-box">
+      <div class="form-header">
+        <h1> Report a Lost Pet</h1>
+        <p>Fill out this form to help others find your pet</p>
+      </div>
+
+      <form (ngSubmit)="handleSubmit(form)" #form="ngForm" class="form-content">
+        <!-- Pet Information -->
+        <section>
+          <h2>Pet Information</h2>
+          <div class="grid-2">
+            <div>
+              <label for="name">Pet Name *</label>
+              <input type="text" id="name" name="name" [(ngModel)]="formData.name" required />
+            </div>
+            <div>
+              <label for="breed">Breed/Species *</label>
+              <input type="text" id="breed" name="breed" [(ngModel)]="formData.breed" required />
+            </div>
+            <div>
+              <label for="age">Age</label>
+              <input type="text" id="age" name="age" [(ngModel)]="formData.age" />
+            </div>
+            <div>
+              <label for="petType">Pet Type *</label>
+              <select id="petType" name="petType" [(ngModel)]="formData.petType" required>
+                <option value="" disabled selected>Select type</option>
+                <option value="dog">Dog</option>
+                <option value="cat">Cat</option>
+                <option value="bird">Bird</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Image Upload -->
+          <div class="image-upload">
+            <label>Upload Photo</label>
+            <div class="image-preview" *ngIf="imagePreview">
+              <img [src]="imagePreview" alt="Preview" />
+              <button type="button" (click)="removeImage()">✕</button>
+            </div>
+            <div *ngIf="!imagePreview" class="image-drop">
+              <i class="icon-camera"></i>
+              <p>Drag & drop or click to upload</p>
+            </div>
+            <input type="file" id="image" (change)="handleImageChange($event)" accept="image/*" />
+            <button type="button" (click)="triggerFileInput()">Browse Files</button>
+          </div>
+        </section>
+
+        <!-- Lost Info -->
+        <section>
+          <h2>Lost Information</h2>
+          <div class="grid-2">
+            <div>
+              <label for="dateLost">Date Lost *</label>
+              <input type="date" id="dateLost" name="dateLost" [(ngModel)]="formData.dateLost" required />
+            </div>
+            <div>
+              <label for="location">Location *</label>
+              <input type="text" id="location" name="location" [(ngModel)]="formData.location" required />
+            </div>
+          </div>
+
+          <label for="description">Description *</label>
+          <textarea id="description" name="description" rows="4" [(ngModel)]="formData.description" required></textarea>
+        </section>
+
+        <!-- Contact Info -->
+        <section>
+          <h2>Contact Information</h2>
+          <div class="grid-2">
+            <div>
+              <label for="contactName">Your Name *</label>
+              <input type="text" id="contactName" name="contactName" [(ngModel)]="formData.contactName" required />
+            </div>
+            <div>
+              <label for="contactPhone">Phone *</label>
+              <input type="text" id="contactPhone" name="contactPhone" [(ngModel)]="formData.contactPhone" required />
+            </div>
+            <div class="full-width">
+              <label for="contactEmail">Email *</label>
+              <input type="email" id="contactEmail" name="contactEmail" [(ngModel)]="formData.contactEmail" required />
+            </div>
+          </div>
+        </section>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="button" class="cancel" (click)="navigateToLost()">Cancel</button>
+          <button type="submit" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Submitting...' : 'Post Lost Pet' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

@@ -8,6 +8,9 @@ const cookieParser = require("cookie-parser"); // Middleware pour gérer les coo
 // Importation des routes personnalisées
 const clientRoutes = require("./client.js"); // Routes liées aux clients
 const cartRoutes = require("./cart.js"); // Routes liées au panier
+const adoptPetRoutes = require('./adoptPet');
+const lostPetRoutes = require('./lostPet');
+
 
 // Création de l'application Express
 const app = express();
@@ -124,6 +127,10 @@ app.get('/produit', (req, res) => {
 // Enregistrement des routes personnalisées pour les clients et le panier
 app.use("/Client", clientRoutes); 
 app.use("/Cart", cartRoutes); 
+app.use('/adoptPet', adoptPetRoutes);
+app.use('/lostPet', lostPetRoutes);
+app.use('/uploads', express.static('uploads'));
+
 
 // Démarrage du serveur sur le port 5000
 const PORT = 5000;

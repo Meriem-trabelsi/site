@@ -1,0 +1,188 @@
+/* Modal backdrop */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    backdrop-filter: blur(3px);
+    transition: all 0.3s ease;
+  }
+  
+  /* Modal content */
+  .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    z-index: 1000;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    animation: modalFadeIn 0.3s ease-out;
+  }
+  
+  /* Modal header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  /* Header title */
+  .modal-header h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 600;
+  }
+  
+  /* Close button */
+  .close-button {
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    transition: color 0.2s;
+    padding: 0.5rem;
+    line-height: 1;
+  }
+  
+  .close-button:hover {
+    color: #e74c3c;
+  }
+  
+ 
+  
+  /* Contact owner button */
+  .modal-body .contact-owner {
+    
+    color: white;
+    background-color: #34a853; /* Green background */
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .modal-body .contact-owner:hover {
+    background-color: #2d8a4e; /* Darker green on hover */
+    transform: translateY(-2px);
+    color:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Larger image size */
+  .modal-body img {
+    display: block; /* Ensure the image is treated as a block element */
+    margin: 0 auto 1.5rem; /* Center the image horizontally, with some space at the bottom */
+    width: 50%; /* Increased image size */
+    height: auto; /* Adjust height to maintain aspect ratio */
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Modal text */
+  .modal-body p {
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+    color: #34495e;
+    cursor: text;
+  }
+  
+  .modal-body strong {
+    color: #2c3e50;
+    font-weight: 600;
+    cursor: text;
+  }
+  
+  .modal-body a {
+    color: #4a6fa5;
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor:text;
+  }
+  
+  .modal-body a:hover {
+    color: #2c3e50;
+    
+  }
+  
+  /* "I've Seen This Pet" Button */
+  .modal-body button.seen-pet-btn {
+    background: linear-gradient(135deg, #22c55e, #16a34a); /* Green gradient */
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .modal-body button.seen-pet-btn:hover {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    transform: translateY(-2px);
+  }
+  
+  /* Popup confirmation */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    width: 300px;
+  }
+  
+  .popup-content h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .popup-content button {
+    background-color: #34a853;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .popup-content button:hover {
+    background-color: #2d8a4e;
+    transform: translateY(-2px);
+    
+  }
+  

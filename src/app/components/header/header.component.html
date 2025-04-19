@@ -1,28 +1,40 @@
-<head>
-
+<head> 
     <title>TechShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
-
 <div class="header">
+    <!-- Top section -->
     <div class="header-section-1">
         <div class="header-inner-section-1">
-            <a href=""><img src="assets\images\logo.png" alt=""></a>
-            <input type="text" placeholder="Search...">
+            <!-- Logo -->
+            <!--<a href=""><img src="assets/images/logo.png" alt="Logo"></a>-->
+            <div class="logo-container">
+                <i class="fa-solid fa-paw fa-rotate-by" style="--fa-rotate-angle: 45deg;color: #22c55e;"></i>
+                <a class="logo-text" routerLink="/">PawPals</a>
+
+                
+              </div>
+            <!-- Center links -->
+            <div class="header-links-center">
+                <a href="/adoption">Adoption</a>
+                <a href="/lost">Lost Pets</a>
+                <a href="/shop">Shop</a>
+            </div>
+
+            <!-- Right side: search icon, cart, login/logout -->
             <div class="header-section-1-buttons">
+                <button class="search-icon-btn">
+                    <i class="fas fa-search"></i>
+                </button>
                 <a href="cart" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
-                <button (click)="goToPage()">
-                    {{ isLoggedIn ? 'Se déconnecter' : "S'authentifier" }}
-                  </button>
-                              </div>
+                <button (click)="goToPage()" ><i class="fa-regular fa-user" style="color: #22c55e;"></i>
+                    {{ isLoggedIn ? 'Log out' : "Login" }}
+                </button>
+            </div>
         </div>
     </div>
-    <div class="header-section-2">
-        <div class="header-inner-section-2">
-            <a *ngFor="let category of categories" (click)="goToCategory(category.categorieID)">
-                {{ category.nom }}
-              </a>
-        </div>
-    </div>
+
+    <!-- Dynamic categories section -->
+ 
 </div>

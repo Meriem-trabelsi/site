@@ -1,0 +1,41 @@
+<div class="pet-cards-container">
+  <div class="pet-card" *ngFor="let pet of pets">
+    <div class="image-wrapper">
+      <img [src]="pet.imageURL" [alt]="pet.petName" />
+      <span class="badge adopt">Adopt Me</span>
+    </div>
+
+    <div class="card-content">
+      <h2>{{ pet.petName }}</h2>
+      <p class="breed">{{ pet.breed }}</p>
+
+      <div class="details">
+        <div class="detail">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>{{ pet.age }} years</span>
+        </div>
+        <div class="detail">
+          <i class="fa-solid fa-genderless"></i>
+          <span>{{ pet.gender }}</span>
+        </div>
+        <div class="detail">
+          <i class="fa-solid fa-map-pin"></i>
+          <span>{{ pet.petLocation }}</span>
+        </div>
+        <div class="detail">
+          <i class="fa-solid fa-clock"></i>
+          <span>{{ pet.datePosted | date:'mediumDate' }}</span> <!-- 👈 Add posted date -->
+        </div>
+      </div>
+
+      <button (click)="openPetModal(pet)">Adopt Me</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Component -->
+<app-adoptdetails
+  *ngIf="selectedPet"
+  [pet]="selectedPet"
+  (closeModal)="closePetModal()"
+></app-adoptdetails>

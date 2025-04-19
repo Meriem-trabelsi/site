@@ -1,0 +1,68 @@
+<app-header></app-header>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-container text-center">
+        <h1 class="hero-title text-4xl font-bold text-gray-800">Adopt a Pet</h1>
+        <p class="hero-subtitle text-lg text-gray-600 mt-4">
+            Find your perfect companion. Browse pets from shelters and rescues that need a loving home.
+        </p>
+        <button class="report-button">
+            <a href="/post" (click)="handlePostAdoption($event)">Post a pet for adoption</a>
+          </button>
+    </div>
+</section>
+
+<!-- Pet Categories Section -->
+<section class="categories-section mt-12">
+    <div class="categories-container">
+        <div class="categories-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- All Pets Category -->
+            <div class="category-card-wrapper relative rounded-lg overflow-hidden">
+                <img class="category-card-image w-full h-full object-cover" src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="A variety of pets available for adoption" />
+                <div class="category-card-overlay absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <h3 class="category-card-title text-white text-2xl font-semibold">All Pets</h3>
+                </div>
+            </div>
+
+            <!-- Dogs Category -->
+            <div class="category-card-wrapper relative rounded-lg overflow-hidden">
+                <img class="category-card-image w-full h-full object-cover" src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Dogs available for adoption" />
+                <div class="category-card-overlay absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <h3 class="category-card-title text-white text-2xl font-semibold">Dogs</h3>
+                </div>
+            </div>
+
+            <!-- Cats Category -->
+            <div class="category-card-wrapper relative rounded-lg overflow-hidden">
+                <img class="category-card-image w-full h-full object-cover" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Cats available for adoption" />
+                <div class="category-card-overlay absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <h3 class="category-card-title text-white text-2xl font-semibold">Cats</h3>
+                </div>
+            </div>
+
+            <!-- Other Pets Category -->
+            <div class="category-card-wrapper relative rounded-lg overflow-hidden">
+                <img class="category-card-image w-full h-full object-cover" src="https://images.unsplash.com/photo-1559715541-5daf8a0296d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Other pets available for adoption" />
+                <div class="category-card-overlay absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <h3 class="category-card-title text-white text-2xl font-semibold">Other Pets</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Pet Listings -->
+    <div class="filters-and-listings mt-12 flex">
+        <!-- Filters Sidebar -->
+        <div class="filter-sidebar w-full md:w-1/4 lg:w-1/4 xl:w-1/5">
+            <app-pet-filters></app-pet-filters>
+        </div>
+
+        <!-- Pet Cards Section -->
+        <div class="pet-cards-section w-full md:w-3/4 lg:w-3/4 xl:w-4/5 ml-4 pl-4">
+            <app-pethome></app-pethome>
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>

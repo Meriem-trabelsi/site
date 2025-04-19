@@ -1,0 +1,38 @@
+<div class="pet-cards-container">
+  <!-- Loop through the pets array and display each pet's details -->
+  <div class="pet-card" *ngFor="let pet of pets">
+    <div class="image-wrapper">
+      <img [src]="pet.imageURL" [alt]="pet.petName" />
+      <span class="badge lost">Lost</span>
+    </div>
+
+    <div class="card-content">
+      <h3>{{ pet.petName }}</h3> <!-- Use petName instead of name -->
+      <p class="breed">{{ pet.breed }}</p>
+
+      <div class="details">
+        <div class="detail">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>{{ pet.age }} years</span>
+        </div>
+        <div class="detail">
+          <i class="fa-solid fa-map-pin"></i>
+          <span>{{ pet.location }}</span>
+        </div>
+        <div class="detail">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>Lost on {{ pet.dateLost | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+
+      <button (click)="openPetModal(pet)">I've Seen This Pet</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Component -->
+<app-lostdetails
+  *ngIf="selectedPet"
+  [pet]="selectedPet"
+  (closeModal)="closePetModal()"
+></app-lostdetails>

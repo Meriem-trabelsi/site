@@ -250,7 +250,7 @@ clientRoutes.get('/getClientInfo', async (req, res) => {
             }
 
             const clientID = decoded.client.clientID;
-            const query = 'SELECT nom, region, adresse, tel FROM Client WHERE clientID = ?';
+            const query = 'SELECT nom, region, adresse, tel, email FROM Client WHERE clientID = ?';
 
             pool.query(query, [clientID], (error, results) => {
                 if (error) {
@@ -270,6 +270,7 @@ clientRoutes.get('/getClientInfo', async (req, res) => {
         return res.status(500).json({ error: 'Erreur de vérification.' });
     }
 });
+
 
 // Route pour mettre à jour les infos du client
 clientRoutes.put('/updateClientInfo', async (req, res) => {

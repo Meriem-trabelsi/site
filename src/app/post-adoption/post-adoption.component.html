@@ -1,0 +1,120 @@
+<app-header></app-header>
+
+<main class="main-wrapper">
+  <div class="form-container">
+    <div class="form-box">
+      <div class="form-header">
+        <h1><i class="icon-heart"></i> Post a Pet for Adoption</h1>
+        <p>Help find a loving home for a pet in need</p>
+      </div>
+
+      <form (ngSubmit)="handleSubmit()" #adoptionForm="ngForm" class="form-content">
+
+        
+        
+        <!-- Pet Info -->
+        <section>
+          <h2>Pet Information</h2>
+          <div class="grid-2">
+            <div>
+              <label for="petName">Pet Name *</label>
+              <input type="text" id="petName" name="petName" required [(ngModel)]="formData.petName" #petName="ngModel" />
+            </div>
+            <div>
+              <label for="breed">Breed/Species *</label>
+              <input type="text" id="breed" name="breed" required [(ngModel)]="formData.breed" #breed="ngModel" />
+            </div>
+            <div>
+              <label for="age">Age *</label>
+              <input type="text" id="age" name="age" required [(ngModel)]="formData.age" #age="ngModel" />
+            </div>
+
+            <div>
+              <label for="gender">Gender *</label>
+              <input type="text" id="gender" name="gender" required [(ngModel)]="formData.gender" #gender="ngModel" />
+            </div>
+
+            <div>
+              <label for="type">Pet Type *</label>
+              <select id="type" name="type" required [(ngModel)]="formData.type" (change)="handleSelectChange('type', $event)">
+                <option disabled selected>Select pet type</option>
+                <option value="dog">Dog</option>
+                <option value="cat">Cat</option>
+                <option value="bird">Bird</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="image-upload">
+            <label>Upload Photo *</label>
+            <div class="image-preview" *ngIf="imagePreview">
+              <img [src]="imagePreview" alt="Pet preview" />
+              <button type="button" (click)="removeImage()">✕</button>
+            </div>
+            <div class="image-drop" *ngIf="!imagePreview">
+              <i class="icon-camera"></i>
+              <p>Drag & drop or click to upload</p>
+            </div>
+            <input type="file" id="image" (change)="handleImageChange($event)" accept="image/*" />
+            <button type="button" (click)="triggerFileInput()">Browse Files</button>
+          </div>
+        </section>
+
+        <!-- Adoption Info -->
+        <section>
+          <h2>Adoption Information</h2>
+          <div class="grid-2">
+            <div>
+              <label for="location"><i class="icon-pin"></i> Location *</label>
+              <input type="text" id="location" name="location" required [(ngModel)]="formData.location" #location="ngModel" />
+            </div>
+            <div>
+              <label for="shelter"><i class="icon-building"></i> Shelter</label>
+              <input type="text" id="shelter" name="shelter" [(ngModel)]="formData.shelter" #shelter="ngModel" />
+            </div>
+          </div>
+  
+          <label for="description">Pet Description *</label>
+          <textarea id="description" name="description" rows="4" required [(ngModel)]="formData.description" #description="ngModel"></textarea>
+  
+          <label>Characteristics</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" [(ngModel)]="formData.goodWithKids" name="goodWithKids" /> Good with kids</label>
+            <label><input type="checkbox" [(ngModel)]="formData.goodWithOtherPets" name="goodWithOtherPets" /> Good with other pets</label>
+            <label><input type="checkbox" [(ngModel)]="formData.houseTrained" name="houseTrained" /> House trained</label>
+            <label><input type="checkbox" [(ngModel)]="formData.specialNeeds" name="specialNeeds" /> Special needs</label>
+          </div>
+        </section>
+
+        <!-- Contact Info -->
+        <section>
+          <h2>Contact Information</h2>
+          <div class="grid-2">
+            <div>
+              <label for="contactName"><i class="icon-user"></i> Your Name *</label>
+              <input type="text" id="contactName" name="contactName" required [(ngModel)]="formData.contactName" #contactName="ngModel" />
+            </div>
+            <div>
+              <label for="contactPhone"><i class="icon-phone"></i> Phone Number *</label>
+              <input type="text" id="contactPhone" name="contactPhone" required [(ngModel)]="formData.contactPhone" #contactPhone="ngModel" />
+            </div>
+            <div class="full-width">
+              <label for="contactEmail"><i class="icon-mail"></i> Email Address *</label>
+              <input type="email" id="contactEmail" name="contactEmail" required [(ngModel)]="formData.contactEmail" #contactEmail="ngModel" />
+            </div>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" class="cancel" (click)="navigateToAdopt()">Cancel</button>
+          <button type="submit" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Submitting...' : 'Post for Adoption' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

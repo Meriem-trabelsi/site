@@ -1,49 +1,60 @@
-<div class="outer-footer">
-    <div class="footer">
-        <div class="footer-section-1">
-            <div class="footer-inner-section-1 footer-inner-section">
-                <a href=""><img src="assets\images\logo.png" alt="Logo"></a>
-                <p>TechShop est votre boutique en ligne dédiée aux produits high-tech, offrant des ordinateurs, smartphones, consoles de jeux et bien plus. Profitez d'une expérience d'achat facile, de produits de qualité et de prix compétitifs..</p>
-            </div>
-            <div class="footer-inner-section-2 footer-inner-section">
-                <h2>Navigation</h2>
-                <div class="footer-navigation-links">
-                    <a href="\home">Accueil</a>
-                    <a href="\shop">Boutique</a>
-                    <a href="\shop">Categories</a>
-                    <a href="\cart">Panier</a>
-                    <a href="\login">Connexion</a>
-                </div>
-            </div>
-            <div class="footer-inner-section-3 footer-inner-section">
-                <h2>Contact</h2>
-                <div class="footer-navigation-links">
-                    <div class="contact-navigation-1">
-                        <a href=""><i class="fas fa-phone"></i></a>
-                        <a href="">+216 25 118 023</a>
-                    </div>
-                    <div class="contact-navigation-1">
-                        <a href=""><i class="fa-solid fa-envelope"></i></a>
-                        <a href="">techshop1ecommerce&#64;gmail.com</a>
-                    </div>
-                    <div class="contact-navigation-1">
-                        <a href=""><i class="fas fa-map-marker-alt"></i></a>
-                        <a href="">Faculté des sciences de Tunis</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-inner-section-4 footer-inner-section">
-                <h2>Votre compte</h2>
-                <div class="footer-navigation-links">
-                    <a href="">Informations générales</a>
-                    <a href="">Paramètres</a>
-                    <a href="">Termes & Conditions</a>
-                    <a href="">Déconnexion</a>
-                </div>
-            </div>
+<footer class="footer bg-white border-t pt-12 pb-8 mt-12">
+    <div class="container">
+      <div class="grid">
+        <!-- Brand Column -->
+        <div class="brand-column">
+          <a routerLink="/" class="brand-link">
+            <!-- Removed Lucide icon -->
+            <div class="logo-container">
+                <i class="fa-solid fa-paw fa-rotate-by" style="--fa-rotate-angle: 45deg;color: #22c55e;"></i>
+                <span class="logo-text">PawPals</span>
+                
+              </div>
+          </a>
+          <p class="brand-description">
+            At PawPals, we’re dedicated to connecting pets with loving families. Our mission is to ensure every pet finds a forever home filled with care and affection.
+          </p>
         </div>
-        <div class="footer-section-2">
-            <p>2025 Techshop - all rights reserved</p>
+  
+        <!-- Quick Links -->
+        <div>
+          <h3 class="footer-title">Quick Links</h3>
+          <ul class="footer-list">
+            <li><a routerLink="/lost" class="footer-link">Lost Pets</a></li>
+            <li><a routerLink="/adopt" class="footer-link">Adopt a Pet</a></li>
+            <li><a routerLink="/shop" class="footer-link">Pet Shop</a></li>
+            <li><a href="#" class="footer-link">Post a Pet</a></li>
+          </ul>
         </div>
+  
+        <!-- Support -->
+        <div>
+          <h3 class="footer-title">Support</h3>
+          <ul class="footer-list">
+            <li><a href="#" class="footer-link">FAQ</a></li>
+            <li><a href="#" class="footer-link">Contact Us</a></li>
+            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+            <li><a href="#" class="footer-link">Terms of Service</a></li>
+          </ul>
+        </div>
+  
+        <!-- Newsletter -->
+        <div>
+          <h3 class="footer-title">Newsletter</h3>
+          <p class="newsletter-desc">Subscribe for updates and pet news.</p>
+          <form class="newsletter-form">
+            <input
+              type="email"
+              placeholder="Your email"
+              class="newsletter-input"
+            />
+            <button type="submit" class="newsletter-button">Subscribe</button>
+          </form>
+        </div>
+      </div>
+  
+      <div class="copyright">
+        <p>&copy; {{ currentYear }} PawPals.</p>
+      </div>
     </div>
-</div>
+</footer>

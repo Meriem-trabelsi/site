@@ -1,109 +1,171 @@
-p {
-    font-size: 14px;
-}
-
-.outer-footer {
-    background-color: #020052;
-    color: white;
-    width: 100%;
-    height: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .footer {
-    width: 90%;
-    height: 80%;
-    margin-top: 5%;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 4rem; /* Increased from 3rem */
+    padding-bottom: 3rem; /* Increased from 2rem */
+    margin-top: 4rem; /* Increased from 3rem */
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 1.5rem; /* Increased from 1rem */
+}
+/* Container for logo + text */
+.logo-container {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    gap: 0; /* Remove gap between icon and text */
+    cursor: pointer;
 }
 
-.footer-section-1, .footer-section-2 {
-    width: 100%;
+/* Paw icon styling */
+.fa-paw {
+    font-size: 1.75rem; /* Larger icon size */
+    margin-right: 0.25rem; /* Small space between icon and text */
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+/* Hover effect for paw icon */
+.logo-container:hover .fa-paw {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* Text styling (matches your existing span) */
+.logo-text {
+    font-size: 1.5rem; /* text-2xl equivalent */
+    font-weight: bold;
+    color: #14532d; /* text-pawgreen-600 equivalent */
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Increased min-width */
+    gap: 2.5rem; /* Increased from 2rem */
+}
+
+.brand-link {
     display: flex;
-    flex-direction: row;
     align-items: center;
-}
-
-.footer-section-1 {
-    height: 270px;
-    justify-content: space-between;
-    gap: 50px;
-}
-
-.footer-section-2 {
-    height: 80px;
-    justify-content: center;
-    border-top: 1px solid #fff;
-}
-
-.footer-inner-section {
-    max-width: 400px;
-    width: 350px;
-    height: 100%;
-}
-
-.footer-inner-section-1 {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.footer-inner-section-1 img {
-    width: 150px;
-    height: auto; /* Ensure logo maintains aspect ratio */
-    max-width: 100%;
-    margin-bottom: 10px; /* Space below the logo */
-}
-
-.footer-inner-section-2, .footer-inner-section-3, .footer-inner-section-4 {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 300px;
-}
-
-.footer-navigation-links {
-    width: 100%;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 20px;
-    font-family: "Poppins";
-    font-size: 16px;
-    color: white;
-}
-
-.footer-navigation-links a {
-    font-family: "Poppins";
-    font-size: 14px;
-    color: white;
+    gap: 0.75rem; /* Increased from 0.5rem */
+    color: #16a34a;
+    font-weight: bold;
+    font-size: 1.5rem; /* Increased from 1.25rem */
     text-decoration: none;
-    transition: color 0.3s ease-out;
 }
 
-.footer-navigation-links a:hover {
-    color: #5653ff;
+.brand-link:hover {
+    color: #15803d;
 }
 
-.contact-navigation-1 {
+.icon {
+    width: 32px; /* Increased from 28px */
+    height: 32px; /* Increased from 28px */
+    stroke-width: 2.5;
+}
+
+.brand-description {
+    color: #555555;
+    font-size: 1rem; /* Increased from 0.875rem */
+    margin-top: 1rem; /* Increased from 0.5rem */
+    line-height: 1.6;
+}
+
+.social-icons {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 40px;
+    gap: 1.25rem; /* Increased from 1rem */
+    margin-top: 1rem; /* Increased from 0.5rem */
 }
 
-.footer-navigation-links a i {
-    margin-right: 10px; /* Space between icon and text */
-    font-size: 20px;
-    color: #fff; /* Keep icons white */
+.social-link {
+    color: #555555;
+    transition: color 0.3s;
+    font-size: 1.25rem; /* Added size for icons */
+}
+
+.social-link:hover {
+    color: #16a34a;
+}
+
+.footer-title {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1.25rem; /* Increased from 1rem */
+    font-size: 1.25rem; /* Added larger size */
+}
+
+.footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-link {
+    display: block;
+    color: #555555;
+    font-size: 1rem; /* Increased from 0.875rem */
+    text-decoration: none;
+    transition: color 0.3s;
+    padding: 0.5rem 0; /* Added vertical padding */
+    line-height: 1.5;
+}
+
+.footer-link:hover {
+    color: #16a34a;
+}
+
+.newsletter-desc {
+    color:#555555;
+    font-size: 1rem; /* Increased from 0.875rem */
+    margin-bottom: 1.25rem; /* Increased from 1rem */
+    line-height: 1.6;
+}
+
+.newsletter-form {
+    display: flex;
+    max-width: 350px; /* Added max-width */
+}
+
+.newsletter-input {
+    flex: 1;
+    padding: 0.75rem 1rem; /* Increased padding */
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem 0 0 0.5rem; /* Slightly larger radius */
+    font-size: 1rem; /* Increased from 0.875rem */
+    outline: none;
+    height: 48px; /* Fixed height */
+}
+
+.newsletter-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3); /* Increased shadow */
+}
+
+.newsletter-button {
+    background-color: #16a34a;
+    color: white;
+    border: none;
+    padding: 0 1.5rem; /* Increased padding */
+    font-size: 1rem; /* Increased from 0.875rem */
+    border-radius: 0 0.5rem 0.5rem 0; /* Slightly larger radius */
+    cursor: pointer;
+    transition: all 0.3s;
+    height: 48px; /* Match input height */
+    min-width: 120px; /* Added min-width */
+}
+
+.newsletter-button:hover {
+    background-color: #15803d;
+    transform: translateY(-1px); /* Added subtle hover effect */
+}
+
+.copyright {
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    margin-top: 3rem; /* Increased from 2.5rem */
+    padding-top: 2rem; /* Increased from 1.5rem */
+    color: #555555;
+    font-size: 1rem; /* Increased from 0.875rem */
+    line-height: 1.5;
 }

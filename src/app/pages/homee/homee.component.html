@@ -1,0 +1,171 @@
+<app-header></app-header>
+<section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <!-- Left Column -->
+        <div class="hero-text">
+          <h1>Find Your Perfect <span class="highlight">Furry</span> Companion</h1>
+          <p>
+            Connecting lost pets with their owners and helping homeless animals find loving families.
+          </p>
+  
+          <div class="hero-buttons">
+            <a routerLink="/adoption" class="btn btn-primary">
+              <i class="fas fa-heart"></i> Adopt a Pet
+            </a>
+            <a routerLink="/lost" class="btn btn-outline">
+              <i class="fas fa-search"></i> Find Lost Pets
+            </a>
+          </div>
+  
+          <div class="hero-stats">
+            <div class="stat-box">
+              <div class="icon-circle peach"><i class="fas fa-heart"></i></div>
+              <div>
+                <p class="stat-number">1,200+</p>
+                <p class="stat-label">Pets Adopted</p>
+              </div>
+            </div>
+            <div class="stat-box">
+              <div class="icon-circle blue"><i class="fas fa-search"></i></div>
+              <div>
+                <p class="stat-number">850+</p>
+                <p class="stat-label">Lost Pets Found</p>
+              </div>
+            </div>
+            <div class="stat-box">
+              <div class="icon-circle yellow"><i class="fas fa-shopping-bag"></i></div>
+              <div>
+                <p class="stat-number">5,000+</p>
+                <p class="stat-label">Products</p>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Right Column: Image -->
+        <div class="hero-image-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=1050&q=80"
+            alt="Dog and cat together"
+          />
+          <div class="bg-circle bg1"></div>
+          <div class="bg-circle bg2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--************************************************-->
+  <section class="navigation-section">
+    <div class="container">
+      <h2 class="section-title">Our Services</h2>
+      <div class="star-wrapper">
+        <!-- Central dog image -->
+        <div class="central-image">
+          <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=1074&q=80" alt="Cute Golden Retriever" />
+        </div>
+  
+        <!-- Service cards -->
+        <a class="service-card top" routerLink="/adopt">
+          <i class="fa-solid fa-dog icon"></i>
+          <h3>Adoption</h3>
+          <p>Browse pets looking for a loving home and start the adoption process today.</p>
+        </a>
+  
+        <a class="service-card top-right" routerLink="/lost">
+          <i class="fa-solid fa-triangle-exclamation icon"></i>
+          <h3>Lost Pets</h3>
+          <p>Report lost pets or help reunite furry friends with their families.</p>
+        </a>
+  
+        <a class="service-card bottom-right" routerLink="/shop">
+          <i class="fa-solid fa-cart-shopping icon"></i>
+          <h3>Pet Supplies</h3>
+          <p>Shop for food, toys, and other essential supplies for your pets.</p>
+        </a>
+  
+        <a class="service-card bottom-left" routerLink="/profile">
+          <i class="fa-solid fa-user icon"></i>
+          <h3>Profile</h3>
+          <p>Manage your account and track your pet-related activities.</p>
+        </a>
+  
+        <a class="service-card top-left" routerLink="/help">
+          <i class="fa-solid fa-circle-question icon"></i>
+          <h3>Online Help</h3>
+          <p>Access expert advice and support from other pet lovers in our forum.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!--*************************************************-->
+  <div class="title-container">
+    <h1 class="title">Recently Lost Pets</h1>
+    <a href="/lost" class="view-button">
+      View all<span class="arrow">→</span>
+    </a>
+  </div>
+  <app-petcard></app-petcard>
+  <!--************************************************-->
+  <div class="title-container">
+    <h1 class="title">Pets Looking for a Home</h1>
+    <a href="/adoption" class="view-button">
+      View all<span class="arrow">→</span>
+    </a>
+  </div>
+  <app-pethome></app-pethome>
+  <!--***********************************************-->
+  <section class="section" style="background-color: #fffdf5;">
+
+    <div class="paw-container text-center">
+      <h2 class="section-title">How PawPals Works</h2>
+      <div class="how-it-works">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Post or Search</h3>
+          <p>Post about a lost pet or browse our database to find or adopt a pet.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Connect</h3>
+          <p>Connect with pet owners or shelters to reunite or adopt pets.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Happy Tails</h3>
+          <p>Celebrate the joy of reuniting lost pets or finding forever homes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--***********************************************-->
+  <div class="title-container">
+    <h1 class="title">Shop for your pet</h1>
+    <a href="/home" class="view-button">
+      View all<span class="arrow">→</span>
+    </a>
+  </div>
+
+  <section class="featured-products">
+    <div class="product-grid">
+      <app-product-card 
+        *ngFor="let product of products | slice:0:3"
+        [product]="product">
+      </app-product-card>
+    </div>
+  </section>
+  
+  <!-- Call to Action -->
+  
+  <section class="cta-section">
+    <div class="paw-container text-center">
+      <h2>Ready to Help a Pet in Need?</h2>
+      <p>Join our community of pet lovers and make a difference in the lives of animals. Sign up today!</p>
+      <div class="cta-buttons">
+        <button class="btn-main"><a routerLink="/signup">Sign Up Now</a></button>
+        <button class="btn-outline-white"><a routerLink="/lost">Report Lost Pet</a></button>
+      </div>
+    </div>
+  </section>
+
+<app-footer></app-footer>

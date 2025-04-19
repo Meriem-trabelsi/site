@@ -1,0 +1,9 @@
+
+<!-- Dynamic categories section -->
+<div class="header-section-2">
+    <div class="header-inner-section-2">
+        <a *ngFor="let category of categories" (click)="goToCategory(category.categorieID)">
+            {{ category.nom }}
+        </a>
+    </div>
+</div>

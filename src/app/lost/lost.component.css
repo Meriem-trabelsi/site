@@ -1,0 +1,76 @@
+/* Body reset to ensure no default margins cause issues */
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Hero Section - Full Bleed Approach */
+.hero-section {
+    background-color: #bbf7d0;
+    padding: 3rem 0;
+    width: 100%; /* changed from 100vw */
+    box-sizing: border-box;
+    position: relative;
+}
+
+
+/* Hero Container - Centered Content */
+.hero-container {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+  
+.hero-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #15803d;
+    margin-bottom: 1rem;
+}
+  
+.hero-subtitle {
+    font-size: 1.125rem;
+    color: #4b5563;
+    max-width: 40rem;
+    margin: 0 auto;
+}
+  
+.report-button {
+    background-color: #34a853;
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: 9999px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    display: inline-block;
+}
+  
+.report-button a {
+    color: white;
+    text-decoration: none;
+}
+  
+.report-button:hover {
+    background-color: #166534;
+}
+.filters-and-listings {
+    display: flex;
+    margin-top: 2rem;
+  }
+  
+  .filter-sidebar {
+    padding: 1rem;
+  }
+  
+  .pet-cards-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: 1rem;
+  }
+  
+ 

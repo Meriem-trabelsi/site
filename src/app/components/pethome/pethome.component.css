@@ -1,0 +1,155 @@
+/* Container for the pet cards */
+.pet-cards-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow the cards to wrap to the next line on smaller screens */
+    gap: 1.5rem; /* Space between cards */
+    justify-content: center; /* Align cards to the center */
+    margin: 2rem 0; /* Add top and bottom margins */
+}
+
+/* Pet card styles with increased width */
+.pet-card {
+    background-color: white;
+    border-radius: 0.875rem;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    width: 350px; /* Increased width for larger cards */
+    margin: 0; /* No additional margin needed here */
+}
+
+.pet-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+}
+
+.image-wrapper {
+    position: relative;
+    height: 12rem; /* Increased image height */
+    overflow: hidden;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.pet-card:hover .image-wrapper img {
+    transform: scale(1.03);
+}
+
+.badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.badge.adopt {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.card-content {
+    padding: 1rem 1.25rem 1.25rem;
+}
+
+.card-content h3 {
+    font-size: 1.25rem; /* Increased font size */
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    color: #1f2937;
+}
+
+.card-content .breed {
+    color: #6b7280;
+    font-size: 0.875rem; /* Increased font size */
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.details {
+    margin-bottom: 1rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.detail {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem; /* Slightly larger font size */
+    color: #6b7280;
+}
+
+.detail i {
+    margin-right: 0.5rem; /* Adjusted for proper alignment */
+    color: #22c55e;
+    width: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+
+
+/* Style for the Adopt Me button */
+.pet-card button {
+    background: linear-gradient(135deg, #22c55e, #16a34a); /* Green gradient */
+    color: white;
+    padding: 0.75rem 1.5rem; /* Increase padding for a more prominent button */
+    border-radius: 0.5rem; /* Rounded corners */
+    font-weight: 600;
+    font-size: 1rem; /* Increase font size for better readability */
+    letter-spacing: 1px;
+    border: none; /* Remove default border */
+    cursor: pointer; /* Change cursor on hover */
+    width: 100%; /* Full width of the card */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    text-align: center;
+}
+
+.pet-card button:hover {
+    background: linear-gradient(135deg, #16a34a, #15803d); /* Darker green on hover */
+    transform: translateY(-2px); /* Lift the button slightly */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+}
+
+.pet-card button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5); /* Green outline for focus */
+}
+
+
+/* Lost pet button style */
+.pet-card .lost-button {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.pet-card .lost-button:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .pet-cards-container {
+        flex-direction: column; /* Stack the cards vertically on smaller screens */
+        align-items: center; /* Center align the cards vertically */
+    }
+
+    .pet-card {
+        width: 100%; /* Full width for each card on small screens */
+    }
+
+    .image-wrapper {
+        height: 10rem; /* Adjust image height for small screens */
+    }
+}

@@ -1,0 +1,108 @@
+.hero-section {
+  background-color: #bbf7d0;
+  padding: 3rem 0;
+}
+
+.hero-container {
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #15803d;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: #4b5563;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.categories-section {
+  padding: 2rem 0;
+}
+
+.categories-container {
+  padding: 0 1rem;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.category-card-wrapper {
+  position: relative;
+  height: 8rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.category-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-card-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.category-card-wrapper:hover .category-card-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.category-card-title {
+  font-weight: 500;
+  font-size: 1.125rem;
+}
+
+.category-card-wrapper.selected {
+  outline: 2px solid #22c55e;
+}
+
+.filters-and-listings {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.filter-sidebar {
+  padding: 1rem;
+}
+
+.pet-cards-section {
+  padding-left: 1rem;
+  margin-left: 1rem;
+}
+.report-button {
+  background-color: #34a853;
+  color: white;
+  padding: 0.875rem 2rem;
+  border-radius: 9999px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  display: inline-block;
+}
+
+.report-button a {
+  color: white;
+  text-decoration: none;
+}
+
+.report-button:hover {
+  background-color: #166534;
+}
