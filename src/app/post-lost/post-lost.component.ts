@@ -78,7 +78,7 @@ export class PostLostComponent implements OnInit {
 
   handleSubmit(form: NgForm) {
     this.isSubmitting = true;
-
+  
     const requiredFields: (keyof LostPetFormFields)[] = ['name', 'breed', 'age', 'description', 'dateLost'];
     for (const field of requiredFields) {
       if (!this.formData[field]) {
@@ -87,13 +87,59 @@ export class PostLostComponent implements OnInit {
         return;
       }
     }
-
-    setTimeout(() => {
-      console.log('Lost pet reported:', this.formData);
-      alert('Lost pet posted successfully!');
-      this.isSubmitting = false;
-    }, 1500);
+  
+    // Step 1: Fetch existing client info first
+    this.http.get<any>('http://localhost:5000/Client/getClientInfo', { withCredentials: true }).subscribe({
+      next: (existingClientInfo) => {
+        // Merge existing info with updated fields
+        const updatedClientInfo = {
+          ...existingClientInfo,
+          nom: this.formData.contactName,
+          tel: this.formData.contactPhone,
+          email: this.formData.contactEmail
+        };
+  
+        // Step 2: Send full updated client info
+        this.http.put('http://localhost:5000/Client/updateClientInfo', updatedClientInfo, { withCredentials: true }).subscribe({
+          next: () => {
+            // Step 3: Prepare FormData for lost pet
+            const lostPetData = new FormData();
+            for (const key in this.formData) {
+              const value = this.formData[key as keyof LostPetFormFields];
+              if (value !== null && value !== undefined) {
+                lostPetData.append(key, value instanceof File ? value : value.toString());
+              }
+            }
+  
+            // Step 4: Post lost pet
+            this.http.post('http://localhost:5000/lostpet/add', lostPetData, { withCredentials: true }).subscribe({
+              next: () => {
+                alert('Lost pet posted successfully!');
+                this.router.navigate(['/lost']);
+                this.isSubmitting = false;
+              },
+              error: (error) => {
+                console.error('Error posting lost pet:', error);
+                alert('Error posting lost pet: ' + (error.error?.error || error.message));
+                this.isSubmitting = false;
+              }
+            });
+          },
+          error: (error) => {
+            console.error('Error updating client info:', error);
+            alert('Error updating contact info: ' + (error.error?.error || error.message));
+            this.isSubmitting = false;
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching client info before update:', error);
+        alert('Failed to fetch your full profile. Try again.');
+        this.isSubmitting = false;
+      }
+    });
   }
+  
 
   triggerFileInput() {
     const fileInput = document.getElementById('image') as HTMLInputElement;

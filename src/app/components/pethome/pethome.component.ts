@@ -1,9 +1,14 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AdoptdetailsComponent } from '../../popup/adoptdetails/adoptdetails.component';
 import { HttpClient } from '@angular/common/http';
 import { PetFilters } from '../pet-filters/pet-filters.component'; // Import PetFilters interface
 import { FormsModule } from '@angular/forms';
+
+interface DeletePetResponse {
+  message: string;
+}
 
 @Component({
   selector: 'app-pethome',
@@ -14,9 +19,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class PethomeComponent implements OnInit, OnChanges {
   @Input() filters: PetFilters = { location: '', types: [], ages: [] }; // Input filter property
+  @Input() limit?: number;
+
 
   pets: any[] = [];
   selectedPet: any = null;
+  isLoading: boolean = false; // Add the isLoading property here
 
   constructor(private http: HttpClient) {}
 
@@ -31,41 +39,21 @@ export class PethomeComponent implements OnInit, OnChanges {
   }
 
   loadPets() {
-    // Initial fetch of all pets
+    this.isLoading = true;
     this.http.get<any[]>('http://localhost:5000/adoptPet/')
       .subscribe({
         next: (data) => {
-          this.pets = data;
+          this.pets = this.limit ? data.slice(0, this.limit) : data;
+          this.isLoading = false;
         },
         error: (err) => {
+          this.isLoading = false;
           console.error('Error loading pets:', err);
         }
       });
   }
+  
 
-  // Method to filter pets using frontend filters (can be used independently)
-  filterPets() {
-    let filteredPets = this.pets;
-  
-    // Filter by location
-    if (this.filters.location) {
-      filteredPets = filteredPets.filter(pet => pet.location === this.filters.location);
-    }
-  
-    // Filter by pet types
-    if (this.filters.types.length > 0) {
-      filteredPets = filteredPets.filter(pet => this.filters.types.includes(pet.type));
-    }
-  
-    // Filter by ages
-    if (this.filters.ages.length > 0) {
-      filteredPets = filteredPets.filter(pet => this.filters.ages.includes(pet.age));
-    }
-  
-    this.pets = filteredPets;  // Update the pets list
-  }
-
-  // Method to fetch pets from backend with updated filters
   fetchPets(): void {
     let queryParams = '';
   
@@ -81,16 +69,18 @@ export class PethomeComponent implements OnInit, OnChanges {
   
     queryParams = queryParams.slice(0, -1);  // Remove the trailing "&"
   
-    // Fetch pets from the backend using query parameters
-    this.http.get<any[]>(`http://localhost:5000/pets?${queryParams}`)
-      .subscribe(
-        (response) => {
-          this.pets = response;  // Update the pets list with filtered pets
-        },
-        (error) => {
-          console.error('Error fetching pets:', error);
-        }
-      );
+    this.isLoading = true; // Set loading to true while fetching
+    this.http.get<any[]>(`http://localhost:5000/adoptPet/pets?${queryParams}`)
+    .subscribe(
+      (response) => {
+        this.pets = this.limit ? response.slice(0, this.limit) : response;
+        this.isLoading = false;
+      },
+      (error) => {
+        this.isLoading = false;
+        console.error('Error fetching pets:', error);
+      }
+    );
   }
 
   openPetModal(pet: any) {
@@ -106,4 +96,45 @@ export class PethomeComponent implements OnInit, OnChanges {
     console.log('Filters updated in parent:', this.filters);
     this.fetchPets();  // Fetch pets with updated filters
   }
+
+  deletePet(petId: string) {
+    const confirmation = confirm('Are you sure you want to delete this pet?');
+    if (confirmation) {
+      this.isLoading = true;  // Start loading state
+      
+      // Perform DELETE request
+      this.http.delete<DeletePetResponse>(`http://localhost:5000/delete/${petId}`, { headers: this.getAuthHeaders() })
+        .subscribe({
+          next: (response) => {
+            this.isLoading = false;  // End loading state
+  
+            // Check if the response contains the message indicating successful deletion
+            if (response && response.message === 'Pet deleted successfully') {
+              // Remove the pet from the local list
+              this.pets = this.pets.filter(pet => pet.petID !== petId); // Ensure matching by petID
+              console.log('Pet deleted successfully');
+            } else {
+              console.error('Failed to delete pet: ', response);
+            }
+          },
+          error: (err) => {
+            this.isLoading = false;  // End loading state
+            console.error('Error deleting pet:', err);
+          }
+        });
+    }
+  }
+  
+  
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token'); // Assuming JWT token is stored in localStorage
+    if (token) {
+      return new HttpHeaders({ Authorization: `Bearer ${token}` });
+    } else {
+      return new HttpHeaders(); // Return empty HttpHeaders if no token is found
+    }
+  }
+
+  
 }

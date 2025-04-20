@@ -2,15 +2,15 @@
 
 * {
 	box-sizing: border-box;
-	font-family: 'Poppins', sans-serif; /* Apply Poppins to everything */
+	font-family: 'Segoe UI', sans-serif;
 }
 
 body {
-	background: lightgray;
+	background: #f0fdf4;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100vh;
+	min-height: 100vh;
 	margin: 0;
 }
 
@@ -19,20 +19,21 @@ h1, h2 {
 	margin: 0 0;
 }
 
-p {
-	font-weight: 400; /* Regular for paragraphs */
-}
+
+
 
 p {
 	font-size: 14px;
-	font-weight: 100;
-	line-height: 20px;
+	font-weight: 400;
+	line-height: 1.6;
 	letter-spacing: 0.5px;
-	margin: 20px 0 30px;
+	margin: 16px 0 24px;
+	color: #FFFFFF;
 }
 
 span {
 	font-size: 12px;
+	
 }
 
 a {
@@ -44,8 +45,8 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #FF9D00;
-	background-color: #FF9D00;
+	border: 1px solid #22c55e;
+	background-color: #22c55e;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -74,17 +75,26 @@ form {
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	padding: 0 50px;
+	padding: 0 30px;
 	height: 100%;
 	text-align: center;
+	border-radius: 10px;
 }
 
 input {
-	background-color: #eee;
-	border: none;
-	padding: 12px 15px;
-	margin: 8px 0;
+	background-color: #f9fafb;
+	border: 1px solid #e5e7eb;
+	padding: 10px 12px;
+	margin: 6px 0;
 	width: 100%;
+	border-radius: 8px;
+	transition: all 0.2s ease;
+}
+
+input:focus {
+	outline: none;
+	border-color: #22c55e;
+	box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
 }
 
 .container {
@@ -162,9 +172,7 @@ input {
 }
 
 .overlay {
-	background: #020052;
-	background: -webkit-linear-gradient(to right, #020052, #020052);
-	background: linear-gradient(to right, #020052, #020052);
+	background: #166534;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -187,7 +195,7 @@ input {
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	padding: 0 40px;
+	padding: 0 30px;
 	text-align: center;
 	top: 0;
 	height: 100%;
@@ -214,42 +222,40 @@ input {
 }
 
 .overlay-left .ghost {
-	background-color: #FF9D00; 
-	border: 1px solid #FF9D00;
+	background-color: #22c55e; 
+	border: 1px solid #22c55e;
 	
   }
   
   .overlay-right .ghost {
-	background-color: #FF9D00; 
-	border: 1px solid #FF9D00;
+	background-color: #22c55e; 
+	border: 1px solid #22c55e;
   }
 
   .ch {
-	display: flex;              /* Aligns the checkbox and the text in a row */
-	align-items: center;        /* Vertically centers the checkbox with the text */
-	justify-content: flex-start; /* Keeps the content aligned to the left */
-  }
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	margin: 6px 0;
+}
   
-  input[type="checkbox"] {
-	margin-right: 8px;  /* Reduces the space between the checkbox and the text */
-  }
+input[type="checkbox"] {
+	width: auto;
+	margin-right: 8px;
+}
   
   
-  p {
-	margin: 0;                 
-	font-size: 14px;
-	font-family: 'poppins';           
-  }
-  form label {
-	display: block;         /* Keeps label above the input */
-	text-align: left;       /* Align text to the far left */
-	font-weight: normal;    /* Remove bold */
-	font-size: 12px;        /* Smaller text */
-	width: 100%;            /* Make the label stretch full width for proper alignment */
-	margin-bottom: 1px;     /* Small gap between label and input */
-	color: #333;            /* Optional: Darker color */
-	padding-left: 0;        /* Make sure there is no left padding */
-	}
+
+form label {
+	display: block;
+	text-align: left;
+	font-weight: 500;
+	font-size: 13px;
+	width: 100%;
+	margin-bottom: 2px;
+	color: #374151;
+}
 	
 	input {
 		width: 100%;
@@ -345,31 +351,59 @@ height: 0;
 pointer-events: none;
 user-select: none;
 }
-@media screen and (max-width: 640px) {
-.checkbox-wrapper-4 .cbx {
-	width: 100%;
-	display: inline-block;
-}
-}
-@-moz-keyframes wave-4 {
-50% {
-	transform: scale(0.9);
-}
-}
-@-webkit-keyframes wave-4 {
-50% {
-	transform: scale(0.9);
-}
-}
-@-o-keyframes wave-4 {
-50% {
-	transform: scale(0.9);
-}
-}
-@keyframes wave-4 {
-50% {
-	transform: scale(0.9);
-}
+@media (max-width: 768px) {
+	.container {
+		width: 100%;
+		min-height: 100vh;
+		border-radius: 0;
+		flex-direction: column;
+	}
+	
+	.sign-in-container,
+	.sign-up-container {
+		width: 100%;
+		height: 50%;
+	}
+	
+	.overlay-container {
+		width: 100%;
+		height: 50%;
+		left: 0;
+		top: 50%;
+	}
+	
+	.overlay {
+		left: 0;
+		width: 100%;
+		height: 200%;
+		transform: translateY(0);
+	}
+	
+	.container.right-panel-active .overlay {
+		transform: translateY(-50%);
+	}
+	
+	.overlay-panel {
+		width: 100%;
+		height: 50%;
+	}
+	
+	.overlay-left {
+		transform: translateY(-20%);
+	}
+	
+	.container.right-panel-active .overlay-left {
+		transform: translateY(0);
+	}
+	
+	.overlay-right {
+		transform: translateY(0);
+		top: 50%;
+	}
+	
+	.container.right-panel-active .overlay-right {
+		transform: translateY(20%);
+	}
 }
 
 input{
@@ -386,7 +420,7 @@ input[type="tel"]::before {
 
 input:focus {
 	outline: none;
-	border: 1px solid #FF9D00;
+	border: 1px solid #22c55e;
 }
 .phone-number {
 	display: flex;
@@ -404,19 +438,20 @@ input:focus {
 
 /* Style the select dropdown */
 select {
-	background-color: #eee;
-	border: 1px solid #ccc;
-	padding: 12px 15px;
+	background-color: #f9fafb;
+	border: 1px solid #e5e7eb;
+	padding: 10px 12px;
 	width: 100%;
-	border-radius: 5px;
-	margin: 8px 0;
+	border-radius: 8px;
+	margin: 6px 0;
 	box-sizing: border-box;
 	font-size: 14px;
-	color: #333;
-  }
-  
-  /* Style the select dropdown on focus */
-  select:focus {
+	color: #374151;
+	transition: all 0.2s ease;
+}
+
+select:focus {
 	outline: none;
-	border: 1px solid #FF9D00;
-  }
+	border-color: #22c55e;
+	box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}

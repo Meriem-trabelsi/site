@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PetCardComponent implements OnInit {
   @Input() pet: any;
+  @Input() limit?: number;
 
   pets: any[] = [];  // Array to hold the pets retrieved from the backend
   selectedPet: any = null;
@@ -29,18 +30,19 @@ export class PetCardComponent implements OnInit {
     this.http.get<any[]>('http://localhost:5000/lostPet/all')
       .subscribe(
         (data) => {
-          this.pets = data.map(pet => {
-            // Convert dateLost to a Date object if it's not already
+          const processedPets = data.map(pet => {
             pet.dateLost = new Date(pet.dateLost);
             return pet;
           });
-          console.log('Fetched pets:', this.pets);  // Log the pets data to check the dateLost format
+          this.pets = this.limit ? processedPets.slice(0, this.limit) : processedPets;
+          console.log('Fetched pets:', this.pets);
         },
         (error) => {
           console.error('Erreur lors de la récupération des animaux perdus', error);
         }
       );
   }
+  
   
 
   openPetModal(pet: any): void {

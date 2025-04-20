@@ -234,3 +234,11 @@ button:disabled {
         width: 100%;
     }
 }
+
+.error small {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 2px;
+    display: block;
+  }
+  

@@ -1,14 +1,50 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+// Set up multer for handling image uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // Save images to the 'src/assets/uploadslost' directory
+    cb(null, path.join(__dirname, '..', 'src', 'assets', 'uploadslost'));  // Adjusted for 'src/assets/uploadslost'
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));  // Add unique timestamp to file names
+  }
+});
+
+const upload = multer({ storage });
+
+// Middleware to extract clientID from JWT token
+function authenticateJWT(req, res, next) {
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1]; 
+  if (!token) return res.status(403).send('Access denied');
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); 
+    req.clientID = decoded.client.clientID;
+    next();
+  } catch (error) {
+    return res.status(401).send('Invalid token');
+  }
+}
 
 // Route to create a lost pet entry
-router.post('/add', (req, res) => {
-  const { clientID, petName, breed, age, type, imageURL, dateLost, location, description } = req.body;
+router.post('/add', authenticateJWT, upload.single('image'), (req, res) => {
+  console.log("Received data:", req.body); // Logs form data to the console
+  console.log("Received file:", req.file);  // Logs file details to the console
+
+  const { name, breed, age, type, dateLost, location, description } = req.body;
+  const imageURL = req.file ? 'uploadslost/' + req.file.filename : null;  // Save the relative path for the image
 
   const sql = `INSERT INTO LostPet (clientID, petName, breed, age, type, imageURL, dateLost, location, description)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+req.pool.query(sql, [req.clientID, name, breed, age, type, imageURL, dateLost, location, description], (err, results) => {
+  // Continue as normal
 
-  req.pool.query(sql, [clientID, petName, breed, age, type, imageURL, dateLost, location, description], (err, results) => {
     if (err) {
       console.error('Erreur lors de l\'ajout d\'un animal perdu :', err);
       return res.status(500).json({ error: 'Erreur de la base de données' });

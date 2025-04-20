@@ -53,6 +53,7 @@ export class PostAdoptionComponent implements OnInit {
     contactPhone: '',
     contactEmail: ''
   };
+  
 
   imagePreview: string | null = null;
   isSubmitting: boolean = false;
@@ -106,34 +107,61 @@ export class PostAdoptionComponent implements OnInit {
   handleSubmit(): void {
     this.isSubmitting = true;
   
-    const formData = new FormData();
-    
-    // Append the form data
-    for (const key in this.formData) {
-      if (this.formData[key] !== undefined && this.formData[key] !== null) {
-        // Convert boolean values to strings
-        if (typeof this.formData[key] === 'boolean') {
-          formData.append(key, this.formData[key].toString());
-        } else {
-          formData.append(key, this.formData[key]);
-        }
-      }
-    }
+    // Step 1: Fetch full client info first
+    this.http.get<any>('http://localhost:5000/Client/getClientInfo', { withCredentials: true }).subscribe({
+      next: (existingClientInfo) => {
+        // Step 2: Merge with updated fields
+        const updatedClientInfo = {
+          ...existingClientInfo,
+          nom: this.formData.contactName,
+          tel: this.formData.contactPhone,
+          email: this.formData.contactEmail
+        };
   
-    // Post the adoption details
-    this.http.post('http://localhost:5000/adoptPet/add', formData, { withCredentials: true }).subscribe(
-      (response) => {
-        alert('Pet adoption posted successfully!');
-        this.router.navigate(['/adopted']);
-        this.isSubmitting = false;
+        // Step 3: Send full updated client info
+        this.http.put('http://localhost:5000/Client/updateClientInfo', updatedClientInfo, { withCredentials: true }).subscribe({
+          next: () => {
+            // Step 4: Build FormData for adoption
+            const formData = new FormData();
+            for (const key in this.formData) {
+              if (this.formData[key] !== undefined && this.formData[key] !== null) {
+                if (typeof this.formData[key] === 'boolean') {
+                  formData.append(key, this.formData[key].toString());
+                } else {
+                  formData.append(key, this.formData[key] as string | Blob);
+                }
+              }
+            }
+  
+            // Step 5: Post adoption data
+            this.http.post('http://localhost:5000/adoptPet/add', formData, { withCredentials: true }).subscribe({
+              next: () => {
+                alert('Pet adoption posted successfully!');
+                this.router.navigate(['/adoption']);
+                this.isSubmitting = false;
+              },
+              error: (error) => {
+                console.error('Error posting adoption:', error);
+                alert('Error posting adoption: ' + (error.error?.error || error.message));
+                this.isSubmitting = false;
+              }
+            });
+          },
+          error: (error) => {
+            console.error('Error updating client info:', error);
+            alert('Error updating contact info: ' + (error.error?.error || error.message));
+            this.isSubmitting = false;
+          }
+        });
       },
-      (error) => {
-        alert('Error posting adoption: ' + error.message);
+      error: (error) => {
+        console.error('Error fetching client info before update:', error);
+        alert('Failed to fetch your full profile. Try again.');
         this.isSubmitting = false;
       }
-    );
-    
+    });
   }
+  
   
   
 

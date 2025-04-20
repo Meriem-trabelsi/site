@@ -8,12 +8,15 @@ require('dotenv').config();
 // Set up multer for handling image uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');  // Save images in the 'uploads' directory
+    // Save images to the 'src/assets/uploads' directory
+    cb(null, path.join(__dirname, '..', 'src', 'assets', 'uploads'));  // Adjusted for 'src/assets/uploads'
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));  // Give the file a unique name
+    cb(null, Date.now() + path.extname(file.originalname));  // Add unique timestamp to file names
   }
 });
+
+
 const upload = multer({ storage });
 
 // Route to create an adoption pet entry
@@ -33,6 +36,8 @@ function authenticateJWT(req, res, next) {
   }
 }
 
+
+
 // Route to create an adoption pet entry
 router.post('/add', authenticateJWT, upload.single('image'), (req, res) => {
   console.log("Received data:", req.body); // Logs form data to the console
@@ -45,7 +50,7 @@ router.post('/add', authenticateJWT, upload.single('image'), (req, res) => {
   const specialNeeds2 = specialNeeds ? 1 : 0;
 
   const clientID = req.clientID;  // Get the clientID from the JWT payload
-  const imageURL = req.file ? req.file.path : null;  // Handle image upload if present
+  const imageURL = req.file ? 'uploads/' + req.file.filename : null;
 
   const sql = `INSERT INTO AdoptionPet 
     (clientID, petName, breed, age, type, gender, imageURL, location, shelter, description, 
@@ -132,6 +137,36 @@ router.get('/pets', (req, res) => {
     res.status(200).json(results);
   });
 });
+
+// In your backend Express app
+// In your backend Express app
+// Route to delete a pet from adoption
+router.delete('/delete/:id', authenticateJWT, (req, res) => {
+  const petId = req.params.id;
+  const clientID = req.clientID; // Extract clientID from the JWT token
+
+  const sql = 'SELECT * FROM AdoptionPet WHERE petID = ? AND clientID = ?';
+  req.pool.query(sql, [petId, clientID], (err, results) => {
+    if (err) {
+      console.error('Error checking pet ownership:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(403).json({ error: 'You can only delete your own pets' });
+    }
+
+    const deleteSql = 'DELETE FROM AdoptionPet WHERE petID = ?';
+    req.pool.query(deleteSql, [petId], (err) => {
+      if (err) {
+        console.error('Error deleting pet:', err);
+        return res.status(500).json({ error: 'Failed to delete pet' });
+      }
+      res.status(200).json({ message: 'Pet deleted successfully' });
+    });
+  });
+});
+
 
 
 

@@ -7,7 +7,7 @@
   </div>
 
   <div class="modal-body">
-    <img [src]="pet.imageUrl" alt="{{ pet.petName }}" />
+    <img [src]="'assets/' + pet.imageURL" [alt]="pet.petName || 'Pet image'" />
     <p><strong>Breed:</strong> {{ pet.breed }}</p>
     <p><strong>Age:</strong> {{ pet.age }} years</p>
     <p><strong>Gender:</strong> {{ pet.gender }}</p>

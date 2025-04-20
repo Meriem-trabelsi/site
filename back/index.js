@@ -4,6 +4,8 @@ const mysql = require("mysql"); // Module pour interagir avec MySQL
 const cors = require("cors"); // Middleware pour gérer les autorisations CORS
 const bodyParser = require("body-parser"); // Middleware pour parser les corps de requête en JSON
 const cookieParser = require("cookie-parser"); // Middleware pour gérer les cookies
+const path = require('path');
+
 
 // Importation des routes personnalisées
 const clientRoutes = require("./client.js"); // Routes liées aux clients
@@ -129,7 +131,11 @@ app.use("/Client", clientRoutes);
 app.use("/Cart", cartRoutes); 
 app.use('/adoptPet', adoptPetRoutes);
 app.use('/lostPet', lostPetRoutes);
-app.use('/uploads', express.static('uploads'));
+app.use('/assets/uploads', express.static(path.join(__dirname, 'assets', 'uploads')));  // Serve static files from back/assets/uploads
+app.use('/assets/uploadslost', express.static(path.join(__dirname, 'assets', 'uploadslost')));  // Serve static files from back/assets/uploads
+
+
+
 
 
 // Démarrage du serveur sur le port 5000

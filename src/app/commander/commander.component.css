@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
 
+/* Général */
 body {
   background: url('http://all4desktop.com/data_images/original/4236532-background-images.jpg') no-repeat center center fixed;
   background-size: cover;
-  font-family: 'Roboto', sans-serif;
+
   color: #262626;
   margin: 5% 0;
 }
@@ -18,11 +19,12 @@ body {
   padding: 20px;
 }
 
+/* Titre */
 .title {
   background: lightgrey;
   border-radius: 5px 5px 0 0;
   padding: 20px;
-  color: #020052;
+  color: #166534;
   text-align: center;
   font-family: 'Roboto', sans-serif;
 }
@@ -39,17 +41,19 @@ h2 {
   color: red;
 }
 
-/* Removed auth-option (Se connecter / S'inscrire) */
+/* Auth (masqué) */
 .auth-option {
   display: none;
 }
 
+/* Formulaire */
 .d-flex {
   display: flex;
   flex-wrap: wrap;
   background: #f6f6f6;
   border-radius: 0 0 5px 5px;
   padding: 25px;
+  gap: 20px;
 }
 
 form {
@@ -57,80 +61,17 @@ form {
   min-width: 300px;
 }
 
+/* Résumé commande */
 .Yorder {
   flex: 1;
   min-width: 280px;
   padding: 20px;
   border: 1px solid #dadada;
   background: #fff;
-  margin-top: -15px; /* Moves it slightly down */
-  margin-left: 30px; /* Moves it more to the right */
+  margin-top: -15px;
+  margin-left: 30px;
   align-self: flex-start;
 }
-
-
-
-label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-label > span {
-  width: 30%;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="tel"],
-select {
-  flex: 1;
-  height: 35px;
-  padding: 5px;
-  border: 1px solid #dadada;
-  color: #333;
-  border-radius: 5px;
-}
-
-select {
-  height: 40px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  border-bottom: 1px solid #dadada;
-  padding: 10px;
-}
-
-th {
-  text-align: left;
-  background: #f3f3f3;
-}
-/* Product names (black) */
-tr > td:first-child {
-  color: black;
-  font-weight: bold;
-}
-
-/* Prices (red) */
-tr > td:last-child {
-  color: red;
-  font-weight: bold;
-}
-
-
-td {
-  text-align: right;
-}
-
-tr > td:first-child {
-  text-align: left;
-}
-
 
 .Yorder div {
   margin-top: 10px;
@@ -145,28 +86,104 @@ tr > td:first-child {
   margin-left: 10px;
 }
 
+/* Étiquettes */
+label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+label > span {
+  width: 30%;
+  font-weight: bold;
+}
+
+/* Champs de formulaire */
+input[type="text"],
+input[type="tel"],
+select {
+  flex: 1;
+  height: 35px;
+  padding: 5px 10px;
+  border: 1px solid #dadada;
+  color: #333;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 14px;
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+select:focus {
+  outline: none;
+  border-color: #999;
+}
+
+select {
+  height: 40px;
+}
+
+/* Tableau */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border-bottom: 1px solid #dadada;
+  padding: 10px;
+  font-size: 14px;
+}
+
+th {
+  text-align: left;
+  background: #f3f3f3;
+}
+
+/* Première colonne : produit */
+tr > td:first-child {
+  text-align: left;
+  color: black;
+  font-weight: bold;
+}
+
+/* Dernière colonne : prix */
+tr > td:last-child {
+  text-align: right;
+  color: red;
+  font-weight: bold;
+}
+
+/* Bouton */
 button {
   width: 100%;
   margin-top: 10px;
   padding: 12px;
   border: none;
   border-radius: 30px;
-  background: #FF9D00;
+  background: #22c55e;
   color: #fff;
   font-size: 16px;
   font-weight: bold;
-  transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out, transform 0.1s ease-in-out;
 }
 
 button:hover {
   cursor: pointer;
   background: #E08A00;
+  transform: translateY(-1px);
 }
 
-/* Responsive Fixes */
+/* Responsive */
 @media (max-width: 768px) {
   .d-flex {
     flex-direction: column;
+  }
+
+  .Yorder {
+    margin-left: 0;
+    margin-top: 20px;
   }
 
   label {

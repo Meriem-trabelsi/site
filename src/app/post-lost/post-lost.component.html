@@ -22,9 +22,23 @@
               <input type="text" id="breed" name="breed" [(ngModel)]="formData.breed" required />
             </div>
             <div>
-              <label for="age">Age</label>
-              <input type="text" id="age" name="age" [(ngModel)]="formData.age" />
+              <label for="age"><i class="icon-calendar"></i> Age *</label>
+              <input
+                type="text"
+                id="age"
+                name="age"
+                required
+                pattern="^[0-9]+$"
+                [(ngModel)]="formData.age"
+                #age="ngModel"
+              />
+              
+              <!-- Error Messages -->
+              <div class="error" *ngIf="age.invalid && (age.dirty || age.touched)">
+                <small *ngIf="age.errors?.['pattern']">Age must be a number.</small>
+              </div>
             </div>
+            
             <div>
               <label for="petType">Pet Type *</label>
               <select id="petType" name="petType" [(ngModel)]="formData.petType" required>
