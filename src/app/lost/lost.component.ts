@@ -1,28 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router'; // Import Router for navigation
 import { PetCardComponent } from '../components/petcard/petcard.component';
-import { LostDetailsComponent } from '../popup/lostdetails/lostdetails.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { FooterComponent } from '../components/footer/footer.component';
 import { PetFiltersComponent } from '../components/pet-filters/pet-filters.component';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-lost',
   templateUrl: './lost.component.html',
   styleUrls: ['./lost.component.css'],
   standalone: true,
-  imports: [PetCardComponent, LostDetailsComponent, HeaderComponent, FooterComponent, PetFiltersComponent]
+  imports: [CommonModule, FormsModule, PetCardComponent, HeaderComponent, FooterComponent, PetFiltersComponent]
 })
-export class LostComponent implements OnInit {
+export class LostComponent implements OnInit, OnChanges {
+  @Input() filters!: { location: string; types: string[]; ages: number };
+  filteredPets: any[] = [];
+  allPets: any[] = [];
   isLoggedIn: boolean = false;
-  pets = [
-    { name: 'Max', breed: 'Golden Retriever', location: 'Tunis', lostDate: '2025-04-10', imageUrl: 'path/to/image' },
-    { name: 'Luna', breed: 'Siamese', location: 'Sfax', lostDate: '2025-04-12', imageUrl: 'path/to/image' },
-    { name: 'Charlie', breed: 'Bulldog', location: 'Hammamet', lostDate: '2025-04-14', imageUrl: 'path/to/image' }
-  ];
-
-  selectedPet: any = null;
+  clientId: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -31,6 +29,28 @@ export class LostComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkAuthStatus();
+  }
+
+  ngOnChanges(): void {
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    const { location, types, ages } = this.filters;
+
+    this.filteredPets = this.allPets.filter(pet => {
+      const matchLocation = location ? pet.location === location : true;
+      const matchType = types.length ? types.includes(pet.type) : true;
+      const matchAge = ages ? ages === pet.age : true;
+
+      return matchLocation && matchType && matchAge;
+    });
+  }
+
+  // Listen for filter changes
+  onFiltersChanged(filters: { location: string, types: string[], ages: number }): void {
+    this.filters = filters;
+    console.log('Filters updated:', this.filters);
   }
 
   // Vérifie si l'utilisateur est connecté
@@ -58,20 +78,5 @@ export class LostComponent implements OnInit {
       alert('You must be logged in to report a lost pet.');
       this.router.navigate(['/login']); // Redirect to login page if not logged in
     }
-  }
-
-  // Show details of a lost pet
-  showLostDetails(pet: any) {
-    if (this.isLoggedIn) {
-      this.selectedPet = pet;
-    } else {
-      alert('You must be logged in to view details.');
-      this.router.navigate(['/login']); // Navigate to login page
-    }
-  }
-
-  // Close the details of a lost pet
-  closeLostDetails() {
-    this.selectedPet = null;
   }
 }

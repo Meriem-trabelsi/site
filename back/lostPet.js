@@ -81,4 +81,55 @@ router.get('/all', (req, res) => {
   });
 });
 
+router.get('/pets', (req, res) => {
+  const { location, types, ages } = req.query;
+
+  let sql = `
+    SELECT 
+      lp.lostPetID,
+      lp.petName,
+      lp.breed,
+      lp.age,
+      lp.type,
+      lp.imageURL,
+      lp.dateLost,
+      lp.description,
+      lp.datePosted,
+      c.nom AS ownerName,
+      c.tel AS ownerPhone,
+      c.email AS ownerEmail, 
+      lp.location AS petLocation
+    FROM 
+      lostpet lp
+    INNER JOIN 
+      Client c ON lp.clientID = c.clientID
+    WHERE 1=1
+  `;
+  const params = [];
+
+  if (location) {
+    sql += ` AND lp.location = ?`;
+    params.push(location);
+  }
+
+  if (types) {
+    const typeList = types.split(',');
+    sql += ` AND lp.type IN (${typeList.map(() => '?').join(',')})`;
+    params.push(...typeList);
+  }
+
+  if (ages) {
+    sql += ` AND lp.age < ?`;
+    params.push(ages);
+  }
+
+  req.pool.query(sql, params, (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des animaux filtrés :', err);
+      return res.status(500).json({ error: 'Erreur de la base de données' });
+    }
+    res.status(200).json(results);
+  });
+});
+
 module.exports = router;

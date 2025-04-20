@@ -3,7 +3,7 @@
   <!-- Location Dropdown -->
   <div class="filter-section">
     <span class="filter-title">Location</span>
-    <select class="filter-input filter-select" (change)="onLocationChange($event)">
+    <select class="filter-input filter-select" [value]="selectedLocation" (change)="onLocationChange($event)">
       <option value="Tunis">Tunis</option>
       <option value="Ariana">Ariana</option>
       <option value="Ben Arous">Ben Arous</option>
@@ -34,9 +34,9 @@
   <div class="filter-section">
     <span class="filter-title">Pet Type</span>
     <div class="filter-checkbox">
-      <input type="checkbox" id="all-pets" (change)="onTypeChange('all-pets', $event)" />
+      <input type="checkbox" id="all-pets" [checked]="selectedTypes.length === 3" (change)="onTypeChange('all-pets', $event)" />
       <label for="all-pets">All Pets</label>
-    </div>
+    </div>    
     <div class="filter-checkbox">
       <input type="checkbox" id="dogs" (change)="onTypeChange('dog', $event)" />
       <label for="dogs">Dogs</label>
@@ -46,6 +46,10 @@
       <label for="cats">Cats</label>
     </div>
     <div class="filter-checkbox">
+      <input type="checkbox" id="birds" (change)="onTypeChange('bird', $event)" />
+      <label for="birds">Birds</label>
+    </div>
+    <div class="filter-checkbox">
       <input type="checkbox" id="other-pets" (change)="onTypeChange('other-pets', $event)" />
       <label for="other-pets">Other Pets</label>
     </div>
@@ -53,24 +57,12 @@
 
   <!-- Age Filters -->
   <div class="filter-section">
-    <span class="filter-title">Age</span>
-    <div class="filter-checkbox">
-      <input type="checkbox" id="baby" (change)="onAgeChange('baby', $event)" />
-      <label for="baby">Baby</label>
-    </div>
-    <div class="filter-checkbox">
-      <input type="checkbox" id="young" (change)="onAgeChange('young', $event)" />
-      <label for="young">Young</label>
-    </div>
-    <div class="filter-checkbox">
-      <input type="checkbox" id="adult" (change)="onAgeChange('adult', $event)" />
-      <label for="adult">Adult</label>
-    </div>
-    <div class="filter-checkbox">
-      <input type="checkbox" id="senior" (change)="onAgeChange('senior', $event)" />
-      <label for="senior">Senior</label>
+    <span class="filter-title">Age less than {{ selectedAges }} months</span>
+    <div class="filter-slider">
+      <input type="range" class='priice-slider' min="1" max="250" step="1" (input)="onAgeChange($event)" />
     </div>
   </div>
+
 
   <!-- Reset Button -->
   <button class="filter-reset" (click)="resetFilters()">Reset Filters</button>

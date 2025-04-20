@@ -25,7 +25,7 @@
               <input type="text" id="breed" name="breed" required [(ngModel)]="formData.breed" #breed="ngModel" />
             </div>
             <div>
-              <label for="age"><i class="icon-calendar"></i> Age *</label>
+              <label for="age"><i class="icon-calendar"></i> Age (Months) *</label>
               <input
                 type="text"
                 id="age"
@@ -80,8 +80,33 @@
           <h2>Adoption Information</h2>
           <div class="grid-2">
             <div>
-              <label for="location"><i class="icon-pin"></i> Location *</label>
-              <input type="text" id="location" name="location" required [(ngModel)]="formData.location" #location="ngModel" />
+              <label for="location">Location *</label>
+              <select id="location" name="location" [(ngModel)]="formData.location" required>
+                <option value="" disabled selected>Select location</option>
+                <option value="Tunis">Tunis</option>
+                <option value="Ariana">Ariana</option>
+                <option value="Ben Arous">Ben Arous</option>
+                <option value="Sousse">Sousse</option>
+                <option value="Monastir">Monastir</option>
+                <option value="Sfax">Sfax</option>
+                <option value="Nabeul">Nabeul</option>
+                <option value="Gabès">Gabès</option>
+                <option value="Kairouan">Kairouan</option>
+                <option value="Kasserine">Kasserine</option>
+                <option value="Tozeur">Tozeur</option>
+                <option value="Bizerte">Bizerte</option>
+                <option value="Beja">Beja</option>
+                <option value="Jendouba">Jendouba</option>
+                <option value="Mahdia">Mahdia</option>
+                <option value="Siliana">Siliana</option>
+                <option value="Zaghouan">Zaghouan</option>
+                <option value="Medenine">Medenine</option>
+                <option value="Sidi Bouzid">Sidi Bouzid</option>
+                <option value="Tataouine">Tataouine</option>
+                <option value="Manouba">Manouba</option>
+                <option value="La Manouba">La Manouba</option>
+                <option value="Gafsa">Gafsa</option>
+              </select>
             </div>
             <div>
               <label for="shelter"><i class="icon-building"></i> Shelter</label>

@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-adoptdetails',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './adoptdetails.component.html',
   styleUrls: ['./adoptdetails.component.css']
 })

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export interface PetFilters {
   location: string;
   types: string[];
-  ages: string[];
+  ages: number;
 }
 
 @Component({
@@ -20,14 +20,14 @@ onFilterChange() {
   this.filtersChanged.emit(this.filters);
 }
   
-  filters: { location: string, types: string[], ages: string[] } = {
+  filters: { location: string, types: string[], ages: number } = {
     location: '',
     types: [],
-    ages: []
+    ages: 0
   };
   selectedLocation: string = '';
   selectedTypes: string[] = [];
-  selectedAges: string[] = [];
+  selectedAges: number = 12;
 
 
   onLocationChange(event: any) {
@@ -35,46 +35,40 @@ onFilterChange() {
     this.emitFilters();
   }
 
-  onTypeChange(type: string, event: any) {
+  onTypeChange(type: string, event: any): void {
     if (type === 'all-pets') {
-      // If "All Pets" is checked, we reset the types and include all pet types
       if (event.target.checked) {
-        this.filters.types = ['dog', 'cat', 'other-pets'];  // All pet types
+        // Check all pet types when "All Pets" is checked
+        this.selectedTypes = ['dog', 'cat', 'bird', 'other-pets'];
       } else {
-        this.filters.types = [];  // If unchecked, clear all types
+        // Uncheck all pet types when "All Pets" is unchecked
+        this.selectedTypes = [];
       }
     } else {
-      // Handle other types (dog, cat, etc.)
+      // For other pet types (Dog, Cat, Other Pets), add/remove them from the selectedTypes array
       if (event.target.checked) {
-        // Add the selected type
-        this.filters.types.push(type);
+        this.selectedTypes.push(type);
       } else {
-        // Remove the unselected type
-        const index = this.filters.types.indexOf(type);
-        if (index !== -1) {
-          this.filters.types.splice(index, 1);
-        }
+        this.selectedTypes = this.selectedTypes.filter(t => t !== type);
       }
   
-      // If "All Pets" is unchecked, make sure we don't add any conflicting types
-      if (this.filters.types.length === 0) {
-        // If no other types are selected, we should uncheck "All Pets"
-        const allPetsCheckbox = document.getElementById('all-pets') as HTMLInputElement;
-        if (allPetsCheckbox) {
-          allPetsCheckbox.checked = false;
+      // If a specific type is unchecked, ensure "All Pets" is unchecked as well
+      if (this.selectedTypes.length < 3) {
+        const allPetsIndex = this.selectedTypes.indexOf('all-pets');
+        if (allPetsIndex !== -1) {
+          this.selectedTypes.splice(allPetsIndex, 1);
         }
       }
     }
   
-    console.log('Selected types:', this.filters.types);
+    this.emitFilters();
   }
   
 
-onAgeChange(age: string, event: Event) {
-  const checked = (event.target as HTMLInputElement).checked;
-  this.updateSelectionArray(this.selectedAges, age, checked);
-  this.emitFilters();
-}
+  onAgeChange(event: any) {
+    this.selectedAges = +event.target.value;
+    this.emitFilters();
+  }
 
 
   updateSelectionArray(array: string[], value: string, add: boolean) {
@@ -86,7 +80,7 @@ onAgeChange(age: string, event: Event) {
   resetFilters() {
     this.selectedLocation = '';
     this.selectedTypes = [];
-    this.selectedAges = [];
+    this.selectedAges = 12;
     this.emitFilters();
   }
 

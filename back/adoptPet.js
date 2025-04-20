@@ -69,6 +69,27 @@ router.post('/add', authenticateJWT, upload.single('image'), (req, res) => {
   });
 });
 
+// Route to delete an adoption pet entry
+router.delete('/delete/:id', authenticateJWT, (req, res) => {
+  const adoptionId = req.params.id;
+  const clientID = req.clientID; // Retrieved from the JWT token
+
+  const sql = `DELETE FROM AdoptionPet WHERE adoptionPetID = ? AND clientID = ?`;
+
+  req.pool.query(sql, [adoptionId, clientID], (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la suppression :", err);
+      return res.status(500).json({ error: 'Erreur de la base de données' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(403).json({ error: "Non autorisé ou entrée introuvable" });
+    }
+
+    res.status(200).json({ message: "Annonce supprimée avec succès" });
+  });
+});
+
 
 
 // Route to get all adoption pets with owner details
@@ -124,9 +145,8 @@ router.get('/pets', (req, res) => {
   }
 
   if (ages) {
-    const ageList = ages.split(',');
-    sql += ` AND ap.age IN (${ageList.map(() => '?').join(',')})`;
-    params.push(...ageList);
+    sql += ` AND ap.age < ?`;
+    params.push(ages);
   }
 
   req.pool.query(sql, params, (err, results) => {

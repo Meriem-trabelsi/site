@@ -12,7 +12,7 @@
       <div class="details">
         <div class="detail">
           <i class="fa-solid fa-calendar-days"></i>
-          <span>{{ pet.age }} years</span>
+          <span>{{ pet.age }} months</span>
         </div>
         <div class="detail">
           <i class="fa-solid fa-genderless"></i>
@@ -27,9 +27,17 @@
           <span>{{ pet.datePosted | date:'mediumDate' }}</span> <!-- 👈 Add posted date -->
         </div>
       </div>
-
-      <button (click)="openPetModal(pet)">Adopt Me</button>
-      <!--<button (click)="deletePet(pet._id)">Delete Pet</button>-->
+      <button 
+      (click)="clientId === pet.clientID ? deleteAdoption(pet) : openPetModal(pet)"
+      [ngStyle]="{
+        background: clientId === pet.clientID 
+          ? 'linear-gradient(135deg, #ef4444, #dc2626)' 
+          : 'linear-gradient(135deg, #22c55e, #16a34a)'
+      }">
+      {{ clientId === pet.clientID ? 'Delete' : 'Adopt Me' }}
+    </button>
+    
+          <!--<button (click)="deletePet(pet._id)">Delete Pet</button>-->
     </div>
   </div>
 </div>

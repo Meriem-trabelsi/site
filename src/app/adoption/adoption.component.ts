@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../components/header/header.component';
@@ -15,13 +15,12 @@ import { Router } from '@angular/router';
   templateUrl: './adoption.component.html',
   styleUrls: ['./adoption.component.css']
 })
-export class AdoptionComponent implements OnInit {
+export class AdoptionComponent implements OnInit, OnChanges {
+  @Input() filters!: { location: string; types: string[]; ages: number };
+  filteredPets: any[] = [];
+  allPets: any[] = [];
   isLoggedIn: boolean = false;
-  filters: { location: string, types: string[], ages: string[] } = {
-    location: '',
-    types: [],
-    ages: []
-  };
+  clientId: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -32,12 +31,30 @@ export class AdoptionComponent implements OnInit {
     this.checkAuthStatus();
   }
 
+  
+  ngOnChanges(): void {
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    const { location, types, ages } = this.filters;
+
+    this.filteredPets = this.allPets.filter(pet => {
+      const matchLocation = location ? pet.location === location : true;
+      const matchType = types.length ? types.includes(pet.type) : true;
+      const matchAge = ages ? ages === pet.age : true;
+
+      return matchLocation && matchType && matchAge;
+    });
+  }
+
   checkAuthStatus(): void {
     this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', {
       withCredentials: true // Include cookies in request
     }).subscribe(
       (response) => {
         console.log('Logged in:', response);
+        this.clientId = response.client.clientID;
         this.isLoggedIn = true;
       },
       (error) => {
@@ -58,7 +75,7 @@ export class AdoptionComponent implements OnInit {
   }
 
   // Listen for filter changes
-  onFiltersChanged(filters: { location: string, types: string[], ages: string[] }): void {
+  onFiltersChanged(filters: { location: string, types: string[], ages: number }): void {
     this.filters = filters;
     console.log('Filters updated:', this.filters);
   }

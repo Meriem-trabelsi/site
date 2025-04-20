@@ -4,7 +4,6 @@ import { FooterComponent } from '../../components/footer/footer.component'; // I
 import { PetCardComponent } from '../../components/petcard/petcard.component';
 import { PethomeComponent } from '../../components/pethome/pethome.component';
 import { RouterModule } from '@angular/router';
-import { FeaturedComponentsComponent } from '../../components/featured-components/featured-components.component';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { Product, ProductService } from '../../services/product.service';
 import { CommonModule } from '@angular/common';
@@ -12,7 +11,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-homee',
-  imports: [HeaderComponent, FooterComponent,PetCardComponent,PethomeComponent, RouterModule,FeaturedComponentsComponent,
+  imports: [HeaderComponent, FooterComponent,PetCardComponent,PethomeComponent, RouterModule,
     ProductCardComponent, CommonModule],
   templateUrl: './homee.component.html',
   styleUrl: './homee.component.css'

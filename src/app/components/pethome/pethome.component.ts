@@ -1,14 +1,9 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AdoptdetailsComponent } from '../../popup/adoptdetails/adoptdetails.component';
 import { HttpClient } from '@angular/common/http';
 import { PetFilters } from '../pet-filters/pet-filters.component'; // Import PetFilters interface
 import { FormsModule } from '@angular/forms';
-
-interface DeletePetResponse {
-  message: string;
-}
 
 @Component({
   selector: 'app-pethome',
@@ -18,9 +13,10 @@ interface DeletePetResponse {
   styleUrls: ['./pethome.component.css']
 })
 export class PethomeComponent implements OnInit, OnChanges {
-  @Input() filters: PetFilters = { location: '', types: [], ages: [] }; // Input filter property
+  isLoggedIn: boolean = false;
+  clientId: number = 0;
+  @Input() filters: PetFilters = { location: '', types: [], ages: 0 }; // Input filter property
   @Input() limit?: number;
-
 
   pets: any[] = [];
   selectedPet: any = null;
@@ -29,7 +25,24 @@ export class PethomeComponent implements OnInit, OnChanges {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    this.checkAuthStatus();
     this.loadPets();  // Initially load pets when the component is initialized
+  }
+
+  checkAuthStatus(): void {
+    this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', {
+      withCredentials: true // Include cookies in request
+    }).subscribe(
+      (response) => {
+        console.log('Logged in:', response);
+        this.clientId = response.client.clientID;
+        this.isLoggedIn = true;
+      },
+      (error) => {
+        console.log('Not logged in:', error);
+        this.isLoggedIn = false;
+      }
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -63,8 +76,8 @@ export class PethomeComponent implements OnInit, OnChanges {
     if (this.filters.types.length > 0) {
       queryParams += `types=${this.filters.types.join(',')}&`;
     }
-    if (this.filters.ages.length > 0) {
-      queryParams += `ages=${this.filters.ages.join(',')}&`;
+    if (this.filters.ages > 0) {
+      queryParams += `ages=${this.filters.ages}&`; // 'ages_lt' for "less than"
     }
   
     queryParams = queryParams.slice(0, -1);  // Remove the trailing "&"
@@ -87,54 +100,25 @@ export class PethomeComponent implements OnInit, OnChanges {
     this.selectedPet = pet;  // Open a modal with selected pet details
   }
 
+  deleteAdoption(pet: any): void {
+    this.http.delete(`http://localhost:5000/adoptPet/delete/${pet.adoptionPetID}`, {
+      withCredentials: true
+    }).subscribe(
+      (res) => {
+        alert('Adoption post deleted successfully.');
+        location.reload();
+      },      (err) => console.error('Error deleting post', err)
+    );
+  }
+  
+
   closePetModal() {
     this.selectedPet = null;  // Close the modal
   }
 
-  onFiltersChanged(updatedFilters: { location: string, types: string[], ages: string[] }): void {
+  onFiltersChanged(updatedFilters: { location: string, types: string[], ages: number }): void {
     this.filters = updatedFilters;  // Update the filters in the component
     console.log('Filters updated in parent:', this.filters);
     this.fetchPets();  // Fetch pets with updated filters
   }
-
-  deletePet(petId: string) {
-    const confirmation = confirm('Are you sure you want to delete this pet?');
-    if (confirmation) {
-      this.isLoading = true;  // Start loading state
-      
-      // Perform DELETE request
-      this.http.delete<DeletePetResponse>(`http://localhost:5000/delete/${petId}`, { headers: this.getAuthHeaders() })
-        .subscribe({
-          next: (response) => {
-            this.isLoading = false;  // End loading state
-  
-            // Check if the response contains the message indicating successful deletion
-            if (response && response.message === 'Pet deleted successfully') {
-              // Remove the pet from the local list
-              this.pets = this.pets.filter(pet => pet.petID !== petId); // Ensure matching by petID
-              console.log('Pet deleted successfully');
-            } else {
-              console.error('Failed to delete pet: ', response);
-            }
-          },
-          error: (err) => {
-            this.isLoading = false;  // End loading state
-            console.error('Error deleting pet:', err);
-          }
-        });
-    }
-  }
-  
-  
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token'); // Assuming JWT token is stored in localStorage
-    if (token) {
-      return new HttpHeaders({ Authorization: `Bearer ${token}` });
-    } else {
-      return new HttpHeaders(); // Return empty HttpHeaders if no token is found
-    }
-  }
-
-  
 }
