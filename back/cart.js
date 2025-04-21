@@ -12,13 +12,13 @@ cartRoutes.get('/fetch', async (req, res) => {
     const clientID = decoded.client.clientID; 
 
     if (!token) {
-        return res.status(401).json({ error: "Accès refusé, token manquant." }); 
+        return res.status(401).json({ error: "Access denied, missing token." }); 
     }
 
     try {
         // Vérifie que l'utilisateur accède bien à son propre panier
         if (decoded.client.clientID !== parseInt(clientID)) {
-            return res.status(403).json({ error: "Accès non autorisé." });
+            return res.status(403).json({ error: "Access denied." });
         }
 
         // Requête SQL pour récupérer les produits du panier
@@ -50,15 +50,15 @@ cartRoutes.get('/fetch', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Erreur lors de la récupération du panier:', error);
+        console.error('Error retrieving cart:', error);
 
         // Gestion des erreurs liées au token
         if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ error: "Token invalide." });
+            return res.status(401).json({ error: "Token invalid." });
         }
 
         // Erreur serveur
-        res.status(500).json({ error: "Une erreur est survenue lors de la récupération du panier." });
+        res.status(500).json({ error: "An error occurred while retrieving the cart." });
     }
 });
 
@@ -69,7 +69,7 @@ cartRoutes.post('/add', async (req, res) => {
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: "Accès refusé, token manquant." });
+        return res.status(401).json({ error: "Access denied, missing token." });
     }
 
     try {
@@ -124,15 +124,15 @@ cartRoutes.post('/add', async (req, res) => {
             });
         }
 
-        res.status(200).json({ message: "Produit ajouté au panier" });
+        res.status(200).json({ message: "Product added to cart" });
     } catch (error) {
-        console.error("Erreur lors de l'ajout au panier:", error);
+        console.error("Error adding to cart:", error);
 
         if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ error: "Token invalide." });
+            return res.status(401).json({ error: "Token invalid." });
         }
 
-        res.status(500).json({ error: "Une erreur est survenue lors de l'ajout du produit au panier." });
+        res.status(500).json({ error: "An error occurred while adding the product to the cart." });
     }
 });
 
@@ -143,7 +143,7 @@ cartRoutes.put('/update', async (req, res) => {
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: "Accès refusé, token manquant." });
+        return res.status(401).json({ error: "Acces denied,missing token." });
     }
 
     try {
@@ -159,7 +159,7 @@ cartRoutes.put('/update', async (req, res) => {
         });
 
         if (cartRows.length === 0) {
-            return res.status(404).json({ error: "Panier non trouvé." });
+            return res.status(404).json({ error: "Cart not found." });
         }
 
         const panierID = cartRows[0].panierID;
@@ -169,7 +169,7 @@ cartRoutes.put('/update', async (req, res) => {
         const currentQuantityResult = await new Promise((resolve, reject) => {
             pool.query(currentQuantityQuery, [panierID, produitID], (error, rows) => {
                 if (error) reject(error);
-                else if (rows.length === 0) reject(new Error('Produit non trouvé dans le panier'));
+                else if (rows.length === 0) reject(new Error('Product not found in cart'));
                 else resolve(rows[0].quantite);
             });
         });
@@ -186,7 +186,7 @@ cartRoutes.put('/update', async (req, res) => {
                     }
                 );
             });
-            return res.status(200).json({ message: "Quantité mise à jour avec succès" });
+            return res.status(200).json({ message: "Quantity updated successfully." });
         }
 
         // Vérifie le stock disponible pour ce produit
@@ -199,7 +199,7 @@ cartRoutes.put('/update', async (req, res) => {
         });
 
         if (quantite > stockResult) {
-            return res.status(400).json({ error: "Quantité demandée dépasse le stock disponible." });
+            return res.status(400).json({ error: "The quantity requested is more than what we have in stock." });
         }
 
         // Mise à jour de la quantité dans le panier
@@ -214,15 +214,15 @@ cartRoutes.put('/update', async (req, res) => {
             );
         });
 
-        res.status(200).json({ message: "Quantité mise à jour avec succès et stock ajusté." });
+        res.status(200).json({ message: "Quantity updated and stock adjusted." });
     } catch (error) {
-        console.error("Erreur lors de la mise à jour de la quantité:", error);
+        console.error("Error updating quantity.", error);
 
         if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ error: "Token invalide." });
+            return res.status(401).json({ error: "Token invalid." });
         }
 
-        res.status(500).json({ error: "Une erreur est survenue lors de la mise à jour de la quantité." });
+        res.status(500).json({ error: "An error occured while updating the quantity" });
     }
 });
 
@@ -233,7 +233,7 @@ cartRoutes.delete('/remove', async (req, res) => {
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: "Accès refusé, token manquant." });
+        return res.status(401).json({ error: "Acces denied, token missing." });
     }
 
     try {
@@ -262,13 +262,13 @@ cartRoutes.delete('/remove', async (req, res) => {
             );
         });
 
-        res.status(200).json({ message: "Produit supprimé du panier avec succès" });
+        res.status(200).json({ message: "Product deleted from cart successfully" });
     } catch (error) {
-        console.error("Erreur lors de la suppression du produit:", error);
+        console.error("Error deleting product:", error);
         if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ error: "Token invalide." });
+            return res.status(401).json({ error: "Token invalid." });
         }
-        res.status(500).json({ error: "Une erreur est survenue lors de la suppression du produit." });
+        res.status(500).json({ error: "An error occured while deleting the product" });
     }
 });
 
@@ -304,7 +304,7 @@ cartRoutes.post('/commander', async (req, res) => {
         });
 
         if (cartProducts.length === 0) {
-            return res.status(400).json({ error: "Aucun produit dans le panier." });
+            return res.status(400).json({ error: "Your cart is empty" });
         }
 
         // Calcul du total de la commande
@@ -373,13 +373,13 @@ cartRoutes.post('/commander', async (req, res) => {
             );
         });
 
-        res.status(200).json({ message: "Commande passée avec succès", commandeID });
+        res.status(200).json({ message: "Your order has been placed successfully", commandeID });
     } catch (error) {
-        console.error("Erreur lors du passage de la commande:", error);
+        console.error("Error while placing the order:", error);
         if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ error: "Token invalide." });
+            return res.status(401).json({ error: "Token invalid." });
         }
-        res.status(500).json({ error: "Une erreur est survenue lors du passage de la commande." });
+        res.status(500).json({ error: "An error occurred while placing the order." });
     }
 });
 

@@ -1,10 +1,8 @@
-
 import { Component, OnInit } from '@angular/core'; 
 import { Router } from '@angular/router'; 
 import { CategoryService } from '../../services/categorie.service'; 
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; 
-
 
 @Component({
   selector: 'app-header', 
@@ -14,13 +12,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header.component.css' 
 })
 export class HeaderComponent implements OnInit {
-  // Déclaration d'un tableau pour stocker les catégories
+  // Array to store categories
   categories: any[] = [];
 
-  // Variable pour suivre l'état de connexion de l'utilisateur
+  // Variable to track the user's login status
   isLoggedIn = false;
 
-  // Injection des services nécessaires via le constructeur
+  // Inject required services through the constructor
   constructor(
     private categoryService: CategoryService, 
     private router: Router,                   
@@ -28,71 +26,71 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Appel au service pour récupérer les catégories depuis l'API
+    // Call the service to fetch categories from the API
     this.categoryService.getCategories().subscribe(
       (data) => {
         this.categories = data.slice(0, 7);
       },
       (error) => {
-        console.error('Erreur lors de la récupération des catégories :', error);
+        console.error('Error while fetching categories:', error);
       }
     );
 
-    // Vérifie si l'utilisateur est connecté
+    // Check if the user is logged in
     this.checkAuthStatus();
   }
 
-  // Fonction pour naviguer vers une catégorie spécifique
+  // Function to navigate to a specific category
   goToCategory(categoryId: number): void {
-    // Redirige vers la page 'shop' avec un paramètre de requête (categoryID)
+    // Redirect to the 'shop' page with a query parameter (categoryID)
     this.router.navigate(['/shop'], {
       queryParams: { categoryID: categoryId }
     });
   }
 
-  // Vérifie si le client est connecté en appelant l'API côté backend
+  // Check if the client is logged in by calling the backend API
   checkAuthStatus(): void {
     this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', {
-      withCredentials: true // Inclut les cookies dans la requête (pour les sessions)
+      withCredentials: true // Include cookies in the request (for sessions)
     }).subscribe(
       (response) => {
-        // Si le client est connecté, on affiche une confirmation et on met à jour isLoggedIn
-        console.log('Déjà connecté :', response);
+        // If the client is logged in, show confirmation and update isLoggedIn
+        console.log('Already logged in:', response);
         this.isLoggedIn = true;
       },
       (error) => {
-        // Sinon, on indique que l'utilisateur n'est pas connecté
-        console.log('Non connecté :', error);
+        // Otherwise, indicate the user is not logged in
+        console.log('Not logged in:', error);
         this.isLoggedIn = false;
       }
     );
   }
 
-  // Redirige l'utilisateur selon son état de connexion
+  // Redirect user based on login status
   goToPage(): void {
     if (this.isLoggedIn) {
-      // Si connecté, déconnecte l'utilisateur
+      // If logged in, log the user out
       this.logout();
     } else {
-      // Sinon, redirige vers la page de connexion
+      // Otherwise, redirect to the login page
       this.router.navigate(['/login']);
     }
   }
 
-  // Fonction pour déconnecter l'utilisateur
+  // Function to log out the user
   logout(): void {
     this.http.post('http://localhost:5000/Client/logout', {}, {
-      withCredentials: true // Envoie aussi les cookies de session
+      withCredentials: true // Send session cookies too
     }).subscribe(
       () => {
-        // Si la déconnexion réussit, on affiche un message, on met à jour l'état et on redirige vers l'accueil
-        alert('Déconnexion réussie');
+        // If logout is successful, show a message, update state and redirect to home
+        alert('Logged out successfully');
         this.isLoggedIn = false;
         this.router.navigate(['/']);
       },
       (error) => {
-        // En cas d'échec de la déconnexion, on affiche l'erreur
-        console.log('Échec de la déconnexion :', error);
+        // On logout failure, log the error
+        console.log('Logout failed:', error);
       }
     );
   }

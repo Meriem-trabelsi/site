@@ -2,20 +2,20 @@
   <!-- Email Request Stage -->
   <div class="form-container password-recovery-container" *ngIf="currentStage === 'request'">
     <form (ngSubmit)="sendCode()" #emailForm="ngForm">
-      <h1>Récupération du mot de passe</h1>
+      <h1>Password Recovery</h1>
       
-      <label for="email">Adresse e-mail</label>
+      <label for="email">Email Address</label>
       <input 
         type="email" 
         id="email" 
-        placeholder="Saisir votre adresse e-mail" 
+        placeholder="Enter your email address" 
         [(ngModel)]="email" 
         name="email"
         required 
       />
       
       <button type="submit">
-        <span>Envoyer le code</span>
+        <span>Send Code</span>
       </button>
     </form>
   </div>
@@ -23,41 +23,40 @@
   <!-- Password Reset Stage -->
   <div class="form-container reset-password-container" *ngIf="currentStage === 'reset'">
     <form (ngSubmit)="resetPassword()" #resetForm="ngForm">
-      <h1>Réinitialisation du mot de passe</h1>
+      <h1>Reset Password</h1>
 
-      <label for="code">Code de vérification</label>
+      <label for="code">Verification Code</label>
       <input 
         type="text" 
         id="code" 
-        placeholder="Saisir votre code" 
+        placeholder="Enter your code" 
         [(ngModel)]="verificationCode" 
         name="code"
         required 
       />
 
-      <label for="password">Nouveau mot de passe</label>
+      <label for="password">New Password</label>
       <input 
         type="password" 
         id="password" 
-        placeholder="Nouveau mot de passe" 
+        placeholder="New password" 
         [(ngModel)]="newPassword" 
         name="password"
         required 
       />
 
-      <label for="confirm-password">Confirmer le mot de passe</label>
+      <label for="confirm-password">Confirm Password</label>
       <input 
         type="password" 
         id="confirm-password" 
-        placeholder="Confirmer le mot de passe" 
+        placeholder="Confirm password" 
         [(ngModel)]="confirmPassword" 
         name="confirmPassword"
         required 
       />
-
       
       <button type="submit">
-        <span>Confirmer</span>
+        <span>Confirm</span>
       </button>
     </form>
   </div>

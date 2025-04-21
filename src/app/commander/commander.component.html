@@ -1,22 +1,22 @@
 <app-header></app-header>
 <div class="container">
   <div class="title">
-    <h2>Formulaire de commande</h2>
+    <h2>Order Form</h2>
   </div>
 
   <div class="auth-option">
-    <h3><a href="/login">Se connecter</a> | <a href="/login">S'inscrire</a></h3>
+    <h3><a href="/login">Login</a> | <a href="/login">Register</a></h3>
   </div>
 
   <div class="d-flex">
     <form>
       <label>
-        <span>Nom <span class="required">*</span></span>
-        <input type="text" name="lname" placeholder="Votre nom" [(ngModel)]="form.lname" required>
+        <span>Last Name <span class="required">*</span></span>
+        <input type="text" name="lname" placeholder="Your name" [(ngModel)]="form.lname" required>
       </label>
 
       <label>
-        <span>Région <span class="required">*</span></span>
+        <span>Region <span class="required">*</span></span>
         <select name="selection" [(ngModel)]="form.region" required>
           <option value="Tunis">Tunis</option>
           <option value="Sfax">Sfax</option>
@@ -46,48 +46,48 @@
         </select>
       </label>
       <label>
-        <span>Adresse <span class="required">*</span></span>
-        <input type="text" name="houseadd" placeholder="Numéro et nom de la rue" [(ngModel)]="form.houseadd" required>
+        <span>Address <span class="required">*</span></span>
+        <input type="text" name="houseadd" placeholder="Street name and number" [(ngModel)]="form.houseadd" required>
       </label>
 
       <label>
-        <span>Téléphone <span class="required">*</span></span>
-        <input type="tel" name="phone" placeholder="Numéro de téléphone" [(ngModel)]="form.phone" required>
+        <span>Phone <span class="required">*</span></span>
+        <input type="tel" name="phone" placeholder="Phone number" [(ngModel)]="form.phone" required>
       </label>
     </form>
 
     <div class="Yorder">
       <table>
         <tr>
-          <th colspan="2">Votre commande</th>
+          <th colspan="2">Your Order</th>
         </tr>
         <tr>
-          <td>Produit</td>
-          <td>Prix</td>
+          <td>Product</td>
+          <td>Price</td>
         </tr>
         <tr *ngFor="let item of cartItems">
           <td>{{ item.quantite }} × {{ item.nom }}</td>
-          <td>{{ (item.prix * item.quantite) | number:'1.2-2' }}DT</td>
+          <td>{{ (item.prix * item.quantite) | number:'1.2-2' }} DT</td>
         </tr>
         <tr>
           <td><strong>Total</strong></td>
-          <td><strong>{{ getTotal() | number:'1.2-2' }}DT</strong></td>
+          <td><strong>{{ getTotal() | number:'1.2-2' }} DT</strong></td>
         </tr>
         <tr>
-          <td>Livraison</td>
-          <td>Gratuite</td>
+          <td>Delivery</td>
+          <td>Free</td>
         </tr>
       </table>
 
       <br>
       <div>
-        <input type="radio" name="payment" value="virement" disabled> Virement bancaire
+        <input type="radio" name="payment" value="virement" disabled> Bank transfer
       </div>
       <div>
-        <input type="radio" name="payment" value="livraison" [defaultChecked]="1"> Paiement à la livraison
+        <input type="radio" name="payment" value="livraison" [defaultChecked]="1"> Cash on delivery
       </div>
-      <button (click)="passerComm()">Commander</button>
+      <button (click)="passerComm()">Place Order</button>
     </div>
   </div>
 </div>
-<app-footer></app-footer> 
+<app-footer></app-footer>

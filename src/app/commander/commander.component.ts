@@ -1,139 +1,139 @@
-// Importation des modules nécessaires
-import { Component, OnInit } from '@angular/core'; // Pour définir le composant Angular
-import { CommonModule } from '@angular/common'; // Fournit les directives Angular communes comme ngIf, ngFor
-import { HttpClient } from '@angular/common/http'; // Permet de faire des requêtes HTTP
-import { FormsModule } from '@angular/forms'; // Permet de gérer les formulaires
-import { Router } from '@angular/router'; // Permet de naviguer entre les pages
-import { HeaderComponent } from '../components/header/header.component'; // Importation du composant d'en-tête
-import { FooterComponent } from '../components/footer/footer.component'; // Importation du composant de pied de page
+// Importing the necessary modules
+import { Component, OnInit } from '@angular/core'; // To define the Angular component
+import { CommonModule } from '@angular/common'; // Provides common Angular directives like ngIf, ngFor
+import { HttpClient } from '@angular/common/http'; // Allows making HTTP requests
+import { FormsModule } from '@angular/forms'; // Manages forms
+import { Router } from '@angular/router'; // Handles page navigation
+import { HeaderComponent } from '../components/header/header.component'; // Importing the header component
+import { FooterComponent } from '../components/footer/footer.component'; // Importing the footer component
 
-// Définition de l'interface représentant un article du panier
+// Defining the interface representing a cart item
 interface CartItem {
-  produitID: number; // Identifiant du produit
-  nom: string;       // Nom du produit
-  quantite: number;  // Quantité de ce produit dans le panier
-  prix: number;      // Prix unitaire du produit
+  produitID: number; // Product ID
+  nom: string;       // Product name
+  quantite: number;  // Quantity of the product in the cart
+  prix: number;      // Unit price of the product
 }
 
-// Interface pour le type de réponse lors de la récupération du panier
+// Interface for the response type when retrieving the cart
 interface CommandeResponse {
-  produits: CartItem[]; // Liste des produits dans le panier
-  total: number;        // Prix total du panier
+  produits: CartItem[]; // List of products in the cart
+  total: number;        // Total price of the cart
 }
 
-// Déclaration du composant Commander
+// Declaring the Commander component
 @Component({
-  selector: 'app-commander', // Sélecteur utilisé dans le HTML
-  standalone: true, // Composant autonome
-  imports: [FormsModule, CommonModule, HeaderComponent, FooterComponent], // Modules et composants importés
-  templateUrl: './commander.component.html', // Fichier HTML associé
-  styleUrls: ['./commander.component.css'] // Fichier CSS associé
+  selector: 'app-commander', // Selector used in the HTML
+  standalone: true, // Standalone component
+  imports: [FormsModule, CommonModule, HeaderComponent, FooterComponent], // Imported modules and components
+  templateUrl: './commander.component.html', // Associated HTML file
+  styleUrls: ['./commander.component.css'] // Associated CSS file
 })
 export class CommanderComponent implements OnInit {
 
-  // Liste des articles dans le panier
+  // List of items in the cart
   cartItems: CartItem[] = [];
 
-  // Prix total du panier
+  // Total price of the cart
   totalPrice: number = 0;
 
-  // Indicateur de chargement pour afficher un spinner ou autre
+  // Loading indicator to display a spinner or something else
   isLoading: boolean = false;
 
-  // Objet représentant les données du formulaire de commande
+  // Object representing the order form data
   form = {
-    lname: '',    // Nom du client
-    region: '',   // Région du client
-    houseadd: '', // Adresse de la maison
-    phone: '',    // Numéro de téléphone
-    payment: ''   // Méthode de paiement (non utilisée ici)
+    lname: '',    // Client's last name
+    region: '',   // Client's region
+    houseadd: '', // Client's house address
+    phone: '',    // Client's phone number
+    payment: ''   // Payment method (not used here)
   };
 
-  // Injection de HttpClient pour les requêtes HTTP et Router pour la navigation
+  // Injecting HttpClient for HTTP requests and Router for navigation
   constructor(private http: HttpClient, private router: Router) {}
 
-  // Méthode appelée automatiquement au chargement du composant
+  // Method automatically called when the component loads
   ngOnInit(): void {
-    this.fetchClient(); // Appel à la méthode pour récupérer les infos client et panier
+    this.fetchClient(); // Calling the method to retrieve client and cart info
   }
 
-  // Méthode pour récupérer les informations du client et les articles du panier
+  // Method to fetch client information and cart items
   fetchClient(): void {
-    this.isLoading = true; // Activation du chargement
+    this.isLoading = true; // Activating the loading state
 
-    // Récupération des informations du client via une requête GET
+    // Fetching client information through a GET request
     this.http.get<any>('http://localhost:5000/Client/getClientInfo', { withCredentials: true }).subscribe(
       (response) => {
-        // Remplissage des champs du formulaire avec les données récupérées
+        // Filling the form fields with retrieved data
         this.form.lname = response.nom;
         this.form.region = response.region;
         this.form.houseadd = response.adresse;
         this.form.phone = response.tel;
       },
       (error) => {
-        // Affichage d'une erreur si la requête échoue
+        // Displaying an error if the request fails
         console.error('Error fetching client info:', error);
         this.isLoading = false;
       }
     );
 
-    // Récupération du contenu du panier
+    // Fetching cart content
     this.http.get<CommandeResponse>('http://localhost:5000/Cart/fetch', { withCredentials: true }).subscribe(
       (response) => {
-        // Mise à jour des articles du panier et du prix total
+        // Updating cart items and total price
         this.cartItems = response.produits;
         this.totalPrice = response.total;
         this.isLoading = false;
       },
       (error) => {
-        // Affichage d'une erreur en cas d'échec
-        console.error('Erreur lors de la récupération du panier:', error);
+        // Displaying an error if fetching the cart fails
+        console.error('Error fetching cart:', error);
         this.isLoading = false;
       }
     );
   }
 
-  // Méthode pour calculer le prix total du panier à partir des articles
+  // Method to calculate the total price of the cart from the items
   getTotal(): number {
     return this.cartItems.reduce(
       (total, item) => total + (item.prix * item.quantite), 0
     );
   }
 
-  // Méthode appelée lorsqu'on passe la commande
+  // Method called when placing the order
   passerComm() {
-    // Extraction des données du formulaire
+    // Extracting form data
     const nom = this.form.lname;
     const region = this.form.region;
-    const adresse = this.form.houseadd; // Correction : on utilise houseadd, pas region
+    const adresse = this.form.houseadd; // Correction: using houseadd, not region
     const tel = this.form.phone;
 
-    // Création de l'objet à envoyer pour mettre à jour les infos client
+    // Creating the object to send to update the client info
     var form2 = { nom, region, adresse, tel };
 
-    // Requête PUT pour mettre à jour les infos du client
+    // PUT request to update client info
     this.http.put('http://localhost:5000/Client/updateClientInfo', form2, { withCredentials: true }).subscribe({
       next: () => {
-        // Si la mise à jour réussit, on passe la commande
+        // If the update is successful, place the order
         this.http.post('http://localhost:5000/Cart/commander', {}, { withCredentials: true }).subscribe({
           next: () => {
-            // Affichage d'une alerte si la commande a été passée avec succès
-            alert('Commande passée avec succès');
+            // Displaying an alert if the order is placed successfully
+            alert('Your order has been placed successfully');
           },
           error: (error) => {
-            // Affichage d'une erreur en cas d'échec de la commande
-            alert('Erreur lors du passage de la commande: ' + error.error?.error || error.message);
+            // Displaying an error if the order fails
+            alert('Error placing the order: ' + error.error?.error || error.message);
           }
         });
       },
       error: (error) => {
-        // Affichage d'une erreur en cas d'échec de mise à jour des infos client
-        alert('Erreur lors de la mise à jour des informations du client: ' + error.error?.error || error.message);
+        // Displaying an error if updating client info fails
+        alert('Error updating client information: ' + error.error?.error || error.message);
       }
     });
 
-    // Redirection vers la page d'accueil
-    this.router.navigate(['/home']);
+    // Redirecting to the home page
+    this.router.navigate(['/homee']);
   }
 
 }

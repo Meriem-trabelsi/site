@@ -1,35 +1,33 @@
-// Importation des modules nécessaires
-const express = require("express"); // Framework pour créer des applications web
-const mysql = require("mysql"); // Module pour interagir avec MySQL
-const cors = require("cors"); // Middleware pour gérer les autorisations CORS
-const bodyParser = require("body-parser"); // Middleware pour parser les corps de requête en JSON
-const cookieParser = require("cookie-parser"); // Middleware pour gérer les cookies
+// Importing required modules
+const express = require("express"); // Framework to create web applications
+const mysql = require("mysql"); // Module to interact with MySQL
+const cors = require("cors"); // Middleware to handle CORS
+const bodyParser = require("body-parser"); // Middleware to parse JSON request bodies
+const cookieParser = require("cookie-parser"); // Middleware to handle cookies
 const path = require('path');
 
-
-// Importation des routes personnalisées
-const clientRoutes = require("./client.js"); // Routes liées aux clients
-const cartRoutes = require("./cart.js"); // Routes liées au panier
+// Importing custom routes
+const clientRoutes = require("./client.js"); // Routes related to clients
+const cartRoutes = require("./cart.js"); // Routes related to the cart
 const adoptPetRoutes = require('./adoptPet');
 const lostPetRoutes = require('./lostPet');
 
-
-// Création de l'application Express
+// Creating the Express app
 const app = express();
 
-// Activation du middleware pour lire les cookies
+// Enable middleware to read cookies
 app.use(cookieParser());
 
-// Activation du middleware pour lire le JSON dans les requêtes
+// Enable middleware to read JSON from requests
 app.use(bodyParser.json());
 
-// Configuration du CORS pour autoriser les requêtes depuis le frontend Angular (localhost:4200)
+// CORS configuration to allow requests from Angular frontend (localhost:4200)
 app.use(cors({
-  origin: "http://localhost:4200", // Origine autorisée
-  credentials: true, // Autoriser les cookies / sessions
+  origin: "http://localhost:4200", // Allowed origin
+  credentials: true, // Allow cookies/sessions
 }));
 
-// Configuration du pool de connexions MySQL
+// MySQL connection pool configuration
 const pool = mysql.createPool({
   host: "localhost", 
   port: 3306, 
@@ -38,29 +36,29 @@ const pool = mysql.createPool({
   database: "pawpals", 
 });
 
-// Middleware pour attacher le pool MySQL à chaque requête
+// Middleware to attach the MySQL pool to each request
 app.use((req, res, next) => {
-  req.pool = pool; // Ajout du pool à l'objet `req`
-  next(); // Continuer au middleware suivant
+  req.pool = pool; // Add the pool to the `req` object
+  next(); // Continue to the next middleware
 });
 
-// Route GET pour récupérer toutes les catégories
+// GET route to fetch all categories
 app.get("/categorie", (req, res) => {
   pool.query(`SELECT * FROM Categorie`, (err, results) => {
     if (err) {
-      console.error("Erreur lors de la récupération des catégories :", err);
-      return res.status(500).json({ error: "Échec de la requête à la base de données" });
+      console.error("Error fetching categories:", err);
+      return res.status(500).json({ error: "Database request failed" });
     } else {
-      res.status(200).json(results); // Retourner la liste des catégories
+      res.status(200).json(results); // Return the list of categories
     }
   });
 });
 
-// Route GET pour récupérer les détails d'un produit par ID
+// GET route to fetch product details by ID
 app.get("/produit/:id", (req, res) => {
-  const productId = req.params.id; // Récupération de l'ID du produit depuis les paramètres d'URL
+  const productId = req.params.id; // Get product ID from URL parameters
 
-  // Requête SQL pour récupérer les infos du produit ainsi que le nom de sa catégorie
+  // SQL query to fetch product info and its category name
   const sql = `SELECT produit.*, Categorie.nom 
                FROM produit 
                LEFT JOIN Categorie ON produit.categorieID = Categorie.categorieID
@@ -68,78 +66,74 @@ app.get("/produit/:id", (req, res) => {
 
   pool.query(sql, [productId], (err, results) => {
     if (err) {
-      console.error("Erreur lors de la récupération du produit :", err);
-      return res.status(500).json({ error: "Erreur de la base de données" });
+      console.error("Error fetching product:", err);
+      return res.status(500).json({ error: "Database error" });
     }
     if (results.length === 0) {
-      return res.status(404).json({ error: "Produit non trouvé" });
+      return res.status(404).json({ error: "Product not found" });
     }
-    res.status(200).json(results[0]); // Retourner le produit trouvé
+    res.status(200).json(results[0]); // Return the found product
   });
 });
 
-// Route GET pour récupérer la fiche technique d’un produit
+// GET route to fetch the technical sheet of a product
 app.get('/fiche-technique/:id', (req, res) => {
-  const productId = req.params.id; // Récupération de l'ID du produit
+  const productId = req.params.id; // Get product ID
 
-  // Requête SQL pour récupérer les spécifications techniques du produit
+  // SQL query to fetch product specifications
   req.pool.query(
     'SELECT specKey, specValue FROM fiche_technique WHERE produitID = ?', productId,
     (err, results) => {
       if (err) {
-        console.error('Erreur lors de la récupération des spécifications :', err);
-        return res.status(500).json({ error: 'Échec lors de la récupération des spécifications' });
+        console.error('Error fetching specifications:', err);
+        return res.status(500).json({ error: 'Failed to fetch specifications' });
       } else {
-        res.status(200).json(results); // Retourner les spécifications techniques
+        res.status(200).json(results); // Return the specifications
       }
     }
   );
 });
 
-// Route GET pour récupérer des produits avec des filtres optionnels (catégorie, prix max)
+// GET route to fetch products with optional filters (category, max price)
 app.get('/produit', (req, res) => {
-  const categoryID = req.query.categoryID; // Récupérer la catégorie depuis les paramètres de requête
-  const maxPrice = req.query.maxPrice; // Récupérer le prix max depuis les paramètres de requête
+  const categoryID = req.query.categoryID; // Get category from query params
+  const maxPrice = req.query.maxPrice; // Get max price from query params
 
-  let query = 'SELECT * FROM produit WHERE 1=1'; // Base de la requête (toujours vraie)
-  const params = []; // Tableau pour les paramètres de la requête préparée
+  let query = 'SELECT * FROM produit WHERE 1=1'; // Base query (always true)
+  const params = []; // Parameters for prepared statement
 
-  // Si une catégorie est spécifiée, l’ajouter à la requête
+  // If category is specified, add it to the query
   if (categoryID) {
     query += ' AND categorieID = ?';
     params.push(categoryID);
   }
 
-  // Si un prix max est spécifié, l’ajouter à la requête
+  // If max price is specified, add it to the query
   if (maxPrice) {
     query += ' AND prix <= ?';
     params.push(maxPrice);
   }
   
-  // Exécuter la requête avec les paramètres
+  // Execute the query with parameters
   pool.query(query, params, (err, results) => {
     if (err) {
-      console.error('Erreur lors de la récupération des produits :', err);
-      return res.status(500).json({ error: 'Échec lors de la récupération des produits' });
+      console.error('Error fetching products:', err);
+      return res.status(500).json({ error: 'Failed to fetch products' });
     }
-    res.status(200).json(results); // Retourner la liste des produits trouvés
+    res.status(200).json(results); // Return the found products
   });
 });
 
-// Enregistrement des routes personnalisées pour les clients et le panier
+// Register custom routes for client and cart
 app.use("/Client", clientRoutes); 
 app.use("/Cart", cartRoutes); 
 app.use('/adoptPet', adoptPetRoutes);
 app.use('/lostPet', lostPetRoutes);
 app.use('/assets/uploads', express.static(path.join(__dirname, 'assets', 'uploads')));  // Serve static files from back/assets/uploads
-app.use('/assets/uploadslost', express.static(path.join(__dirname, 'assets', 'uploadslost')));  // Serve static files from back/assets/uploads
+app.use('/assets/uploadslost', express.static(path.join(__dirname, 'assets', 'uploadslost')));  // Serve static files from back/assets/uploadslost
 
-
-
-
-
-// Démarrage du serveur sur le port 5000
+// Start the server on port 5000
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`Serveur démarré sur le port ${PORT}`);
+  console.log(`Server started on port ${PORT}`);
 });

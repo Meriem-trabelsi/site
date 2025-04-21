@@ -12,10 +12,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./recuperer-mdp.component.css'] 
 })
 export class RecupererMdpComponent {
-  // Variable pour suivre l'étape actuelle de la récupération de mot de passe 
+  // Variable to track the current stage of password recovery
   currentStage: 'request' | 'reset' = 'request';
   
-  // Données du formulaire
+  // Form data
   email: string = ''; 
   verificationCode: string = ''; 
   newPassword: string = ''; 
@@ -23,83 +23,83 @@ export class RecupererMdpComponent {
   
   serverCode: string = ''; 
   
-  constructor(private http: HttpClient, private router: Router) {} // Injection des services HttpClient et Router dans le constructeur
+  constructor(private http: HttpClient, private router: Router) {} // Injecting HttpClient and Router services in the constructor
   
-  // Méthode pour envoyer le code de vérification
+  // Method to send the verification code
   sendCode(): void {    
-    // Validation de l'adresse e-mail
+    // Validate the email address
     if (!this.email || !this.validateEmail(this.email)) {
-      alert('Veuillez saisir une adresse e-mail valide.');
-      return; // Retourner si l'adresse e-mail est invalide
+      alert('Please enter a valid email address.');
+      return; // Return if the email address is invalid
     }
 
-    // Appel à l'API pour envoyer le code de vérification
+    // Call API to send the verification code
     this.http.post<any>('http://localhost:5000/Client/forgotpassword', { email: this.email }, { withCredentials: true })
       .subscribe({
         next: (response) => {
-          console.log('Response received:', response); // Affichage de la réponse du serveur dans la console
-          this.serverCode = response.code; // Stockage du code de vérification du serveur
-          this.currentStage = 'reset'; // Passage à l'étape de réinitialisation
+          console.log('Response received:', response); // Log the server response
+          this.serverCode = response.code; // Store the server's verification code
+          this.currentStage = 'reset'; // Move to the reset password stage
         },
         error: (error) => {
-          console.error('Error sending verification code:', error); // Affichage de l'erreur dans la console
+          console.error('Error sending verification code:', error); // Log error if it occurs
           if (error.status === 404) {
-            alert('Adresse e-mail non trouvée.'); // Message d'erreur si l'e-mail n'est pas trouvé
+            alert('Email address not found.'); // Error message if email is not found
           } else {
-            alert('Une erreur s\'est produite. Veuillez réessayer.'); // Message d'erreur générique
+            alert('An error occurred. Please try again.'); // General error message
           }
         }
       });
   }
   
-  // Méthode pour réinitialiser le mot de passe
+  // Method to reset the password
   resetPassword(): void {
-    console.log('resetPassword called'); // Affichage du message dans la console pour vérifier l'appel de la méthode
+    console.log('resetPassword called'); // Log message to verify the method is called
     
-    // Validation du code de vérification
+    // Validate the verification code
     if (!this.verificationCode) {
-      alert('Veuillez saisir le code de vérification.');
-      return; // Retourner si le code de vérification est vide
+      alert('Please enter the verification code.');
+      return; // Return if the verification code is empty
     }
     
-    // Vérification si le code correspond à celui reçu du serveur
+    // Check if the code matches the one received from the server
     if (this.serverCode && String(this.verificationCode) !== String(this.serverCode)) {
-      alert('Code de vérification incorrect.'+ this.serverCode + ' ' + this.verificationCode);
-      return; // Retourner si les codes ne correspondent pas
+      alert('Incorrect verification code.'+ this.serverCode + ' ' + this.verificationCode);
+      return; // Return if the codes do not match
     }
     
-    // Validation du nouveau mot de passe
+    // Validate the new password
     if (!this.newPassword) {
-      alert('Veuillez saisir un nouveau mot de passe.');
-      return; // Retourner si le mot de passe est vide
+      alert('Please enter a new password.');
+      return; // Return if the password is empty
     }
     
-    // Vérification si le mot de passe et sa confirmation correspondent
+    // Check if the password and confirmation match
     if (this.newPassword !== this.confirmPassword) {
-      alert('Les mots de passe ne correspondent pas.');
-      return; // Retourner si les mots de passe ne correspondent pas
+      alert('Passwords do not match.');
+      return; // Return if the passwords do not match
     }
     
-    // Appel à l'API pour changer le mot de passe
+    // Call API to change the password
     this.http.post<any>('http://localhost:5000/Client/changepass', { 
-      email: this.email, // L'adresse e-mail de l'utilisateur
-      newPassword: this.newPassword // Le nouveau mot de passe
+      email: this.email, // The user's email address
+      newPassword: this.newPassword // The new password
     }, { withCredentials: true }).subscribe({
       next: (response) => {
-        console.log('Password changed successfully:', response); // Affichage du message de succès dans la console
-        alert('Votre mot de passe a été modifié avec succès!'); // Affichage du message de succès
-        this.router.navigate(['/login']); // Redirection vers la page de connexion
+        console.log('Password changed successfully:', response); // Log success message
+        alert('Your password has been successfully changed!'); // Success message
+        this.router.navigate(['/login']); // Redirect to the login page
       },
       error: (error) => {
-        console.error('Error changing password:', error); // Affichage de l'erreur dans la console
-        alert('Une erreur s\'est produite lors de la modification du mot de passe.'); // Message d'erreur si la modification échoue
+        console.error('Error changing password:', error); // Log error if it occurs
+        alert('An error occurred while changing the password.'); // Error message if the change fails
       }
     });
   }
   
-  // Méthode pour valider le format de l'adresse e-mail
+  // Method to validate the email address format
   private validateEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expression régulière pour valider le format de l'e-mail
-    return emailRegex.test(email); // Retourne vrai si l'e-mail est valide, sinon faux
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regular expression to validate email format
+    return emailRegex.test(email); // Return true if the email is valid, otherwise false
   }
 }
