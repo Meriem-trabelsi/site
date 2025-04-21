@@ -25,7 +25,18 @@
         </div>
       </div>
 
-      <button (click)="openPetModal(pet)">I've Seen This Pet</button>
+      <button 
+      (click)="clientId === pet.clientID ? deleteLostPet(pet) : openPetModal(pet)"
+      [ngStyle]="{
+        background: clientId === pet.clientID 
+          ? 'linear-gradient(135deg, #ef4444, #dc2626)' 
+          : 'linear-gradient(135deg, #22c55e, #16a34a)'
+      }">
+      {{ clientId === pet.clientID ? 'Delete' : 'Adopt Me' }}
+    </button>
+
+
+
     </div>
   </div>
 </div>

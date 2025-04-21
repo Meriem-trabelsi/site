@@ -86,5 +86,50 @@
   color: #166534;
   border-color: #38a169;
 }
+.filter-slider {
+  width: 100%;
+  max-width: 400px;
+}
+
+.priice-slider {
+  width: 100%;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+.priice-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #22c55e;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.priice-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #22c55e;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.priice-slider:focus {
+  background: #aaa;
+}
+
+.priice-slider:active::-webkit-slider-thumb {
+  background: #16a34a;
+}
+
+.priice-slider:active::-moz-range-thumb {
+  background: #16a34a;
+}
 
 

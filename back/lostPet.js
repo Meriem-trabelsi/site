@@ -98,7 +98,7 @@ router.get('/pets', (req, res) => {
       c.nom AS ownerName,
       c.tel AS ownerPhone,
       c.email AS ownerEmail, 
-      lp.location AS petLocation
+      lp.location 
     FROM 
       lostpet lp
     INNER JOIN 
@@ -131,5 +131,32 @@ router.get('/pets', (req, res) => {
     res.status(200).json(results);
   });
 });
+// Route to delete a lost pet entry
+router.delete('/delete/:id', authenticateJWT, (req, res) => {
+  const lostPetId = req.params.id;
+  const clientID = req.clientID; // Retrieved from the JWT token
+
+  // SQL query to delete the lost pet entry for the authenticated client
+  const sql = `DELETE FROM LostPet WHERE lostPetID = ? AND clientID = ?`;
+
+  req.pool.query(sql, [lostPetId, clientID], (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la suppression :", err);
+      return res.status(500).json({ error: 'Erreur de la base de données' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(403).json({ error: "Non autorisé ou entrée introuvable" });
+    }
+
+    res.status(200).json({ message: "Annonce perdue supprimée avec succès" });
+  });
+});
+
+
+
+
+
+
 
 module.exports = router;

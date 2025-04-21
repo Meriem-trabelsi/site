@@ -13,6 +13,7 @@ import { PetFilters } from '../pet-filters/pet-filters.component';
   standalone: true
 })
 export class PetCardComponent implements OnInit, OnChanges {
+  timestamp = Date.now();
   isLoggedIn: boolean = false;
   clientId: number = 0;
   @Input() filters: PetFilters = { location: '', types: [], ages: 0 }; // Input filter property
@@ -29,9 +30,9 @@ export class PetCardComponent implements OnInit, OnChanges {
     this.fetchLostPets();
   }
 
-  checkAuthStatus(): void {
+   checkAuthStatus(): void {
     this.http.get<{ client: any }>('http://localhost:5000/Client/checkAuth', {
-      withCredentials: true // Include cookies in request
+      withCredentials: true
     }).subscribe(
       (response) => {
         console.log('Logged in:', response);
@@ -97,6 +98,47 @@ export class PetCardComponent implements OnInit, OnChanges {
       }
     );
   }
+  loadLostPets() {
+    this.isLoading = true;
+    this.http.get<any[]>('http://localhost:5000/lostPet/lost')
+      .subscribe({
+        next: (data) => {
+          this.pets = this.limit ? data.slice(0, this.limit) : data;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error('Error loading lost pets:', err);
+        }
+      });
+  }
+  handleButtonClick(pet: any): void {
+    if (this.clientId === pet.clientID) {
+      this.deleteLostPet(pet);
+    } else {
+      this.openPetModal(pet);
+    }
+  }
+  
+  deleteLostPet(pet: any): void {
+    console.log('Trying to delete pet with ID:', pet.lostPetID);
+      if (!confirm('Are you sure you want to delete this lost pet post?')) return;
+    
+  
+      this.http.delete(`http://localhost:5000/lostPet/delete/${pet.lostPetID}`, {
+        withCredentials: true
+      }).subscribe(
+      (res) => {
+        alert('Lost pet post deleted successfully.');
+        this.fetchLostPets(); // Refresh the list after deletion
+      },
+      (err) => {
+        console.error('Error deleting lost pet post:', err);
+        alert('Failed to delete lost pet post. You may not be the owner.');
+      }
+    );
+  }
+  
   
   onFiltersChanged(updatedFilters: { location: string, types: string[], ages: number }): void {
     this.filters = updatedFilters;  // Update the filters in the component
