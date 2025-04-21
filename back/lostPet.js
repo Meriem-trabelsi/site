@@ -68,7 +68,8 @@ router.get('/all', (req, res) => {
                  lp.datePosted,
                  c.nom AS ownerName,
                  c.tel AS ownerPhone,
-                 c.email AS ownerEmail
+                 c.email AS ownerEmail,
+                 lp.clientID
                FROM LostPet lp
                JOIN Client c ON lp.clientID = c.clientID`; // Join LostPet with Client table
 
@@ -98,7 +99,8 @@ router.get('/pets', (req, res) => {
       c.nom AS ownerName,
       c.tel AS ownerPhone,
       c.email AS ownerEmail, 
-      lp.location 
+      lp.location,
+      lp.clientID
     FROM 
       lostpet lp
     INNER JOIN 
@@ -152,11 +154,6 @@ router.delete('/delete/:id', authenticateJWT, (req, res) => {
     res.status(200).json({ message: "Annonce perdue supprimée avec succès" });
   });
 });
-
-
-
-
-
 
 
 module.exports = router;

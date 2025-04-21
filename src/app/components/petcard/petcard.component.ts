@@ -13,7 +13,6 @@ import { PetFilters } from '../pet-filters/pet-filters.component';
   standalone: true
 })
 export class PetCardComponent implements OnInit, OnChanges {
-  timestamp = Date.now();
   isLoggedIn: boolean = false;
   clientId: number = 0;
   @Input() filters: PetFilters = { location: '', types: [], ages: 0 }; // Input filter property
@@ -90,6 +89,7 @@ export class PetCardComponent implements OnInit, OnChanges {
     .subscribe(
       (response) => {
         this.pets = this.limit ? response.slice(0, this.limit) : response;
+        console.log(this.pets);
         this.isLoading = false;
       },
       (error) => {

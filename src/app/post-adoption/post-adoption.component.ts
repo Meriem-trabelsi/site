@@ -88,6 +88,7 @@ export class PostAdoptionComponent implements OnInit {
         this.imagePreview = reader.result as string;
       };
       reader.readAsDataURL(file);
+    
     }
   }
 

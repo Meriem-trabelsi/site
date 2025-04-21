@@ -8,7 +8,10 @@
     "client": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+     "watch:assets": "chokidar 'src/assets/**/*' -c \"ng build\""
+
+    
   },
   "private": true,
   "dependencies": {
@@ -37,6 +40,7 @@
     "@angular/compiler-cli": "^19.1.0",
     "@types/bootstrap": "^5.2.10",
     "@types/jasmine": "~5.1.0",
+    "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.2",
     "jasmine-core": "~5.5.0",
     "karma": "~6.4.0",

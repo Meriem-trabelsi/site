@@ -10,7 +10,7 @@ type LostPetFormFields = {
   name: string;
   breed: string;
   age: string;
-  petType: string;
+  type: string;
   location: string;
   dateLost: string;
   description: string;
@@ -36,7 +36,7 @@ export class PostLostComponent implements OnInit {
     name: '',
     breed: '',
     age: '',
-    petType: '',
+    type: '',
     location: '',
     dateLost: '',
     description: '',
