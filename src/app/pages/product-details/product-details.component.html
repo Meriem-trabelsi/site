@@ -1,65 +1,33 @@
-<style>
-    .price-text {
-        font-size: 26px;
-    }
-    .add-to-cart-container {
-        gap: 20px;
-    }
-    .products-breadcrumbs {
-        margin-bottom: 30px;
-    }
-    .product-main-img {
-        width: 400px;
-        height: 400px;
-    }
-    .shop-title-breadcumbs {
-        font-size: 16px;
-        text-decoration: none;
-        font-weight: 600;
-    }
-</style>
 <app-header></app-header>
 <div class="container mx-auto py-8 px-4">
-    <div class="products-breadcrumbs">
-        <nav class="text-sm text-gray-500">
-          <a href="" class="hover:text-blue-600 shop-title-breadcumbs">Accueil</a>
-          <span class="mx-2">/</span>
-          <a href="shop" class="hover:text-blue-600 shop-title-breadcumbs">Boutique</a>
-          <span class="mx-2">/</span>
-          <span class="text-gray-700 shop-title-breadcumbs">{{ product.nomProd }}</span>
-        </nav>
-      </div>
-    <div class="grid md:grid-cols-2 gap-8">
-      <div>
-        <img [src]="product.imageURL" alt="Product Image" class="product-main-img rounded-lg shadow">
-      </div>
-      <div>
-        <h1 class="text-2xl font-semibold">{{ product.nomProd }}</h1>
-        <div class="flex items-center space-x-2 text-yellow-500">
-        </div>
-        <p class="text-red-500 font-semibold my-2 price-text">{{ product.prix }} DT</p>
-        <p class="text-gray-600">{{ product.description }}</p>
-        <hr />
-        <div class="mt-4 flex add-to-cart-container">
-          <input type="number" [(ngModel)]="selectedQuantity" min="1" class="border rounded w-20 text-center">
-          <button (click)="addToCart()" class="bg-black text-white px-10 py-3 rounded hover:bg-gray-800">AJOUTER AU PANIER</button>
-        </div>
-        <hr />
-        <p class="mt-4 text-gray-500">Catégories : {{ product.nom }}</p>
-        <p class="text-gray-500">Étiquette: Blouse</p>
-      </div>
+  <div class="products-breadcrumbs">
+      <nav class="text-sm text-green-500">
+        <a href="" class="hover:text-green-600 shop-title-breadcumbs">Home</a>
+        <span class="mx-2">/</span>
+        <a href="shop" class="hover:text-green-600 shop-title-breadcumbs">Shop</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-700 shop-title-breadcumbs">{{ product.nomProd }}</span>
+      </nav>
     </div>
-  
-    <div class="mt-8 border-t pt-4">
-      <h2 class="text-2xl font-semibold text-green-600">Fiche Technique</h2>
-      <table class="w-full mt-4 border text-sm text-gray-700">
-        <tbody>
-          <tr *ngFor="let spec of specifications" class="border-b">
-            <td class="font-semibold p-2 w-1/3">{{ spec.specKey }}</td>
-            <td class="p-2">{{ spec.specValue }}</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="grid md:grid-cols-2 gap-8">
+    <div>
+      <img [src]="'assets/uploads/' + product.imageURL" alt="Product Image" class="product-main-img rounded-lg shadow">
+    </div>
+    <div>
+      <h1 class="text-2xl font-semibold">{{ product.nomProd }}</h1>
+      <div class="flex items-center space-x-2 text-yellow-500">
+      </div>
+      <p class="text-red-500 font-semibold my-2 price-text">{{ product.prix }} DT</p>
+      <p class="text-gray-600">{{ product.description }}</p>
+      <hr />
+      <div class="mt-4 flex add-to-cart-container">
+        <input type="number" [(ngModel)]="selectedQuantity" min="1" class="border rounded w-20 text-center">
+        <button (click)="addToCart()" class="bg-green-500 text-white px-10 py-3 rounded hover:bg-green-700">Add to cart</button>
+      </div>
+      <hr />
+      <p class="mt-4 text-gray-500">Catégories : {{ product.nom }}</p>
+      <p class="text-gray-500">Étiquette: Blouse</p>
     </div>
   </div>
+</div>
 <app-footer></app-footer>

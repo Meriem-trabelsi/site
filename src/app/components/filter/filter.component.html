@@ -1,29 +1,52 @@
+<div class="filter-panel">
+  <!-- Catégories -->
+  <div>
+    <h2 class="panel-title">Catégories</h2>
+    <ul class="category-list">
+      <li *ngFor="let category of categories" class="category-item">
+        <input
+          [id]="'category' + category.categorieID"
+          type="radio"
+          name="categoryFilter"
+          [(ngModel)]="selectedCategoryId"
+          [value]="category.categorieID"
+          (change)="onCategoryChange(category.categorieID)"
+          class="category-radio"
+        />
+        <label
+          [for]="'category' + category.categorieID"
+          class="category-label"
+        >
+          {{ category.nom }}
+        </label>
+      </li>
+    </ul>
+  </div>
 
-
-<div class="w-80 bg-white pr-5">
-    <!-- Categories -->
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 border-b pb-2">CATEGORIES</h2>
-      <ul class="mt-2 space-y-2 text-sm text-gray-700">
-        <li *ngFor="let category of categories" class="filter-cats">
-          <input [id]="'category' + category.categorieID"  (change)="onCategoryChange(category.categorieID)" type="radio" name="categoryFilter" [(ngModel)]="selectedCategoryId" [value]="category.categorieID" class="mr-2">
-          <label [for]="'category' + category.categorieID" class="ml-2">{{ category.nom }}</label>
-        </li>
-      </ul>
+  <!-- Prix -->
+  <div>
+    <h2 class="panel-title">Prix</h2>
+    <div class="price-info">
+      Prix sélectionné: <span class="price-value">${{ selectedPrice }}</span>
     </div>
-  
-    <!-- Price -->
-    <h2 class="text-lg font-semibold text-gray-900 border-b pb-2">prix</h2>
-  <div class="price-values my-3 filter-price">
-      Prix sélectionné: <span>{{ selectedPrice }} DT</span>
+    <input
+      type="range"
+      [min]="minPrice"
+      [max]="maxPrice"
+      step="20"
+      [(ngModel)]="selectedPrice"
+      (input)="onPriceChange($event)"
+      class="price-slider"
+    />
   </div>
 
-  <div class="slider-container">
-    <div class="slider-container">
-      <input type="range" class='priice-slider' min="20" max="2000" step="20" [(ngModel)]="selectedPrice" (input)="onPriceChange($event)" />
-    </div>
-  </div>
-  
-    <!-- Reset Button -->
-    <button (click)="resetFilters()" class="w-full text-center bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Réinitialiser</button>
-  </div>
+  <!-- Réinitialiser -->
+  <button (click)="resetFilters()" class="reset-button">
+    <svg xmlns="http://www.w3.org/2000/svg" class="reset-icon" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 4v5h.582m15.21 4A9 9 0 105.582 9H20"/>
+    </svg>
+    Réinitialiser
+  </button>
+</div>

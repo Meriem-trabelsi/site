@@ -1,11 +1,10 @@
 import { Component } from '@angular/core'; 
 import { Router } from '@angular/router'; 
 import { HttpClient } from '@angular/common/http'; 
-import { HeaderComponent } from '../components/header/header.component';
 
 @Component({
   selector: 'app-login', 
-  imports: [HeaderComponent], 
+  imports: [], 
   templateUrl: './login.component.html', 
   styleUrl: './login.component.css' 
 })

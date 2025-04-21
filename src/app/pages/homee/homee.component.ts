@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component'; // Importation du composant d'en-tête
 import { FooterComponent } from '../../components/footer/footer.component'; // Importation du composant de pied de page
 import { PetCardComponent } from '../../components/petcard/petcard.component';
@@ -17,10 +17,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './homee.component.css'
   
 })
-export class HomeeComponent {
-  // Déclaration d’un tableau pour stocker les produits à afficher
+export class HomeeComponent implements OnInit, AfterViewInit, OnDestroy {
   products: any[] = [];
+  @ViewChild('carousel', { static: false }) carouselRef!: ElementRef;
 
+  private autoScrollInterval: any;
+  private scrollDirection: number = 1; // 1 = droite, -1 = gauche
   // Le constructeur injecte le service ProductService pour récupérer les produits
   constructor(private productService: ProductService) {}
 
@@ -38,7 +40,37 @@ export class HomeeComponent {
       }
     );
   }
+
+  ngAfterViewInit(): void {
+    this.startAutoScroll();
+  }
+
+  scrollCarousel(direction: number): void {
+    const carousel = this.carouselRef.nativeElement;
+    const scrollAmount = 320;
+    carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  }
+
+  startAutoScroll(): void {
+    const carousel = this.carouselRef.nativeElement;
   
+    this.autoScrollInterval = setInterval(() => {
+      const scrollAmount = 320; // combien de pixels avancer à chaque fois
+      const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+  
+      // Si on atteint la fin, repartir au début doucement
+      if (carousel.scrollLeft + scrollAmount >= maxScrollLeft) {
+        carousel.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }, 5000); // toutes les 5 secondes
+  }
+  
+
+  ngOnDestroy(): void {
+    clearInterval(this.autoScrollInterval);
+  } 
 
 
 }

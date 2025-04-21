@@ -12,7 +12,7 @@ export interface Product {
   stock: number;
   imageURL: string;
   categorieID: number;
-  fournisseurID: number;
+  rating: number;
 }
 
 

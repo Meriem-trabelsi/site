@@ -17,7 +17,74 @@ h2 {
   margin: 0 auto;
 }
 
+/* Conteneur principal */
+.featured-products {
+  padding: 20px;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
 
+/* Wrapper du carrousel */
+.product-carousel-wrapper {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Ligne scrollable */
+.product-carousel {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0;
+  scrollbar-width: none;
+}
+
+.product-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Carte produit */
+app-product-card {
+  flex: 0 0 auto;
+  min-width: 250px;
+}
+
+/* Boutons de scroll */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(185, 241, 196, 0.8);
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  padding: 8px 12px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-btn:hover {
+  background-color: rgb(131, 242, 151);
+}
+
+.carousel-btn.left {
+  left: 10px;
+}
+
+.carousel-btn.right {
+  right: 10px;
+}
+:host {
+  display: block;
+  min-width: 250px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
 
 p, a {
   text-decoration: none !important;

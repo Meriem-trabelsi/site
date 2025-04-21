@@ -105,7 +105,7 @@
       View all<span class="arrow">→</span>
     </a>
   </div>
-  <app-petcard [limit]="3"></app-petcard>
+  <app-petcard [filters]="{ location: '', types: [], ages: 0 }" [limit]="3"></app-petcard>
 
   <!--************************************************-->
   <div class="title-container">
@@ -114,7 +114,7 @@
       View all<span class="arrow">→</span>
     </a>
   </div>
-  <app-pethome [limit]="3"></app-pethome>
+  <app-pethome [filters]="{ location: '', types: [], ages: 0 }" [limit]="3"></app-pethome>
   <!--***********************************************-->
   <section class="section" style="background-color: #fffdf5;">
 
@@ -148,11 +148,16 @@
   </div>
 
   <section class="featured-products">
-    <div class="product-grid">
-      <app-product-card 
-        *ngFor="let product of products | slice:0:3"
+    <div class="product-carousel-wrapper">
+      <div class="product-carousel" #carousel>
+        <app-product-card
+        *ngFor="let product of products | slice:0:7"
         [product]="product">
-      </app-product-card>
+        </app-product-card>
+      </div>
+  
+      <button class="carousel-btn left" (click)="scrollCarousel(-1)">‹</button>
+      <button class="carousel-btn right" (click)="scrollCarousel(1)">›</button>
     </div>
   </section>
   
