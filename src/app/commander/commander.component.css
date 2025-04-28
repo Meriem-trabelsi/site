@@ -1,12 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
 
 
-body {
-  background: url('http://all4desktop.com/data_images/original/4236532-background-images.jpg') no-repeat center center fixed;
-  background-size: cover;
-  margin: 5% 0;
-}
-
 .container {
   width: 90%;
   max-width: 1140px;
@@ -16,7 +10,6 @@ body {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
-
 
 .title {
   background: lightgrey;
@@ -31,17 +24,8 @@ h2, h3, label, span, th, td, button {
   font-family: 'Roboto', sans-serif;
 }
 
-h2 {
-  margin: 0;
-}
-
 .required {
   color: red;
-}
-
-
-.auth-option {
-  display: none;
 }
 
 
