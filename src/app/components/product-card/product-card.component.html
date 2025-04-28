@@ -1,25 +1,27 @@
-<a [routerLink]="['/product', product.produitID]" class="product-card-link">
-  <div class="product-card">
-    <div class="product-image">
-      <img [src]="'assets/uploads/' + product.imageURL" [alt]="product.nom">
-      <div class="product-info">
-        <h3 class="product-name">{{ product.nom }}</h3>
-          <div class="rating" *ngIf="product.rating">
-              <div class="stars">
-                <span *ngFor="let star of getStarsArray(product.rating)">★</span>
-                <span *ngFor="let emptyStar of getEmptyStarsArray(product.rating)">☆</span>
-              </div>
-              <span class="rating-score">({{ product.rating }})</span>
-          </div>
-  
-          <p class="description">{{ product.description }}</p>
-          <div class="price-quantity">
-           <p class="price">{{ product.prix | currency:'TD ' }}</p>
-      </div>
-          <div class="actions">
-            <button class="cart-button" (click)="addToCart()">🛒 Add to Cart</button>
-          </div>
-     </div>
-      </div>
+<div class="product-card">
+  <div class="product-image">
+    <a [routerLink]="['/product', product.produitID]" class="product-card-link">
+    <img [src]="'assets/uploads/' + product.imageURL" [alt]="product.nom">
+     </a>
+    <div class="product-info">
+      <a [routerLink]="['/product', product.produitID]" class="product-card-link">
+      <h3 class="product-name">{{ product.nom }}</h3>
+        <div class="rating" *ngIf="product.rating">
+            <div class="stars">
+              <span *ngFor="let star of getStarsArray(product.rating)">★</span>
+              <span *ngFor="let emptyStar of getEmptyStarsArray(product.rating)">☆</span>
+            </div>
+            <span class="rating-score">({{ product.rating }})</span>
+       
+        </div>
+        <p class="description">{{ product.description }}</p>
+        <div class="price-quantity">
+         <p class="price">{{ product.prix | currency:'TD ' }}</p>
     </div>
   </a>
+        <div class="actions">
+          <button class="cart-button" (click)="addToCart()">🛒 Add to Cart</button>
+        </div>
+   </div>
+</div>
+</div>

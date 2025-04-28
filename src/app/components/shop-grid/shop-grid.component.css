@@ -1,5 +1,65 @@
+/* Style principal avec flexbox pour le corps de la boutique */
 .shop-inner-body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
+    padding: 40px 0;
+ 
+    min-height: 100vh;
+  }
+  
+  /* Container principal */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    width: 100%;
+  }
+  
+  /* Mise en page pour les produits - deux par ligne */
+  .flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 25px;
+  }
+  
+  /* Message quand aucun produit n'est trouvé */
+  .container > div:first-of-type {
+    text-align: center;
+    padding: 30px;
+    font-size: 18px;
+    font-weight: 500;
+    width: 100%;
+  }
+
+  
+  /* Style pour les cartes de produits - exactement deux par ligne */
+  app-product-card {
+    width: calc(50% - 12.5px);
+    margin-bottom: 25px;
+    transition: transform 0.3s ease;
+  }
+  
+  app-product-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .shop-inner-body {
+      flex-direction: column;
+    }
+    
+    app-filter {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 30px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    app-product-card {
+      width: 100%;
+    }
+  }

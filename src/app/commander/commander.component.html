@@ -4,9 +4,6 @@
     <h2>Order Form</h2>
   </div>
 
-  <div class="auth-option">
-    <h3><a href="/login">Login</a> | <a href="/login">Register</a></h3>
-  </div>
 
   <div class="d-flex">
     <form>
@@ -14,7 +11,6 @@
         <span>Last Name <span class="required">*</span></span>
         <input type="text" name="lname" placeholder="Your name" [(ngModel)]="form.lname" required>
       </label>
-
       <label>
         <span>Region <span class="required">*</span></span>
         <select name="selection" [(ngModel)]="form.region" required>

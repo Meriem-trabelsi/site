@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 
 export interface Product {
   produitID: number;
-  nomProd: string;
   nom: string;
+  nomCat: string;
   description: string;
   prix: number;
   oldPrice: number;

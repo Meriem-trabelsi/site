@@ -1,7 +1,7 @@
 <div class="filter-panel">
   <!-- Catégories -->
   <div>
-    <h2 class="panel-title">Catégories</h2>
+    <h2 class="panel-title">Categories</h2>
     <ul class="category-list">
       <li *ngFor="let category of categories" class="category-item">
         <input
@@ -25,15 +25,15 @@
 
   <!-- Prix -->
   <div>
-    <h2 class="panel-title">Prix</h2>
+    <h2 class="panel-title">Price</h2>
     <div class="price-info">
-      Prix sélectionné: <span class="price-value">${{ selectedPrice }}</span>
+      Selected price: <span class="price-value">${{ selectedPrice }}</span>
     </div>
     <input
       type="range"
       [min]="minPrice"
       [max]="maxPrice"
-      step="20"
+      step="10"
       [(ngModel)]="selectedPrice"
       (input)="onPriceChange($event)"
       class="price-slider"
@@ -42,11 +42,6 @@
 
   <!-- Réinitialiser -->
   <button (click)="resetFilters()" class="reset-button">
-    <svg xmlns="http://www.w3.org/2000/svg" class="reset-icon" fill="none"
-         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M4 4v5h.582m15.21 4A9 9 0 105.582 9H20"/>
-    </svg>
     Réinitialiser
   </button>
 </div>

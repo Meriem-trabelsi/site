@@ -37,16 +37,17 @@ export class ProductCardComponent {
       { withCredentials: true }
     ).subscribe(
       () => {
-        alert('Produit ajouté au panier !');
+        alert('Product added to cart !');
       },
       (error) => {
-        console.error('Erreur ajout panier :', error);
+        console.error('Error adding to cart:', error);
         if (error.status === 400) {
-          alert("La quantité demandée dépasse le stock disponible.");
+          alert("The quantity surpasses our available stock!");
         } else if (error.status === 401) {
-          alert("Veuillez vous authentifier.");
+          alert("Please login.");
+          window.location.href = '/login';
         } else {
-          alert("Erreur lors de l’ajout au panier.");
+          alert("Error adding to cart");
         }
       }
     );

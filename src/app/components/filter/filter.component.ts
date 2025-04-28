@@ -11,9 +11,9 @@ import { Category, CategoryService } from '../../services/categorie.service';
   styleUrl: './filter.component.css'
 })
 export class FilterComponent implements OnInit {
-  selectedPrice: number = 1000; // Valeur initiale du prix (peut être modifiée selon les besoins)
+  selectedPrice: number = 50; // Valeur initiale du prix (peut être modifiée selon les besoins)
   minPrice: number = 0; // Prix minimum
-  maxPrice: number = 2000; // Prix maximum
+  maxPrice: number = 100; // Prix maximum
   categories: any[] = [];
   selectedCategoryId: number | null = null;
 
@@ -48,7 +48,7 @@ export class FilterComponent implements OnInit {
   resetFilters() {
     this.selectedCategoryId = null;
     this.categoryChanged.emit(null);
-    this.selectedPrice = 1000;
+    this.selectedPrice = 50;
     this.priceChanged.emit(this.selectedPrice);
   }
 }

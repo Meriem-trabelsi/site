@@ -6,17 +6,16 @@
         <span class="mx-2">/</span>
         <a href="shop" class="hover:text-green-600 shop-title-breadcumbs">Shop</a>
         <span class="mx-2">/</span>
-        <span class="text-gray-700 shop-title-breadcumbs">{{ product.nomProd }}</span>
+        <span class="text-gray-700 shop-title-breadcumbs">{{ product.nom }}</span>
       </nav>
-    </div>
-  <div class="grid md:grid-cols-2 gap-8">
+  </div>
+
+  <div class="product-details-container">
     <div>
       <img [src]="'assets/uploads/' + product.imageURL" alt="Product Image" class="product-main-img rounded-lg shadow">
     </div>
-    <div>
-      <h1 class="text-2xl font-semibold">{{ product.nomProd }}</h1>
-      <div class="flex items-center space-x-2 text-yellow-500">
-      </div>
+    <div class="product-info">
+      <h1 class="text-2xl font-semibold">{{ product.nom }}</h1>
       <p class="text-red-500 font-semibold my-2 price-text">{{ product.prix }} DT</p>
       <p class="text-gray-600">{{ product.description }}</p>
       <hr />
@@ -25,8 +24,8 @@
         <button (click)="addToCart()" class="bg-green-500 text-white px-10 py-3 rounded hover:bg-green-700">Add to cart</button>
       </div>
       <hr />
-      <p class="mt-4 text-gray-500">Catégories : {{ product.nom }}</p>
-      <p class="text-gray-500">Étiquette: Blouse</p>
+      <p class="mt-4 text-gray-500">Categories : {{ product.nomCat }}</p>
+      <p class="text-gray-500">Ticket: Blouse</p>
     </div>
   </div>
 </div>

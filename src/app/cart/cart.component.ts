@@ -83,7 +83,7 @@ export class CartComponent implements OnInit {
         console.error('An error occurred during quantity update', error);
 
         // If the error is due to stock limits
-        if (error.status === 400 && error.error?.error === "Quantité demandée dépasse le stock disponible.") {
+        if (error.status === 400 && error.error?.error === "Requested quantity exceeds available stock.") {
           alert("Requested quantity exceeds available stock.");
         } else {
           // Other types of errors

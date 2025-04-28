@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core'; 
 import { ProductCardComponent } from '../product-card/product-card.component'; 
 import { CommonModule } from '@angular/common'; 
@@ -13,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
   imports: [ProductCardComponent, CommonModule, FormsModule, FilterComponent], 
   standalone: true, 
   templateUrl: './shop-grid.component.html', 
-  styleUrl: './shop-grid.component.css' 
+  styleUrls: ['./shop-grid.component.css'] 
 })
 export class ShopGridComponent implements OnInit {
   // Tableau pour stocker les produits affichés
@@ -23,7 +22,7 @@ export class ShopGridComponent implements OnInit {
   currentCategoryId: number | null = null;
 
   // Prix maximal sélectionné pour le filtre
-  selectedPrice: number = 0;
+  selectedPrice: number = 50;
 
   // Injection des services nécessaires via le constructeur
   constructor(
@@ -43,6 +42,12 @@ export class ShopGridComponent implements OnInit {
 
   // Fonction pour récupérer les produits depuis le service
   fetchProducts(): void {
+    // Si le prix sélectionné est 0, ne rien afficher
+    if (this.selectedPrice === 0) {
+      this.products = []; // Aucun produit à afficher
+      return;
+    }
+
     // Si une catégorie est sélectionnée, on l'inclut dans la requête, sinon undefined
     const categoryID = this.currentCategoryId !== null ? this.currentCategoryId : undefined;
 

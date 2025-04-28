@@ -31,7 +31,10 @@ export class ProductDetailsComponent implements OnInit { // Déclaration du comp
 
     // Récupération des informations du produit à partir du service ProductService
     this.productService.getProductById(this.produitID).subscribe(
-      (data) => this.product = data, // Si la requête réussit, assigner le produit récupéré à la variable 'product'
+      (data) => {
+        this.product = data;
+        console.log(this.product); // Log to verify the product object
+      },
       (error) => console.error('Error fetching product:', error) // En cas d'erreur, afficher un message dans la console
     );
     

@@ -27,7 +27,7 @@ onFilterChange() {
   };
   selectedLocation: string = '';
   selectedTypes: string[] = [];
-  selectedAges: number = 12;
+  selectedAges: number = 25;
 
 
   onLocationChange(event: any) {
@@ -80,7 +80,7 @@ onFilterChange() {
   resetFilters() {
     this.selectedLocation = '';
     this.selectedTypes = [];
-    this.selectedAges = 12;
+    this.selectedAges = 25;
     this.emitFilters();
   }
 

@@ -59,10 +59,11 @@ app.get("/produit/:id", (req, res) => {
   const productId = req.params.id; // Get product ID from URL parameters
 
   // SQL query to fetch product info and its category name
-  const sql = `SELECT produit.*, Categorie.nom 
-               FROM produit 
-               LEFT JOIN Categorie ON produit.categorieID = Categorie.categorieID
-               WHERE produitID = ?`;
+  const sql = `SELECT produit.*, Categorie.nom AS nomCat
+             FROM produit
+             LEFT JOIN Categorie ON produit.categorieID = Categorie.categorieID
+             WHERE produitID = ?`;
+
 
   pool.query(sql, [productId], (err, results) => {
     if (err) {
@@ -76,23 +77,6 @@ app.get("/produit/:id", (req, res) => {
   });
 });
 
-// GET route to fetch the technical sheet of a product
-app.get('/fiche-technique/:id', (req, res) => {
-  const productId = req.params.id; // Get product ID
-
-  // SQL query to fetch product specifications
-  req.pool.query(
-    'SELECT specKey, specValue FROM fiche_technique WHERE produitID = ?', productId,
-    (err, results) => {
-      if (err) {
-        console.error('Error fetching specifications:', err);
-        return res.status(500).json({ error: 'Failed to fetch specifications' });
-      } else {
-        res.status(200).json(results); // Return the specifications
-      }
-    }
-  );
-});
 
 // GET route to fetch products with optional filters (category, max price)
 app.get('/produit', (req, res) => {

@@ -1,22 +1,128 @@
-.price-text {
-    font-size: 26px;
-}
-.add-to-cart-container {
-    gap: 20px;
-}
+/* Breadcrumb section */
 .products-breadcrumbs {
     margin-bottom: 30px;
 }
-.product-main-img {
-    width: 400px;
-    height: 400px;
-}
+
 .shop-title-breadcumbs {
     font-size: 16px;
-    text-decoration: none;
     font-weight: 600;
+    text-decoration: none;
 }
+
+/* General link styles */
 a {
-color: inherit;
-text-decoration: none;
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Product container */
+.product-details-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* Main product image */
+.product-main-img {
+    width: 100%;
+    max-width: 400px;
+    height: 400px;
+    object-fit: contain;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+/* Product details */
+.product-info {
+    flex: 1; /* Ensures this section takes remaining space */
+}
+
+/* Product title */
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.75rem;
+}
+
+/* Price text */
+.price-text {
+    font-size: 26px;
+    color: #b60101;
+}
+
+/* Product description */
+.text-gray-600 {
+    font-size: 16px;
+    margin-bottom: 1rem;
+}
+
+/* Add to cart section */
+.add-to-cart-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Quantity input */
+.add-to-cart-container input[type="number"] {
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem;
+    border-radius: 8px;
+    width: 70px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Add to cart button */
+.add-to-cart-container button {
+    background-color: #22c55e;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-to-cart-container button:hover {
+    background-color: #16a34a;
+}
+
+/* Small text (categories, ticket) */
+.text-gray-500 {
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+/* Utility spacing */
+hr {
+    margin: 20px 0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .product-details-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-main-img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .add-to-cart-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .add-to-cart-container input[type="number"],
+    .add-to-cart-container button {
+        width: 100%;
+    }
 }

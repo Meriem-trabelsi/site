@@ -16,7 +16,15 @@ h2 {
   justify-content: center;
   margin: 0 auto;
 }
+a {
+  color: inherit;
+  text-decoration: none;
+  }
 
+
+p, a {
+  text-decoration: none !important;
+}
 /* Conteneur principal */
 .featured-products {
   padding: 20px;
@@ -86,9 +94,7 @@ app-product-card {
   box-sizing: border-box;
 }
 
-p, a {
-  text-decoration: none !important;
-}
+
 .body{
     font-family:'Segoe UI', sans-serif;
 }
